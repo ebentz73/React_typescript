@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home 1`] = `
+<Styled(div)>
+  Frosted Affair
+</Styled(div)>
+`;
