@@ -3,7 +3,11 @@ import {SessionToken} from 'fusion-tokens';
 
 const ExemptPaths = ['/login', '/api/signup', '/api/login'];
 
-export const SessionAuthToken = createToken('SessionAuth');
+interface SessionAuthType {
+  getUserId(ctx: Context): string | null;
+}
+
+export const SessionAuthToken = createToken<SessionAuthType>('SessionAuth');
 
 export const SessionAuth = createPlugin({
   deps: {Session: SessionToken, ssrDecider: SSRDeciderToken},
