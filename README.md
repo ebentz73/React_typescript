@@ -3,23 +3,23 @@
 FusionJS web application using BaseWeb design system and TypeScript. Powers the web app for Frosted Affair and backend server.
 
 ## Deps
-FusionJS docs: https://fusionjs.com
-
-BaseWeb docs: https://baseweb.design
+- FusionJS docs: https://fusionjs.com
+- BaseWeb docs: https://baseweb.design
+- MongoDB:
+```
+brew tap mongodb/brew
+brew install mongodb-community@4.2
+brew services start mongodb-community
+```
 
 ## Command Line
-Run `yarn` or `yarn install` to install / update dependencies
-
-Run server: `yarn dev`
-
-Run tests: `yarn test`
-
-Run specific tests: `yarn test --match filename`
-
-Check types with TypeScript: `yarn check-types`
-
-Check lint rules: `yarn lint`
-
+Use Node 8 (`nvm use 8`)
+- Run `yarn` or `yarn install` to install / update dependencies
+- Run server: `yarn dev`
+- Run tests: `yarn test`
+- Run specific tests: `yarn test --match filename`
+- Check types with TypeScript: `yarn check-types`
+- Check lint rules: `yarn lint`
 
 ## VSCode Environment Setup
 
@@ -29,7 +29,8 @@ Extensions:
 Settings:
 ```
 {
-    "editor.formatOnSave": true,
+{
+    "editor.formatOnSave": false,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
     "editor.formatOnType": true,
@@ -37,6 +38,19 @@ Settings:
     "files.autoSave": "onFocusChange",
     "files.trimTrailingWhitespace": true,
     "eslint.autoFixOnSave": true,
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+            "language": "typescript",
+            "autoFix": true
+        },
+        {
+            "language": "typescriptreact",
+            "autoFix": true
+        }
+    ],
+}
 }
 ```
 

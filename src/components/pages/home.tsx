@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { styled } from 'fusion-plugin-styletron-react';
+import {styled} from 'fusion-plugin-styletron-react';
 
 const Container = styled('div', {
   height: '100%',
@@ -8,8 +8,4 @@ const Container = styled('div', {
   backgroundColor: '#FFFFFF',
 });
 
-export const Home = () => (
-  <Container>
-    Frosted Affair
-  </Container>
-);
+export const Home = () => <Container>Frosted Affair</Container>;

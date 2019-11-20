@@ -8,8 +8,7 @@
     "allowJs": true,
     // Don't emit; allow Babel to transform files.
     "noEmit": true,
-    // Enable strictest settings like strictNullChecks & noImplicitAny.
-    "strict": true,
+    "noImplicitAny": false,
     // Disallow features that require cross-file information for emit.
     "isolatedModules": true,
     // Import non-ES modules as default imports.
@@ -18,7 +17,8 @@
   },
   "include": [
     "src",
-    "fusion-modules.d.ts"
+    "fusion-modules.d.ts",
+    "globals.d.ts"
   ],
   "exclude": [
     "**/__tests__/**"
