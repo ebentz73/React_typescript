@@ -1,16 +1,22 @@
-import mongoose, {Schema} from 'mongoose';
+import {createPlugin, createToken, ServiceType} from 'fusion-core';
+import {MongooseToken} from '../mongoose';
 
-const timelineSnippetSchema = new Schema({
-  name: String,
-  timelineItems: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'TimelineItem',
-    },
-  ],
+export const TimelineSnippetModel = createPlugin({
+  deps: {mongoose: MongooseToken},
+  provides: ({mongoose}) =>
+    mongoose.model(
+      'TimelineSnippet',
+      new mongoose.Schema({
+        name: String,
+        timelineItems: [
+          {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'TimelineItem',
+          },
+        ],
+      })
+    ),
 });
-
-export const TimelineSnippet = mongoose.model(
-  'TimelineSnippet',
-  timelineSnippetSchema
-);
+export const TimelineSnippetModelToken = createToken<
+  ServiceType<typeof TimelineSnippetModel>
+>('TimelineSnippetModel');

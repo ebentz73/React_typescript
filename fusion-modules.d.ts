@@ -53,6 +53,13 @@ declare module 'fusion-core' {
     cleanup?: (service: Service) => Promise<void>;
   }
 
+  export type ServiceType<TPlugin> = TPlugin extends FusionPlugin<
+    infer Deps,
+    infer Service
+  >
+    ? Service
+    : never;
+
   type FusionPluginNoHidden<TDeps, TService> = Omit<
     Omit<FusionPlugin<TDeps, TService>, '__plugin__'>,
     'stack'

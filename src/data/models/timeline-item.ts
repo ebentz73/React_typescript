@@ -1,4 +1,6 @@
-import mongoose, {Schema, Document} from 'mongoose';
+import {Document} from 'mongoose';
+import {createPlugin, createToken, ServiceType} from 'fusion-core';
+import {MongooseToken} from '../mongoose';
 
 export type TimelineItemDocument = Document & {
   date: string;
@@ -9,25 +11,30 @@ export type TimelineItemDocument = Document & {
   vendorId: string;
 };
 
-const timelineItemSchema = new Schema(
-  {
-    date: String,
-    startTime: String,
-    description: String,
-    location: String,
-    weddingParty: {
-      type: Boolean,
-      default: true,
-    },
-    vendorId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Vendor',
-    },
-  },
-  {timestamps: true}
-);
-
-export const TimelineItem = mongoose.model<TimelineItemDocument>(
-  'TimelineItem',
-  timelineItemSchema
-);
+export const TimelineItemModel = createPlugin({
+  deps: {mongoose: MongooseToken},
+  provides: ({mongoose}) =>
+    mongoose.model<TimelineItemDocument>(
+      'TimelineItem',
+      new mongoose.Schema(
+        {
+          date: String,
+          startTime: String,
+          description: String,
+          location: String,
+          weddingParty: {
+            type: Boolean,
+            default: true,
+          },
+          vendorId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Vendor',
+          },
+        },
+        {timestamps: true}
+      )
+    ),
+});
+export const TimelineItemModelToken = createToken<
+  ServiceType<typeof TimelineItemModel>
+>('TimelineItemModel');

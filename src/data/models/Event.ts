@@ -1,4 +1,4 @@
-import mongoose, {Schema, Document} from 'mongoose';
+import {Document} from 'mongoose';
 import {UserDocument} from './user';
 import {FIELD_INPUT_KIND} from '../../constants/field-input';
 import {
@@ -7,6 +7,9 @@ import {
   TIMEZONE,
   CURRENCY,
 } from '../../constants/model-constants';
+import {createPlugin, createToken, ServiceType} from 'fusion-core';
+import {MongooseToken} from '../mongoose';
+
 export interface ChecklistItem extends Document {
   text: string;
   checked: boolean;
@@ -46,78 +49,89 @@ export interface EventDocument extends Document {
   vendors: string[];
 }
 
-const eventSchema = new Schema(
-  {
-    name: String,
-    date: Date,
-    client: {type: Schema.Types.ObjectId, ref: 'Contact'},
-    type: {
-      type: String,
-      default: EVENT_TYPE.DEFAULT,
-      enum: Object.values(EVENT_TYPE),
-    },
-    checklists: [
-      {
-        name: String,
-        checklistItems: [
-          {
-            text: String,
-            checked: Boolean,
+export const EventModel = createPlugin({
+  deps: {mongoose: MongooseToken},
+  provides: ({mongoose}) =>
+    mongoose.model<EventDocument>(
+      'Event',
+      new mongoose.Schema(
+        {
+          name: String,
+          date: Date,
+          client: {type: mongoose.Schema.Types.ObjectId, ref: 'Contact'},
+          type: {
+            type: String,
+            default: EVENT_TYPE.DEFAULT,
+            enum: Object.values(EVENT_TYPE),
           },
-        ],
-      },
-    ],
-    creator: {type: Schema.Types.ObjectId, ref: 'User'},
-    status: {
-      type: String,
-      required: true,
-      default: EVENT_STATUS.ACTIVE,
-      enum: Object.values(EVENT_STATUS),
-    },
-    currency: {
-      type: String,
-      required: true,
-      default: CURRENCY.DEFAULT,
-      enum: Object.values(CURRENCY),
-    },
-    timezone: {
-      type: String,
-      required: true,
-      default: TIMEZONE.DEFAULT,
-      enum: Object.values(TIMEZONE),
-    },
-    vendors: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Vendor',
-      },
-    ],
-    contacts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Contact',
-      },
-    ],
-    budgetItems: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'BudgetItem',
-      },
-    ],
-    paymentSchedules: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'PaymentSchedule',
-      },
-    ],
-    timelineItems: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'TimelineItem',
-      },
-    ],
-  },
-  {timestamps: true}
+          checklists: [
+            {
+              name: String,
+              checklistItems: [
+                {
+                  text: String,
+                  checked: Boolean,
+                },
+              ],
+            },
+          ],
+          creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+          status: {
+            type: String,
+            required: true,
+            default: EVENT_STATUS.ACTIVE,
+            enum: Object.values(EVENT_STATUS),
+          },
+          currency: {
+            type: String,
+            required: true,
+            default: CURRENCY.DEFAULT,
+            enum: Object.values(CURRENCY),
+          },
+          timezone: {
+            type: String,
+            required: true,
+            default: TIMEZONE.DEFAULT,
+            enum: Object.values(TIMEZONE),
+          },
+          vendors: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Vendor',
+            },
+          ],
+          contacts: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Contact',
+            },
+          ],
+          budgetItems: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'BudgetItem',
+            },
+          ],
+          paymentSchedules: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'PaymentSchedule',
+            },
+          ],
+          timelineItems: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'TimelineItem',
+            },
+          ],
+        },
+        {timestamps: true}
+      )
+    ),
+});
+
+export const EventModelToken = createToken<ServiceType<typeof EventModel>>(
+  'EventModel'
 );
 
 export function generateContractDetails(vendorKind: string): ContractDetails[] {
@@ -228,5 +242,3 @@ function generateAVContractDetails(): ContractDetails[] {
     },
   ];
 }
-
-export const Event = mongoose.model<EventDocument>('Event', eventSchema);

@@ -1,5 +1,5 @@
-import {Schema, Document} from 'mongoose';
-import {createPlugin} from 'fusion-core';
+import {Document} from 'mongoose';
+import {createPlugin, createToken, ServiceType} from 'fusion-core';
 import {MongooseToken} from '../mongoose';
 
 export type BudgetItemDocument = Document & {
@@ -10,19 +10,19 @@ export type BudgetItemDocument = Document & {
   vendorId: string;
 };
 
-export const BudgetItem = createPlugin({
+export const BudgetItemModel = createPlugin({
   deps: {mongoose: MongooseToken},
   provides: ({mongoose}) =>
     mongoose.model(
       'BudgetItem',
-      new Schema(
+      new mongoose.Schema(
         {
           item: String,
           qty: Number,
           amount: Number,
           total: Number,
           vendorId: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'Vendor',
           },
         },
@@ -30,3 +30,6 @@ export const BudgetItem = createPlugin({
       )
     ),
 });
+export const BudgetItemModelToken = createToken<
+  ServiceType<typeof BudgetItemModel>
+>('BudgetItemModel');

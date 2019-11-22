@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import {Document} from 'mongoose';
-import {createToken, createPlugin} from 'fusion-core';
+import {createToken, createPlugin, ServiceType} from 'fusion-core';
 import {MongooseToken} from '../mongoose';
 
 export type UserDocument = Document & {
@@ -57,6 +57,6 @@ export const UserModel = createPlugin({
     return mongoose.model('User', userSchema);
   },
 });
-export const UserModelToken = createToken<
-  ReturnType<typeof UserModel.provides>
->('User');
+export const UserModelToken = createToken<ServiceType<typeof UserModel>>(
+  'UserModel'
+);

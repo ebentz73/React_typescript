@@ -1,18 +1,24 @@
-import mongoose, {Schema} from 'mongoose';
+import {createPlugin, createToken, ServiceType} from 'fusion-core';
+import {MongooseToken} from '../mongoose';
 
-const ChecklistTemplateSchema = new Schema({
-  templateName: String,
-  name: String,
-  checklistItems: [
-    {
-      id: String,
-      text: String,
-      checked: Boolean,
-    },
-  ],
+export const ChecklistTemplateModel = createPlugin({
+  deps: {mongoose: MongooseToken},
+  provides: ({mongoose}) =>
+    mongoose.model(
+      'ChecklistTemplate',
+      new mongoose.Schema({
+        templateName: String,
+        name: String,
+        checklistItems: [
+          {
+            id: String,
+            text: String,
+            checked: Boolean,
+          },
+        ],
+      })
+    ),
 });
-
-export const ChecklistTemplate = mongoose.model(
-  'ChecklistTemplate',
-  ChecklistTemplateSchema
-);
+export const ChecklistTemplateModelToken = createToken<
+  ServiceType<typeof ChecklistTemplateModel>
+>('ChecklistTemplateModel');
