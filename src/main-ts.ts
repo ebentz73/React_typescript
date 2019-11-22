@@ -20,7 +20,7 @@ import {RenderToken, createPlugin} from 'fusion-core';
 import {SchemaPlugin} from './data/schema';
 import {MongooseToken, MongoosePlugin} from './data/mongoose';
 import {SecretsToken, SecretsPlugin} from './config/secrets';
-import {UserModelToken, UserModel} from './data/models/User';
+import {UserModelToken, UserModel} from './data/models/user';
 import unfetch from 'unfetch';
 
 const setUpServer = app => {

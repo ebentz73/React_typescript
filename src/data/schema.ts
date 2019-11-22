@@ -1,5 +1,5 @@
 import {createPlugin, Context} from 'fusion-core';
-import {UserModelToken, UserDocument} from './models/User';
+import {UserModelToken, UserDocument} from './models/user';
 import {makeExecutableSchema} from 'graphql-tools';
 import {gql} from 'fusion-plugin-apollo';
 import {SessionAuthToken} from '../plugins/session-auth';
