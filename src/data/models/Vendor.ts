@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {UserDocument} from './User';
+import {UserDocument} from './user';
 import {VENDOR_KINDS} from '../../constants/vendor-kind';
 import {Document, Schema} from 'mongoose';
 

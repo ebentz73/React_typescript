@@ -1,7 +1,7 @@
-import {BudgetItem} from '../data/models/BudgetItem';
-import {Contact} from '../data/models/Contact';
-import {PaymentSchedule} from '../data/models/PaymentSchedule';
-import {TimelineItem} from '../data/models/TimelineItem';
+import {BudgetItem} from '../data/models/budget-item';
+import {Contact} from '../data/models/contact';
+import {PaymentSchedule} from '../data/models/payment-schedule';
+import {TimelineItem} from '../data/models/timeline-item';
 
 export const modelMap = {
   budgetItem: BudgetItem,

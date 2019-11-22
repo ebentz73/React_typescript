@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import {ChecklistTemplate} from '../models/ChecklistTemplate';
-import {ChecklistItem} from '../models/Event';
+import {ChecklistTemplate} from '../models/checklist-template';
+import {ChecklistItem} from '../models/event';
 
 export async function create(event, reqBody) {
   const newChecklist = {

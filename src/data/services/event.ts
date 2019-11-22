@@ -1,5 +1,5 @@
-import {Event} from '../models/Event';
-import {Contact} from '../models/Contact';
+import {Event} from '../models/event';
+import {Contact} from '../models/contact';
 import {modelMap} from '../../constants/model-map';
 import {EVENT_STATUS} from '../../constants/model-constants';
 

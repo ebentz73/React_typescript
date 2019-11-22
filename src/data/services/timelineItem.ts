@@ -1,6 +1,6 @@
 import moment from 'moment';
-import {TimelineItem} from '../models/TimelineItem';
-import {TimelineSnippet} from '../models/TimelineSnippet';
+import {TimelineItem} from '../models/timeline-item';
+import {TimelineSnippet} from '../models/timeline-snippet';
 
 function shiftOneTimeline(timelineId, minToShift) {
   return TimelineItem.findById(timelineId).then(timeline => {

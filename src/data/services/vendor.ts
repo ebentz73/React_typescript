@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import {Vendor} from '../models/Vendor';
-import {Contact} from '../models/Contact';
-import {BudgetItem} from '../models/BudgetItem';
-import {TimelineItem} from '../models/TimelineItem';
-import {PaymentSchedule} from '../models/PaymentSchedule';
+import {Vendor} from '../models/vendor';
+import {Contact} from '../models/contact';
+import {BudgetItem} from '../models/budget-item';
+import {TimelineItem} from '../models/timeline-item';
+import {PaymentSchedule} from '../models/payment-schedule';
 
 export function create(reqBody, currentEvent, user) {
   const vendor = new Vendor({

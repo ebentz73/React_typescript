@@ -1,5 +1,5 @@
 import mongoose, {Schema, Document} from 'mongoose';
-import {UserDocument} from './User';
+import {UserDocument} from './user';
 import {FIELD_INPUT_KIND} from '../../constants/field-input';
 import {
   EVENT_STATUS,
