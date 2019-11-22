@@ -1,56 +1,62 @@
-import * as bcrypt from 'bcrypt-nodejs';
-import {default as mongoose} from 'mongoose';
+import * as bcrypt from 'bcryptjs';
+import {Document} from 'mongoose';
+import {createToken, createPlugin} from 'fusion-core';
+import {MongooseToken} from '../mongoose';
 
-export type UserDocument = mongoose.Document & {
+export type UserDocument = Document & {
   email: string;
   password: string;
-  comparePassword: (
-    candidatePassword: string,
-    cb: (err: any, isMatch: any) => void
-  ) => void;
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
 };
 
-const userSchema = new mongoose.Schema(
-  {
-    email: {type: String, unique: true},
-    password: String,
-  },
-  {timestamps: true}
-);
+export const UserModel = createPlugin({
+  deps: {mongoose: MongooseToken},
+  provides: ({mongoose}) => {
+    const userSchema = new mongoose.Schema(
+      {
+        email: {type: String, unique: true},
+        password: String,
+      },
+      {timestamps: true}
+    );
 
-/**
- * Password hash middleware.
- */
-userSchema.pre('save', function save(next) {
-  const user = this as UserDocument;
-  if (!user.isModified('password')) {
-    return next();
-  }
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) {
-      return next(err);
-    }
-    bcrypt.hash(user.password, salt, undefined, (err: mongoose.Error, hash) => {
-      if (err) {
-        return next(err);
+    userSchema.pre('save', function save(next) {
+      const user = this as UserDocument;
+      if (!user.isModified('password')) {
+        return next();
       }
-      user.password = hash;
-      next();
+      bcrypt.genSalt(10, (err, salt) => {
+        if (err) {
+          return next(err);
+        }
+        bcrypt.hash(user.password, salt, (err, hash) => {
+          if (err) {
+            return next(err);
+          }
+          user.password = hash;
+          next();
+        });
+      });
     });
-  });
+    userSchema.methods.comparePassword = function(candidatePassword: string) {
+      return new Promise((resolve, reject) => {
+        bcrypt.compare(
+          candidatePassword,
+          this.password,
+          (err, isMatch: boolean) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(isMatch);
+            }
+          }
+        );
+      });
+    };
+
+    return mongoose.model('User', userSchema);
+  },
 });
-
-userSchema.methods.comparePassword = function(
-  candidatePassword: string,
-  cb: (err: any, isMatch: any) => {}
-) {
-  bcrypt.compare(
-    candidatePassword,
-    this.password,
-    (err: mongoose.Error, isMatch: boolean) => {
-      cb(err, isMatch);
-    }
-  );
-};
-
-export const User = mongoose.model('User', userSchema);
+export const UserModelToken = createToken<
+  ReturnType<typeof UserModel.provides>
+>('User');

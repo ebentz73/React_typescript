@@ -1,4 +1,6 @@
-import mongoose, {Schema, Document} from 'mongoose';
+import {Schema, Document} from 'mongoose';
+import {createPlugin} from 'fusion-core';
+import {MongooseToken} from '../mongoose';
 
 export type BudgetItemDocument = Document & {
   item: string;
@@ -8,18 +10,23 @@ export type BudgetItemDocument = Document & {
   vendorId: string;
 };
 
-const budgetItemSchema = new Schema(
-  {
-    item: String,
-    qty: Number,
-    amount: Number,
-    total: Number,
-    vendorId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Vendor',
-    },
-  },
-  {timestamps: true}
-);
-
-export const BudgetItem = mongoose.model('BudgetItem', budgetItemSchema);
+export const BudgetItem = createPlugin({
+  deps: {mongoose: MongooseToken},
+  provides: ({mongoose}) =>
+    mongoose.model(
+      'BudgetItem',
+      new Schema(
+        {
+          item: String,
+          qty: Number,
+          amount: Number,
+          total: Number,
+          vendorId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Vendor',
+          },
+        },
+        {timestamps: true}
+      )
+    ),
+});

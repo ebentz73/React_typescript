@@ -68,9 +68,14 @@ declare module 'fusion-core' {
 
   export type SSRDecider = (ctx: Context) => boolean;
   export const SSRDeciderToken: Token<SSRDecider>;
+  export const RenderToken: Token<any>;
 }
-declare module 'fusion-plugin-react-router';
-declare module 'fusion-plugin-styletron-react';
+declare module 'fusion-plugin-react-router' {
+  export * from 'react-router';
+}
+declare module 'fusion-plugin-styletron-react' {
+  export const Styletron: any;
+}
 declare module 'fusion-plugin-jwt' {
   export const SessionSecretToken: Token<string>;
   export const SessionCookieNameToken: Token<string>;
@@ -84,4 +89,20 @@ declare module 'fusion-tokens' {
     get: <T>(key: string) => T;
   }
   export const SessionToken: Token<{from: (ctx: Context) => Session}>;
+  export const FetchToken: Token<any>;
+}
+
+declare module 'fusion-plugin-apollo' {
+  export const ApolloRenderEnhancer: any;
+  export const ApolloClientPlugin: any;
+  export const ApolloClientToken: Token<any>;
+  export const GraphQLSchemaToken: Token<any>;
+  export function gql(path: string): any;
+}
+
+declare module 'graphql-tools' {
+  export function makeExecutableSchema(args: {
+    typeDefs: any;
+    resolvers: any;
+  }): void;
 }
