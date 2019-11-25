@@ -2,3 +2,5 @@ node_modules/
 .fusion/
 *log
 .vscode/
+
+.env*
