@@ -1,28 +1,27 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useStyletron} from 'baseui';
 import {Search} from 'baseui/icon';
 import {Button} from 'baseui/button';
 import {SIZE} from 'baseui/input';
-import {EventModal} from '../events/event-modal';
 
-export const EventsPage = () => {
+export const EventsPage = ({history}) => {
   const [css, theme] = useStyletron();
 
   return (
     <div className={css({margin: `0 ${theme.sizing.scale1600}`})}>
       <h1>Events</h1>
-      <EventFilters></EventFilters>
+      <EventFilters
+        goToNewEvent={() => history.push('/new-event')}
+      ></EventFilters>
     </div>
   );
 };
 
-const EventFilters = () => {
+const EventFilters = ({goToNewEvent}) => {
   const [css, theme] = useStyletron();
   const verticalCenter = css({
     verticalAlign: 'middle',
   });
-
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
   return (
     <div className={css({display: 'flex', justifyContent: 'space-between'})}>
@@ -35,16 +34,11 @@ const EventFilters = () => {
         <FilterAnchor text="archived"></FilterAnchor>
       </div>
       <div>
-        <Button onClick={() => setIsEventModalOpen(true)} size={SIZE.compact}>
+        <Button onClick={goToNewEvent} size={SIZE.compact}>
           <span className={css({fontSize: theme.typography.font400.fontSize})}>
             New Event
           </span>
         </Button>
-
-        <EventModal
-          isOpen={isEventModalOpen}
-          close={() => setIsEventModalOpen(false)}
-        ></EventModal>
       </div>
     </div>
   );

@@ -7,11 +7,12 @@ import PageNotFound from './pageNotFound';
 import {EventsPage} from './events';
 import {assetUrl} from 'fusion-core';
 import {EventPage} from './event';
+import {NewEventPage} from './new-event';
 
 const Header = ({eventSelected}: {eventSelected: boolean}) => {
   const [css, theme] = useStyletron();
   const containerStyles = css({
-    height: '80px',
+    flex: '0 0 80px',
     display: 'flex',
     backgroundColor: eventSelected ? '#FFFFFF' : '#F3F2F2',
     alignItems: 'center',
@@ -36,6 +37,12 @@ export const Home = () => {
   const [css] = useStyletron();
 
   const containerStyles = css({
+    display: 'flex',
+    backgroundColor: '#F3F2F2',
+    flexDirection: 'column',
+  });
+
+  const fullHeightContainerStyles = css({
     height: '100%',
     display: 'flex',
     backgroundColor: '#F3F2F2',
@@ -50,8 +57,8 @@ export const Home = () => {
     return <Redirect to="/login" />;
   }
 
-  return (
-    <div className={containerStyles}>
+  const pageContent = (
+    <>
       <Switch>
         <Route
           path="/event/:eventId/"
@@ -59,13 +66,27 @@ export const Home = () => {
         />
         <Route render={() => <Header eventSelected={false} />} />
       </Switch>
-      <div className={css({flexGrow: 1})}>
-        <Switch>
-          <Route exact path="/" component={EventsPage} />
-          <Route path="/event/:eventId/" component={EventPage} />
-          <Route component={PageNotFound} />;
-        </Switch>
-      </div>
-    </div>
+      <Switch>
+        <Route exact path="/" component={EventsPage} />
+        <Route exact path="/new-event" component={NewEventPage} />
+        <Route path="/event/:eventId/" component={EventPage} />
+        <Route component={PageNotFound} />;
+      </Switch>
+    </>
+  );
+
+  return (
+    <Switch>
+      <Route
+        exact
+        path="/new-event"
+        render={() => <div className={containerStyles}>{pageContent}</div>}
+      />
+      <Route
+        render={() => (
+          <div className={fullHeightContainerStyles}>{pageContent}</div>
+        )}
+      />
+    </Switch>
   );
 };
