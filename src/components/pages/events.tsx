@@ -25,7 +25,7 @@ const EventFilters = () => {
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
   return (
-    <div className={css({display: 'flex'})}>
+    <div className={css({display: 'flex', justifyContent: 'space-between'})}>
       <div>
         <span className={verticalCenter}>
           <Search size={32} />
@@ -34,7 +34,7 @@ const EventFilters = () => {
         <FilterAnchor text="all"></FilterAnchor>
         <FilterAnchor text="archived"></FilterAnchor>
       </div>
-      <div className={css({marginLeft: 'auto'})}>
+      <div>
         <Button onClick={() => setIsEventModalOpen(true)} size={SIZE.compact}>
           <span className={css({fontSize: theme.typography.font400.fontSize})}>
             New Event

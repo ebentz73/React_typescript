@@ -1,7 +1,7 @@
 import React from 'react';
 import {useStyletron} from 'baseui';
 import {useQuery} from '@apollo/react-hooks';
-import {Redirect, Switch, Route} from 'fusion-plugin-react-router';
+import {Redirect, Switch, Route, Link} from 'fusion-plugin-react-router';
 import {SessionQuery, SessionQueryType} from '../queries';
 import PageNotFound from './pageNotFound';
 import {EventsPage} from './events';
@@ -24,7 +24,9 @@ const Header = ({eventSelected}: {eventSelected: boolean}) => {
   return (
     <div className={containerStyles}>
       <div className={logoStyles}>
-        <img src={assetUrl('../../static/logo.svg')} />
+        <Link to="/">
+          <img src={assetUrl('../../static/logo.svg')} />
+        </Link>
       </div>
     </div>
   );
