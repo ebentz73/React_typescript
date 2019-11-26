@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {useState} from 'react';
 import {useStyletron} from 'baseui';
 import {useQuery} from '@apollo/react-hooks';
 import {Redirect} from 'fusion-plugin-react-router';
@@ -40,10 +40,7 @@ const EventFilters = () => {
     verticalAlign: 'middle',
   });
 
-  const [isEventModalOpen, setIsEventModalOpen] = React.useState(false);
-  function closeEventModal() {
-    setIsEventModalOpen(false);
-  }
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
   return (
     <div className={css({display: 'flex'})}>
@@ -64,7 +61,7 @@ const EventFilters = () => {
 
         <EventModal
           isOpen={isEventModalOpen}
-          close={closeEventModal}
+          close={setIsEventModalOpen(false)}
         ></EventModal>
       </div>
     </div>

@@ -8,7 +8,7 @@ import {ClientFormState} from './client-form';
 
 export const EventForm = () => {
   const [eventName, setEventName] = useState('');
-  const [eventDate, setEventDate] = useState([]);
+  const [eventDate, setEventDate] = useState();
   const [eventBudget, setEventBudget] = useState('');
 
   const defaultClientFormState = {
@@ -30,21 +30,19 @@ export const EventForm = () => {
 
   return (
     <div>
-      <FormControl label={() => 'Event Name'} caption={() => ''}>
+      <FormControl label="Event Name" caption="">
         <Input
           value={eventName}
           onChange={(e: any) => setEventName(e.target.value)}
         />
       </FormControl>
-      <FormControl label={() => 'Date'} caption={() => ''}>
+      <FormControl label="Date" caption="">
         <Datepicker
           value={eventDate}
-          onChange={({date}) =>
-            setEventDate(Array.isArray(date) ? date : [date])
-          }
+          onChange={({date}) => setEventDate(date)}
         />
       </FormControl>
-      <FormControl label={() => 'Budget'} caption={() => ''}>
+      <FormControl label="Budget" caption="">
         <Input
           value={eventBudget}
           onChange={(e: any) => setEventBudget(e.target.value)}
