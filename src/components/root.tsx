@@ -5,12 +5,12 @@ import {Home} from './pages/home';
 import PageNotFound from './pages/pageNotFound';
 import {BaseProvider, styled, createTheme, lightThemePrimitives} from 'baseui';
 import {Login} from './pages/login';
-import { Logout } from './pages/logout';
+import {Logout} from './pages/logout';
 
 const RootStyles = styled('div', ({$theme: {typography: {font300}}}) => ({
   ...font300,
-  width: '1280px',
-  margin: '0 auto'
+  maxWidth: '1280px',
+  margin: '0 auto',
 }));
 
 const theme = createTheme({
