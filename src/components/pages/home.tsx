@@ -1,4 +1,3 @@
-// @flow
 import React, {useState} from 'react';
 import {useStyletron} from 'baseui';
 import {useQuery} from '@apollo/react-hooks';
@@ -61,7 +60,7 @@ const EventFilters = () => {
 
         <EventModal
           isOpen={isEventModalOpen}
-          close={setIsEventModalOpen(false)}
+          close={() => setIsEventModalOpen(false)}
         ></EventModal>
       </div>
     </div>
