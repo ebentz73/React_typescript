@@ -57,6 +57,7 @@ import {
   TimelineItemServiceToken,
 } from './data/services/timeline-item';
 import {VendorService, VendorServiceToken} from './data/services/vendor';
+import HelmetPlugin from 'fusion-plugin-react-helmet-async';
 
 const setUpServer = app => {
   app.register(SecretsToken, SecretsPlugin);
@@ -101,6 +102,7 @@ export default () => {
   app.enhance(RenderToken, ApolloRenderEnhancer);
   app.register(ApolloClientToken, ApolloClientPlugin);
   app.register(FetchToken, unfetch);
+  app.register(HelmetPlugin);
   if (__NODE__) {
     setUpServer(app);
   }

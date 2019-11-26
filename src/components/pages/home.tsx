@@ -1,20 +1,43 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useStyletron} from 'baseui';
 import {useQuery} from '@apollo/react-hooks';
-import {Redirect} from 'fusion-plugin-react-router';
+import {Redirect, Switch, Route} from 'fusion-plugin-react-router';
 import {SessionQuery, SessionQueryType} from '../queries';
-import {Search} from 'baseui/icon';
-import {Button} from 'baseui/button';
-import {SIZE} from 'baseui/input';
-import {EventModal} from '../events/event-modal';
+import PageNotFound from './pageNotFound';
+import {EventsPage} from './events';
+import {assetUrl} from 'fusion-core';
+import {EventPage} from './event';
+
+const Header = ({eventSelected}: {eventSelected: boolean}) => {
+  const [css, theme] = useStyletron();
+  const containerStyles = css({
+    height: '80px',
+    display: 'flex',
+    backgroundColor: eventSelected ? '#FFFFFF' : '#F3F2F2',
+    alignItems: 'center',
+    borderBottom: '1px solid #F3F2F2',
+  });
+  const logoStyles = css({
+    marginLeft: theme.sizing.scale1000,
+  });
+
+  return (
+    <div className={containerStyles}>
+      <div className={logoStyles}>
+        <img src={assetUrl('../../static/logo.svg')} />
+      </div>
+    </div>
+  );
+};
 
 export const Home = () => {
-  const [css, theme] = useStyletron();
+  const [css] = useStyletron();
 
-  const container = css({
+  const containerStyles = css({
     height: '100%',
-    backgroundColor: '#FFFFFF',
-    margin: `${theme.sizing.scale700} ${theme.sizing.scale1600}`,
+    display: 'flex',
+    backgroundColor: '#F3F2F2',
+    flexDirection: 'column',
   });
 
   const {
@@ -26,59 +49,21 @@ export const Home = () => {
   }
 
   return (
-    <div className={container}>
-      <h1>Events</h1>
-      <EventFilters></EventFilters>
-    </div>
-  );
-};
-
-const EventFilters = () => {
-  const [css, theme] = useStyletron();
-  const verticalCenter = css({
-    verticalAlign: 'middle',
-  });
-
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
-
-  return (
-    <div className={css({display: 'flex'})}>
-      <div>
-        <span className={verticalCenter}>
-          <Search size={32} />
-        </span>
-        <FilterAnchor text="recent"></FilterAnchor>
-        <FilterAnchor text="all"></FilterAnchor>
-        <FilterAnchor text="archived"></FilterAnchor>
-      </div>
-      <div className={css({marginLeft: 'auto'})}>
-        <Button onClick={() => setIsEventModalOpen(true)} size={SIZE.compact}>
-          <span className={css({fontSize: theme.typography.font400.fontSize})}>
-            New Event
-          </span>
-        </Button>
-
-        <EventModal
-          isOpen={isEventModalOpen}
-          close={() => setIsEventModalOpen(false)}
-        ></EventModal>
+    <div className={containerStyles}>
+      <Switch>
+        <Route
+          path="/event/:eventId/"
+          render={() => <Header eventSelected={true} />}
+        />
+        <Route render={() => <Header eventSelected={false} />} />
+      </Switch>
+      <div className={css({flexGrow: 1})}>
+        <Switch>
+          <Route exact path="/" component={EventsPage} />
+          <Route path="/event/:eventId/" component={EventPage} />
+          <Route component={PageNotFound} />;
+        </Switch>
       </div>
     </div>
-  );
-};
-
-const FilterAnchor = ({text}) => {
-  const [css] = useStyletron();
-
-  const styles = css({
-    paddingLeft: '28px',
-    fontSize: '18px',
-    verticalAlign: 'middle',
-  });
-
-  return (
-    <span className={styles}>
-      <a>{text.toUpperCase()}</a>
-    </span>
   );
 };

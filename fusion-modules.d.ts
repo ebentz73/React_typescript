@@ -17,6 +17,8 @@ declare module 'fusion-react';
 declare module 'fusion-core' {
   import {Context as KoaContext} from 'koa';
 
+  export function assetUrl(path: string): string;
+
   type ExtendedKoaContext = KoaContext & {
     memoized: Map<Record<string, any>, unknown>;
   };
@@ -79,6 +81,8 @@ declare module 'fusion-core' {
 }
 declare module 'fusion-plugin-react-router' {
   export * from 'react-router';
+  export const NotFound: React.SFC;
+  export const Link: React.SFC<{to: string}>;
 }
 declare module 'fusion-plugin-styletron-react' {
   export const Styletron: any;
@@ -112,4 +116,8 @@ declare module 'graphql-tools' {
     typeDefs: any;
     resolvers: any;
   }): void;
+}
+
+declare module 'fusion-plugin-react-helmet-async' {
+  export const Helmet: React.SFC;
 }
