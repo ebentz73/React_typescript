@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {useState} from 'react';
 import {useStyletron} from 'baseui';
 import {useQuery} from '@apollo/react-hooks';
 import {Redirect} from 'fusion-plugin-react-router';
@@ -7,11 +7,12 @@ import {SessionQuery, SessionQueryType} from '../queries';
 import {Search} from 'baseui/icon';
 import {Button} from 'baseui/button';
 import {SIZE} from 'baseui/input';
+import {EventModal} from '../events/event-modal';
 
 export const Home = () => {
-  const [useCss, theme] = useStyletron();
+  const [css, theme] = useStyletron();
 
-  const container = useCss({
+  const container = css({
     height: '100%',
     backgroundColor: '#FFFFFF',
     margin: `${theme.sizing.scale700} ${theme.sizing.scale1600}`,
@@ -34,13 +35,15 @@ export const Home = () => {
 };
 
 const EventFilters = () => {
-  const [useCss, theme] = useStyletron();
-  const verticalCenter = useCss({
+  const [css, theme] = useStyletron();
+  const verticalCenter = css({
     verticalAlign: 'middle',
   });
 
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+
   return (
-    <div className={useCss({display: 'flex'})}>
+    <div className={css({display: 'flex'})}>
       <div>
         <span className={verticalCenter}>
           <Search size={32} />
@@ -49,23 +52,26 @@ const EventFilters = () => {
         <FilterAnchor text="all"></FilterAnchor>
         <FilterAnchor text="archived"></FilterAnchor>
       </div>
-      <div className={useCss({marginLeft: 'auto'})}>
-        <Button size={SIZE.compact}>
-          <span
-            className={useCss({fontSize: theme.typography.font400.fontSize})}
-          >
-            +
+      <div className={css({marginLeft: 'auto'})}>
+        <Button onClick={() => setIsEventModalOpen(true)} size={SIZE.compact}>
+          <span className={css({fontSize: theme.typography.font400.fontSize})}>
+            New Event
           </span>
         </Button>
+
+        <EventModal
+          isOpen={isEventModalOpen}
+          close={setIsEventModalOpen(false)}
+        ></EventModal>
       </div>
     </div>
   );
 };
 
 const FilterAnchor = ({text}) => {
-  const [useCss] = useStyletron();
+  const [css] = useStyletron();
 
-  const styles = useCss({
+  const styles = css({
     paddingLeft: '28px',
     fontSize: '18px',
     verticalAlign: 'middle',
