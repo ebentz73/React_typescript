@@ -22,6 +22,7 @@ enum EventFilterType {
 type Query {
   session: Session!
   events(filterType: EventFilterType!, search: String): [Event!]!
+  event(id: ID): Event!
 }
 
 type Mutation {

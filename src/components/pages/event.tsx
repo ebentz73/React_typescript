@@ -10,6 +10,7 @@ import {TimelinePage} from './timeline';
 import {ChecklistPage} from './checklist';
 import {SettingsPage} from './settings';
 import {RoutePaths} from '../../constants';
+import {EventContextProvider} from '../event/context';
 
 export const EventPage = ({
   match: {
@@ -115,37 +116,45 @@ export const EventPage = ({
         <div className={menuContainerStyles}>{menuItems}</div>
       </div>
       <div className={mainStyles}>
-        <Switch>
-          <Route
-            exact
-            path={RoutePaths.EventDashboard()}
-            component={DashboardPage}
-          />
-          <Route
-            exact
-            path={RoutePaths.EventVendors()}
-            component={VendorsPage}
-          />
-          <Route exact path={RoutePaths.EventBudget()} component={BudgetPage} />
-          <Route
-            exact
-            path={RoutePaths.EventTimeline()}
-            component={TimelinePage}
-          />
-          <Route
-            exact
-            path={RoutePaths.EventChecklist()}
-            component={ChecklistPage}
-          />
-          <Route
-            exact
-            path={RoutePaths.EventSettings()}
-            component={SettingsPage}
-          />
-          <Route
-            render={() => <Redirect to={RoutePaths.EventDashboard(eventId)} />}
-          />
-        </Switch>
+        <EventContextProvider eventId={eventId}>
+          <Switch>
+            <Route
+              exact
+              path={RoutePaths.EventDashboard()}
+              component={DashboardPage}
+            />
+            <Route
+              exact
+              path={RoutePaths.EventVendors()}
+              component={VendorsPage}
+            />
+            <Route
+              exact
+              path={RoutePaths.EventBudget()}
+              component={BudgetPage}
+            />
+            <Route
+              exact
+              path={RoutePaths.EventTimeline()}
+              component={TimelinePage}
+            />
+            <Route
+              exact
+              path={RoutePaths.EventChecklist()}
+              component={ChecklistPage}
+            />
+            <Route
+              exact
+              path={RoutePaths.EventSettings()}
+              component={SettingsPage}
+            />
+            <Route
+              render={() => (
+                <Redirect to={RoutePaths.EventDashboard(eventId)} />
+              )}
+            />
+          </Switch>
+        </EventContextProvider>
       </div>
     </div>
   );

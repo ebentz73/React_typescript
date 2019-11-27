@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useStyletron} from 'baseui';
 import {useQuery} from '@apollo/react-hooks';
 import {Redirect, Switch, Route, Link} from 'fusion-plugin-react-router';
@@ -9,17 +9,23 @@ import {assetUrl} from 'fusion-core';
 import {EventPage} from './event';
 import {NewEventPage} from './new-event';
 import {RoutePaths} from '../../constants';
+import {MaybeEventContextProvider, MaybeEventContext} from '../event/context';
 
-const Header = ({eventSelected}: {eventSelected: boolean}) => {
+const Header = () => {
   const [css, theme] = useStyletron();
+  const {event} = useContext(MaybeEventContext);
+
   const containerStyles = css({
     flex: '0 0 80px',
     display: 'flex',
-    backgroundColor: eventSelected ? '#FFFFFF' : '#F3F2F2',
+    backgroundColor: event ? '#FFFFFF' : '#F3F2F2',
     alignItems: 'center',
     borderBottom: '1px solid #F3F2F2',
   });
   const logoStyles = css({
+    marginLeft: theme.sizing.scale1000,
+  });
+  const eventNameStyles = css({
     marginLeft: theme.sizing.scale1000,
   });
 
@@ -30,6 +36,7 @@ const Header = ({eventSelected}: {eventSelected: boolean}) => {
           <img src={assetUrl('../../static/logo.svg')} />
         </Link>
       </div>
+      {event && <div className={eventNameStyles}>{event.name}</div>}
     </div>
   );
 };
@@ -49,6 +56,7 @@ export const Home = () => {
     display: 'flex',
     backgroundColor: '#F3F2F2',
     flexDirection: 'column',
+    overflowY: 'scroll',
   });
 
   const {
@@ -64,9 +72,19 @@ export const Home = () => {
       <Switch>
         <Route
           path={RoutePaths.Event()}
-          render={() => <Header eventSelected={true} />}
+          render={props => (
+            <MaybeEventContextProvider eventId={props.match.params.eventId}>
+              <Header />
+            </MaybeEventContextProvider>
+          )}
         />
-        <Route render={() => <Header eventSelected={false} />} />
+        <Route
+          render={() => (
+            <MaybeEventContextProvider eventId={null}>
+              <Header />
+            </MaybeEventContextProvider>
+          )}
+        />
       </Switch>
       <Switch>
         <Route exact path={RoutePaths.Events()} component={EventsPage} />

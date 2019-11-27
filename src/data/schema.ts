@@ -13,6 +13,13 @@ const createInvalidSession = error => ({
   error,
 });
 
+const randomEvent = id => ({
+  id: id.toString(),
+  date: new Date(2019, Math.random() * 11, Math.random() * 28).valueOf(),
+  name: `Event ${id}`,
+  budget: Math.round(Math.random() * 20000),
+});
+
 export const SchemaPlugin = createPlugin({
   deps: {sessionAuth: SessionAuthToken, UserModel: UserModelToken},
   provides: ({sessionAuth, UserModel}) => {
@@ -24,17 +31,11 @@ export const SchemaPlugin = createPlugin({
           id: SessionId,
           isLoggedIn: Boolean(sessionAuth.getUserId(ctx)),
         }),
+        event: (_, {id}): EventSchema => {
+          return randomEvent(id);
+        },
         events: (): EventSchema[] => {
-          return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({
-            id: id.toString(),
-            date: new Date(
-              2019,
-              Math.random() * 11,
-              Math.random() * 28
-            ).valueOf(),
-            name: `Event ${id}`,
-            budget: Math.round(Math.random() * 20000),
-          }));
+          return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(randomEvent);
         },
       },
       Mutation: {
