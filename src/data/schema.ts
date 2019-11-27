@@ -3,19 +3,16 @@ import {UserModelToken, UserDocument} from './models/user';
 import {makeExecutableSchema} from 'graphql-tools';
 import {gql} from 'fusion-plugin-apollo';
 import {SessionAuthToken} from '../plugins/session-auth';
+import {EventSchema, SessionSchema} from './schema-types';
 
-export interface SessionSchema {
-  id: string;
-  isLoggedIn: boolean;
-  error?: string;
-}
-const SessionId = 'session';
+export const SessionId = 'session';
 const LoggedInSession = {id: SessionId, isLoggedIn: true};
 const createInvalidSession = error => ({
   id: SessionId,
   isLoggedIn: false,
   error,
 });
+
 export const SchemaPlugin = createPlugin({
   deps: {sessionAuth: SessionAuthToken, UserModel: UserModelToken},
   provides: ({sessionAuth, UserModel}) => {
@@ -27,6 +24,18 @@ export const SchemaPlugin = createPlugin({
           id: SessionId,
           isLoggedIn: Boolean(sessionAuth.getUserId(ctx)),
         }),
+        events: (): EventSchema[] => {
+          return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({
+            id: id.toString(),
+            date: new Date(
+              2019,
+              Math.random() * 11,
+              Math.random() * 28
+            ).valueOf(),
+            name: `Event ${id}`,
+            budget: Math.round(Math.random() * 20000),
+          }));
+        },
       },
       Mutation: {
         signup: async (

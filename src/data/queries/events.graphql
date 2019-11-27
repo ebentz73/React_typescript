@@ -1,0 +1,8 @@
+  query events($filterType: EventFilterType!, $search: String) {
+    events(filterType: $filterType, search: $search) {
+      id
+      date
+      name
+      budget
+    }
+  }

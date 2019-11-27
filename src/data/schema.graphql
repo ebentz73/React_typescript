@@ -1,11 +1,27 @@
+scalar Date
+
 type Session {
   id: ID!
   isLoggedIn: Boolean
   error: String
 }
 
+type Event {
+  id: ID!
+  date: Date!
+  name: String!
+  budget: Int!
+}
+
+enum EventFilterType {
+  RECENT
+  ALL
+  ARCHIVED
+}
+
 type Query {
   session: Session!
+  events(filterType: EventFilterType!, search: String): [Event!]!
 }
 
 type Mutation {

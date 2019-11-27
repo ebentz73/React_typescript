@@ -13,7 +13,6 @@ export const NewEventPage = ({history}) => {
   });
   const formWrapperStyles = css({
     flexGrow: 1,
-    overflowY: 'scroll',
   });
   const footerStyles = css({
     backgroundColor: '#FFFFFF',

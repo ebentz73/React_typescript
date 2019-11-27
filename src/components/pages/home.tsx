@@ -37,6 +37,7 @@ export const Home = () => {
   const [css] = useStyletron();
 
   const containerStyles = css({
+    minHeight: '100%',
     display: 'flex',
     backgroundColor: '#F3F2F2',
     flexDirection: 'column',
@@ -80,6 +81,11 @@ export const Home = () => {
       <Route
         exact
         path="/new-event"
+        render={() => <div className={containerStyles}>{pageContent}</div>}
+      />
+      <Route
+        exact
+        path="/"
         render={() => <div className={containerStyles}>{pageContent}</div>}
       />
       <Route

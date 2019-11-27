@@ -1,61 +1,40 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useStyletron} from 'baseui';
-import {Search} from 'baseui/icon';
-import {Button} from 'baseui/button';
-import {SIZE} from 'baseui/input';
+import {EventsQueryType, EventsQuery} from '../queries';
+import {useQuery} from '@apollo/react-hooks';
+import {EventFilters} from '../events/filters';
+import {EventsGrid} from '../events/grid';
+import {EventFilterType} from '../../data/schema-types';
+import {Spinner} from 'baseui/icon';
 
 export const EventsPage = ({history}) => {
   const [css, theme] = useStyletron();
+  const [filterType, setFilterType] = useState<EventFilterType>(
+    EventFilterType.ALL
+  );
+  const {data, loading} = useQuery<EventsQueryType>(EventsQuery, {
+    variables: {filterType, search: ''},
+  });
 
   return (
-    <div className={css({margin: `0 ${theme.sizing.scale1600}`})}>
-      <h1>Events</h1>
+    <div
+      className={css({
+        padding: `0 ${theme.sizing.scale1600}`,
+      })}
+    >
+      <div className={css({...theme.typography.font750, marginBottom: '32px'})}>
+        Events
+      </div>
       <EventFilters
+        selectedFilterType={filterType}
+        setSelectedFilterType={setFilterType}
         goToNewEvent={() => history.push('/new-event')}
       ></EventFilters>
+      {loading ? (
+        <Spinner />
+      ) : data ? (
+        <EventsGrid events={data.events} />
+      ) : null}
     </div>
-  );
-};
-
-const EventFilters = ({goToNewEvent}) => {
-  const [css, theme] = useStyletron();
-  const verticalCenter = css({
-    verticalAlign: 'middle',
-  });
-
-  return (
-    <div className={css({display: 'flex', justifyContent: 'space-between'})}>
-      <div>
-        <span className={verticalCenter}>
-          <Search size={32} />
-        </span>
-        <FilterAnchor text="recent"></FilterAnchor>
-        <FilterAnchor text="all"></FilterAnchor>
-        <FilterAnchor text="archived"></FilterAnchor>
-      </div>
-      <div>
-        <Button onClick={goToNewEvent} size={SIZE.compact}>
-          <span className={css({fontSize: theme.typography.font400.fontSize})}>
-            New Event
-          </span>
-        </Button>
-      </div>
-    </div>
-  );
-};
-
-const FilterAnchor = ({text}) => {
-  const [css] = useStyletron();
-
-  const styles = css({
-    paddingLeft: '28px',
-    fontSize: '18px',
-    verticalAlign: 'middle',
-  });
-
-  return (
-    <span className={styles}>
-      <a>{text.toUpperCase()}</a>
-    </span>
   );
 };
