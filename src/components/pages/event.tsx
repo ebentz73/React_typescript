@@ -9,6 +9,7 @@ import {BudgetPage} from './budget';
 import {TimelinePage} from './timeline';
 import {ChecklistPage} from './checklist';
 import {SettingsPage} from './settings';
+import {RoutePaths} from '../../constants';
 
 export const EventPage = ({
   match: {
@@ -70,32 +71,32 @@ export const EventPage = ({
     {
       icon: assetUrl('../../static/dashboard.svg'),
       selectedIcon: assetUrl('../../static/dashboard-selected.svg'),
-      route: `/event/${eventId}/dashboard`,
+      route: RoutePaths.EventDashboard(eventId),
     },
     {
       icon: assetUrl('../../static/vendors.svg'),
       selectedIcon: assetUrl('../../static/vendors-selected.svg'),
-      route: `/event/${eventId}/vendors`,
+      route: RoutePaths.EventVendors(eventId),
     },
     {
       icon: assetUrl('../../static/budget.svg'),
       selectedIcon: assetUrl('../../static/budget-selected.svg'),
-      route: `/event/${eventId}/budget`,
+      route: RoutePaths.EventBudget(eventId),
     },
     {
       icon: assetUrl('../../static/timeline.svg'),
       selectedIcon: assetUrl('../../static/timeline-selected.svg'),
-      route: `/event/${eventId}/timeline`,
+      route: RoutePaths.EventTimeline(eventId),
     },
     {
       icon: assetUrl('../../static/checklist.svg'),
       selectedIcon: assetUrl('../../static/checklist-selected.svg'),
-      route: `/event/${eventId}/checklist`,
+      route: RoutePaths.EventChecklist(eventId),
     },
     {
       icon: assetUrl('../../static/settings.svg'),
       selectedIcon: assetUrl('../../static/settings-selected.svg'),
-      route: `/event/${eventId}/settings`,
+      route: RoutePaths.EventSettings(eventId),
     },
   ].map(({icon, route}) => (
     <div key={route}>
@@ -117,28 +118,32 @@ export const EventPage = ({
         <Switch>
           <Route
             exact
-            path="/event/:eventId/dashboard"
+            path={RoutePaths.EventDashboard()}
             component={DashboardPage}
           />
-          <Route exact path="/event/:eventId/vendors" component={VendorsPage} />
-          <Route exact path="/event/:eventId/budget" component={BudgetPage} />
           <Route
             exact
-            path="/event/:eventId/timeline"
+            path={RoutePaths.EventVendors()}
+            component={VendorsPage}
+          />
+          <Route exact path={RoutePaths.EventBudget()} component={BudgetPage} />
+          <Route
+            exact
+            path={RoutePaths.EventTimeline()}
             component={TimelinePage}
           />
           <Route
             exact
-            path="/event/:eventId/checklist"
+            path={RoutePaths.EventChecklist()}
             component={ChecklistPage}
           />
           <Route
             exact
-            path="/event/:eventId/settings"
+            path={RoutePaths.EventSettings()}
             component={SettingsPage}
           />
           <Route
-            render={() => <Redirect to={`/event/${eventId}/dashboard`} />}
+            render={() => <Redirect to={RoutePaths.EventDashboard(eventId)} />}
           />
         </Switch>
       </div>

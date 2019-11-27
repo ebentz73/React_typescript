@@ -8,6 +8,7 @@ import {useStyletron} from 'baseui';
 import {SignupUserMutation, LoginUserMutation} from '../mutations';
 import {SessionQuery, SessionQueryType} from '../queries';
 import {FormControl} from 'baseui/form-control';
+import {RoutePaths} from '../../constants';
 
 export const Login = () => {
   const [css, theme] = useStyletron();
@@ -25,7 +26,7 @@ export const Login = () => {
     data: {session},
   } = useQuery<SessionQueryType>(SessionQuery);
   if (session.isLoggedIn) {
-    return <Redirect to="/" />;
+    return <Redirect to={RoutePaths.Events()} />;
   }
 
   const containerStyle = css({

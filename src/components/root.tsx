@@ -6,6 +6,7 @@ import {BaseProvider, styled, createTheme, lightThemePrimitives} from 'baseui';
 import {Login} from './pages/login';
 import {Logout} from './pages/logout';
 import {Helmet} from 'fusion-plugin-react-helmet-async';
+import {RoutePaths} from '../constants';
 
 const RootStyles = styled('div', ({$theme: {typography: {font300}}}) => ({
   ...font300,
@@ -37,9 +38,9 @@ input::-webkit-inner-spin-button,input::-webkit-outer-spin-button,input::-webkit
         <title>A Frosted Affair</title>
       </Helmet>
       <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/logout" component={Logout} />
-        <Route path="/" component={Home} />
+        <Route exact path={RoutePaths.Login()} component={Login} />
+        <Route exact path={RoutePaths.Logout()} component={Logout} />
+        <Route path={RoutePaths.Events()} component={Home} />
       </Switch>
     </RootStyles>
   </TsIgnoreBaseProvider>

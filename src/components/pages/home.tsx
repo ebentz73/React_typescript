@@ -8,6 +8,7 @@ import {EventsPage} from './events';
 import {assetUrl} from 'fusion-core';
 import {EventPage} from './event';
 import {NewEventPage} from './new-event';
+import {RoutePaths} from '../../constants';
 
 const Header = ({eventSelected}: {eventSelected: boolean}) => {
   const [css, theme] = useStyletron();
@@ -55,22 +56,22 @@ export const Home = () => {
   } = useQuery<SessionQueryType>(SessionQuery);
 
   if (!session.isLoggedIn) {
-    return <Redirect to="/login" />;
+    return <Redirect to={RoutePaths.Login()} />;
   }
 
   const pageContent = (
     <>
       <Switch>
         <Route
-          path="/event/:eventId/"
+          path={RoutePaths.Event()}
           render={() => <Header eventSelected={true} />}
         />
         <Route render={() => <Header eventSelected={false} />} />
       </Switch>
       <Switch>
-        <Route exact path="/" component={EventsPage} />
-        <Route exact path="/new-event" component={NewEventPage} />
-        <Route path="/event/:eventId/" component={EventPage} />
+        <Route exact path={RoutePaths.Events()} component={EventsPage} />
+        <Route exact path={RoutePaths.NewEvent()} component={NewEventPage} />
+        <Route path={RoutePaths.Event()} component={EventPage} />
         <Route component={PageNotFound} />;
       </Switch>
     </>
@@ -80,12 +81,12 @@ export const Home = () => {
     <Switch>
       <Route
         exact
-        path="/new-event"
+        path={RoutePaths.NewEvent()}
         render={() => <div className={containerStyles}>{pageContent}</div>}
       />
       <Route
         exact
-        path="/"
+        path={RoutePaths.Event()}
         render={() => <div className={containerStyles}>{pageContent}</div>}
       />
       <Route

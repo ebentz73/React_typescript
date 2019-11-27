@@ -4,6 +4,7 @@ import {useQuery, useMutation} from '@apollo/react-hooks';
 import {Redirect} from 'fusion-plugin-react-router';
 import {SessionQuery, SessionQueryType} from '../queries';
 import {LogOutMutation} from '../mutations';
+import {RoutePaths} from '../../constants';
 
 export const Logout = () => {
   const {
@@ -14,5 +15,5 @@ export const Logout = () => {
   if (session.isLoggedIn) {
     logout();
   }
-  return <Redirect to="/login" />;
+  return <Redirect to={RoutePaths.Login()} />;
 };

@@ -6,6 +6,7 @@ import {EventFilters} from '../events/filters';
 import {EventsGrid} from '../events/grid';
 import {EventFilterType} from '../../data/schema-types';
 import {Spinner} from 'baseui/icon';
+import {RoutePaths} from '../../constants';
 
 export const EventsPage = ({history}) => {
   const [css, theme] = useStyletron();
@@ -28,7 +29,7 @@ export const EventsPage = ({history}) => {
       <EventFilters
         selectedFilterType={filterType}
         setSelectedFilterType={setFilterType}
-        goToNewEvent={() => history.push('/new-event')}
+        goToNewEvent={() => history.push(RoutePaths.NewEvent())}
       ></EventFilters>
       {loading ? (
         <Spinner />

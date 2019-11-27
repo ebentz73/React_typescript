@@ -4,12 +4,14 @@ import {EventSchema} from '../../data/schema-types';
 import {useStyletron} from 'baseui';
 import {ProgressBar} from 'baseui/progress-bar';
 import moment from 'moment';
+import {withRouter, RouteComponentProps} from 'react-router';
+import {RoutePaths} from '../../constants';
 
 interface Props {
   event: EventSchema;
 }
 
-export const EventTile = ({event}: Props) => {
+export const EventTile = ({event, history}: Props & RouteComponentProps) => {
   const [css, theme] = useStyletron();
   const containerStyles = css({
     width: '244px',
@@ -24,6 +26,7 @@ export const EventTile = ({event}: Props) => {
     display: 'flex',
     flexDirection: 'column',
     padding: '22px 32px',
+    cursor: 'pointer',
   });
   const topSectionStyles = css({
     display: 'flex',
@@ -41,7 +44,10 @@ export const EventTile = ({event}: Props) => {
   });
 
   return (
-    <div className={containerStyles}>
+    <div
+      className={containerStyles}
+      onClick={() => history.push(RoutePaths.Event(event.id))}
+    >
       <div className={topSectionStyles}>
         <div>{moment(event.date).format('LL')}</div>
         <div>...</div>
@@ -70,3 +76,5 @@ export const EventTile = ({event}: Props) => {
     </div>
   );
 };
+
+export default withRouter(EventTile);

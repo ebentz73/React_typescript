@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useStyletron} from 'baseui';
 import {EventForm} from '../events/event-form';
 import {Button, KIND, SIZE} from 'baseui/button';
+import {RoutePaths} from '../../constants';
 
 export const NewEventPage = ({history}) => {
   const [css, theme] = useStyletron();
@@ -56,7 +57,7 @@ export const NewEventPage = ({history}) => {
             size={SIZE.compact}
             $style={buttonStyles}
             kind={KIND.tertiary}
-            onClick={() => history.push('/')}
+            onClick={() => history.push(RoutePaths.Events())}
           >
             Cancel
           </Button>

@@ -21,6 +21,11 @@ Use Node 8 (`nvm use 8`)
 - Check types with TypeScript: `yarn check-types`
 - Check lint rules: `yarn lint`
 
+## Chrome Setup
+Extensions:
+* React dev tools
+* Apollo dev tools
+
 ## VSCode Environment Setup
 
 Extensions:

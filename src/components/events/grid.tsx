@@ -1,5 +1,5 @@
 import React from 'react';
-import {EventTile} from './tile';
+import EventTile from './tile';
 import {EventSchema} from '../../data/schema-types';
 import {useStyletron} from 'baseui';
 
