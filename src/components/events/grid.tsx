@@ -9,15 +9,14 @@ interface Props {
 export const EventsGrid = ({events}: Props) => {
   const [css, theme] = useStyletron();
   const containerStyles = css({
-    display: 'flex',
-    justifyContent: 'start',
-    flexWrap: 'wrap',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, 320px)',
+    justifyContent: 'center',
+    gridGap: '24px',
     marginTop: theme.sizing.scale900,
+    marginBottom: theme.sizing.scale900,
   });
-  const tileStyles = css({
-    marginRight: theme.sizing.scale800,
-    marginBottom: theme.sizing.scale800,
-  });
+  const tileStyles = css({});
   return (
     <div className={containerStyles}>
       {events.map(event => (
