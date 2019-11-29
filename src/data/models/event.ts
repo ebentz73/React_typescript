@@ -153,6 +153,7 @@ export function generateContractDetails(vendorKind: string): ContractDetails[] {
       return contractDetails;
     }
   }
+  throw new Error('Cannot find vendor kind ' + vendorKind);
 }
 
 // returns list of default ContractDetails. Intended as a helper for adding new contracts

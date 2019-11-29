@@ -2,6 +2,7 @@ import moment from 'moment';
 import {createPlugin, createToken, ServiceType} from 'fusion-core';
 import {TimelineItemModelToken} from '../models/timeline-item';
 import {TimelineSnippetModelToken} from '../models/timeline-snippet';
+import {unwrap} from '../../util';
 
 export const TimelineItemService = createPlugin({
   deps: {
@@ -10,7 +11,8 @@ export const TimelineItemService = createPlugin({
   },
   provides: ({TimelineItemModel, TimelineSnippetModel}) => {
     const shiftOneTimeline = (timelineId, minToShift) =>
-      TimelineItemModel.findById(timelineId).then(timeline => {
+      TimelineItemModel.findById(timelineId).then(t => {
+        const timeline = unwrap(t);
         const startingTime = `${timeline.date} ${timeline.startTime}`;
         const currentTimeStamp = moment(
           startingTime,

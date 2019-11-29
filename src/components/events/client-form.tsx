@@ -3,6 +3,7 @@ import {FormControl} from 'baseui/form-control';
 import {Input} from 'baseui/input';
 import {useStyletron} from 'baseui';
 import {PhoneInput, Country, COUNTRIES} from 'baseui/phone-input';
+import {unwrap} from '../../util';
 
 export type ClientFormState = {
   name: string;
@@ -45,7 +46,10 @@ export const ClientForm = ({state, setState}: Props) => {
                 overrides={{Input: {style: {height: '48px'}}}}
                 country={state.country}
                 onCountryChange={({option}) =>
-                  setState({...state, country: COUNTRIES[option.id]})
+                  setState({
+                    ...state,
+                    country: COUNTRIES[unwrap(unwrap(option).id)],
+                  })
                 }
                 text={state.phone}
                 onTextChange={e =>

@@ -1,45 +1,15 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {useStyletron} from 'baseui';
 import {useQuery} from '@apollo/react-hooks';
-import {Redirect, Switch, Route, Link} from 'fusion-plugin-react-router';
+import {Redirect, Switch, Route} from 'fusion-plugin-react-router';
 import {SessionQuery, SessionQueryType} from '../queries';
 import PageNotFound from './pageNotFound';
 import {EventsPage} from './events';
-import {assetUrl} from 'fusion-core';
 import {EventPage} from './event';
 import {NewEventPage} from './new-event';
 import {RoutePaths} from '../../constants';
-import {MaybeEventContextProvider, MaybeEventContext} from '../event/context';
-
-const Header = () => {
-  const [css, theme] = useStyletron();
-  const {event} = useContext(MaybeEventContext);
-
-  const containerStyles = css({
-    flex: '0 0 80px',
-    display: 'flex',
-    backgroundColor: event ? '#FFFFFF' : '#F3F2F2',
-    alignItems: 'center',
-    borderBottom: '1px solid #F3F2F2',
-  });
-  const logoStyles = css({
-    marginLeft: theme.sizing.scale1000,
-  });
-  const eventNameStyles = css({
-    marginLeft: theme.sizing.scale1000,
-  });
-
-  return (
-    <div className={containerStyles}>
-      <div className={logoStyles}>
-        <Link to="/">
-          <img src={assetUrl('../../static/logo.svg')} />
-        </Link>
-      </div>
-      {event && <div className={eventNameStyles}>{event.name}</div>}
-    </div>
-  );
-};
+import {MaybeEventContextProvider} from '../event/context';
+import {Header} from '../header';
 
 export const Home = () => {
   const [css] = useStyletron();
@@ -59,11 +29,13 @@ export const Home = () => {
     overflowY: 'scroll',
   });
 
-  const {
-    data: {session},
-  } = useQuery<SessionQueryType>(SessionQuery);
+  const {data} = useQuery<SessionQueryType>(SessionQuery);
 
-  if (!session.isLoggedIn) {
+  if (!data) {
+    return null;
+  }
+
+  if (!data.session.isLoggedIn) {
     return <Redirect to={RoutePaths.Login()} />;
   }
 

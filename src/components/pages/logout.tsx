@@ -7,12 +7,13 @@ import {LogOutMutation} from '../mutations';
 import {RoutePaths} from '../../constants';
 
 export const Logout = () => {
-  const {
-    data: {session},
-  } = useQuery<SessionQueryType>(SessionQuery);
+  const {data} = useQuery<SessionQueryType>(SessionQuery);
   const [logout] = useMutation(LogOutMutation);
 
-  if (session.isLoggedIn) {
+  if (!data) {
+    return null;
+  }
+  if (data.session.isLoggedIn) {
     logout();
   }
   return <Redirect to={RoutePaths.Login()} />;

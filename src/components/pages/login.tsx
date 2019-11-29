@@ -22,9 +22,13 @@ export const Login = () => {
     variables: {email, password},
   });
 
-  const {
-    data: {session},
-  } = useQuery<SessionQueryType>(SessionQuery);
+  const {data} = useQuery<SessionQueryType>(SessionQuery);
+
+  if (!data) {
+    return null;
+  }
+
+  const session = data.session;
   if (session.isLoggedIn) {
     return <Redirect to={RoutePaths.Events()} />;
   }

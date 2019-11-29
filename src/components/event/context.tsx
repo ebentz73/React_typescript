@@ -46,7 +46,7 @@ export const EventContextProvider = ({children, eventId}: Props) => {
     variables: {id: eventId},
   });
 
-  if (loading) {
+  if (loading || !data) {
     return <Spinner />;
   }
 

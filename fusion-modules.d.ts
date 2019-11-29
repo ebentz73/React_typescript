@@ -50,7 +50,7 @@ declare module 'fusion-core' {
     __plugin__: boolean;
     stack: string;
     deps?: Deps;
-    provides?: (Deps: MapDeps<Deps>) => Service;
+    provides: (Deps: MapDeps<Deps>) => Service;
     middleware?: (Deps: MapDeps<Deps & {}>, Service: Service) => Middleware;
     cleanup?: (service: Service) => Promise<void>;
   }

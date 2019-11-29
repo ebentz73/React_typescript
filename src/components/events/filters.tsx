@@ -42,7 +42,7 @@ export const EventFilters = ({
           clearable={true}
           overrides={{
             Root: {style: {width: '400px'}},
-            After: {
+            Before: {
               component: () => (
                 <div
                   className={css({

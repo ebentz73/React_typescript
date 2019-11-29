@@ -63,7 +63,10 @@ export const EventPage = ({
           : baseIconContainerStyles
       )}
     >
-      <img src={icon} className={isSelected ? css({color: '#F1EAD9'}) : null} />
+      <img
+        src={icon}
+        className={isSelected ? css({color: '#F1EAD9'}) : undefined}
+      />
     </div>
   );
 
