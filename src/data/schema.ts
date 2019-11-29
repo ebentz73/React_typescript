@@ -21,6 +21,9 @@ const randomEvent = id => ({
   budget: Math.round(Math.random() * 20000),
 });
 
+const sleep = (delay: number) =>
+  new Promise(resolve => setTimeout(resolve, delay));
+
 export const SchemaPlugin = createPlugin({
   deps: {sessionAuth: SessionAuthToken, UserModel: UserModelToken},
   provides: ({sessionAuth, UserModel}) => {
@@ -35,7 +38,8 @@ export const SchemaPlugin = createPlugin({
         event: (_, {id}): EventSchema => {
           return randomEvent(id);
         },
-        events: (_, {search}): EventSchema[] => {
+        events: async (_, {search}): Promise<EventSchema[]> => {
+          await sleep(500);
           return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
             .map(randomEvent)
             .filter(

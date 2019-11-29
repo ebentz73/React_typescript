@@ -5,7 +5,7 @@ import {useQuery} from '@apollo/react-hooks';
 import {EventFilters} from '../events/filters';
 import {EventsGrid} from '../events/grid';
 import {EventFilterType} from '../../data/schema-types';
-import {Spinner} from 'baseui/icon';
+import {Spinner} from 'baseui/spinner';
 import {RoutePaths} from '../../constants';
 import {useDebounce} from 'use-debounce';
 
@@ -37,7 +37,16 @@ export const EventsPage = ({history}) => {
         goToNewEvent={() => history.push(RoutePaths.NewEvent())}
       ></EventFilters>
       {loading ? (
-        <Spinner />
+        <div className={css({marginTop: '100px', textAlign: 'center'})}>
+          <Spinner
+            size="140px"
+            overrides={{
+              ActivePath: {
+                style: {fill: theme.colors.primary},
+              },
+            }}
+          />
+        </div>
       ) : data ? (
         <EventsGrid events={data.events} />
       ) : null}
