@@ -26,7 +26,7 @@ export const Header = () => {
     <div className={containerStyles}>
       <div className={logoStyles}>
         <Link to="/">
-          <img src={assetUrl('../../static/logo.svg')} />
+          <img src={assetUrl('../static/logo.svg')} />
         </Link>
       </div>
       {event && <div className={eventNameStyles}>{event.name}</div>}

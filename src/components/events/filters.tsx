@@ -39,6 +39,7 @@ export const EventFilters = ({
         <Input
           value={searchQuery}
           onChange={e => setSearchQuery(e.currentTarget.value)}
+          placeholder="Search..."
           clearable={true}
           overrides={{
             Root: {style: {width: '400px'}},

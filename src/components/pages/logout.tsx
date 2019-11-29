@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {Redirect} from 'fusion-plugin-react-router';
 import {SessionQuery, SessionQueryType} from '../queries';
@@ -10,11 +10,14 @@ export const Logout = () => {
   const {data} = useQuery<SessionQueryType>(SessionQuery);
   const [logout] = useMutation(LogOutMutation);
 
+  useEffect(() => {
+    logout();
+  }, [logout]);
+
+  console.log('LOGOUT render: ' + (data ? data.session.isLoggedIn : false));
   if (!data) {
     return null;
   }
-  if (data.session.isLoggedIn) {
-    logout();
-  }
-  return <Redirect to={RoutePaths.Login()} />;
+
+  return data.session.isLoggedIn ? null : <Redirect to={RoutePaths.Login()} />;
 };

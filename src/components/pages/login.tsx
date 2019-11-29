@@ -70,6 +70,11 @@ export const Login = () => {
           value={password}
           onChange={(e: any) => setPassword(e.target.value)}
           type="password"
+          onKeyPress={e => {
+            if (e.key === 'Enter') {
+              login();
+            }
+          }}
         />
       </FormControl>
       {session.error && <div className={errorStyle}>{session.error}</div>}
