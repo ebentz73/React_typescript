@@ -4,6 +4,7 @@ import {makeExecutableSchema} from 'graphql-tools';
 import {gql} from 'fusion-plugin-apollo';
 import {SessionAuthToken} from '../plugins/session-auth';
 import {EventSchema, SessionSchema} from './schema-types';
+import uuid from 'uuid/v4';
 
 export const SessionId = 'session';
 const LoggedInSession = {id: SessionId, isLoggedIn: true};
@@ -14,7 +15,7 @@ const createInvalidSession = error => ({
 });
 
 const randomEvent = id => ({
-  id: id.toString(),
+  id: uuid(),
   date: new Date(2019, Math.random() * 11, Math.random() * 28).valueOf(),
   name: `Event ${id}`,
   budget: Math.round(Math.random() * 20000),
@@ -34,8 +35,12 @@ export const SchemaPlugin = createPlugin({
         event: (_, {id}): EventSchema => {
           return randomEvent(id);
         },
-        events: (): EventSchema[] => {
-          return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(randomEvent);
+        events: (_, {search}): EventSchema[] => {
+          return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            .map(randomEvent)
+            .filter(
+              e => e.name.toUpperCase().indexOf(search.toUpperCase()) !== -1
+            );
         },
       },
       Mutation: {

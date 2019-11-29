@@ -7,14 +7,17 @@ import {EventsGrid} from '../events/grid';
 import {EventFilterType} from '../../data/schema-types';
 import {Spinner} from 'baseui/icon';
 import {RoutePaths} from '../../constants';
+import {useDebounce} from 'use-debounce';
 
 export const EventsPage = ({history}) => {
   const [css, theme] = useStyletron();
   const [filterType, setFilterType] = useState<EventFilterType>(
     EventFilterType.ALL
   );
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
   const {data, loading} = useQuery<EventsQueryType>(EventsQuery, {
-    variables: {filterType, search: ''},
+    variables: {filterType, search: debouncedSearchQuery},
   });
 
   return (
@@ -29,6 +32,8 @@ export const EventsPage = ({history}) => {
       <EventFilters
         selectedFilterType={filterType}
         setSelectedFilterType={setFilterType}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
         goToNewEvent={() => history.push(RoutePaths.NewEvent())}
       ></EventFilters>
       {loading ? (
