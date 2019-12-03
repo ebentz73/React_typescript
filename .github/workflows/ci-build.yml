@@ -8,17 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Setup Node.js for use with actions
-      uses: actions/setup-node@v1.1.0
-      with:
-        # Version Spec of the version to use.  Examples: 10.x, 10.15.1, >=10.15.0, lts
-        version: 8.x
-    - name: GitHub Action for Yarn
-      uses: Borales/actions-yarn@v2.1.0
     - name: Checkout code
       uses: actions/checkout@v1
+
+    - name: Setup Node.js v8
+      uses: actions/setup-node@v1.1.0
+      with:
+        node-version: '8'
+    
     - name: Yarn install
       run: yarn
+    
     - name: Yarn build
       run: yarn build
     
