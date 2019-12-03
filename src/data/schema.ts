@@ -40,7 +40,7 @@ export const SchemaPlugin = createPlugin({
           return randomEvent(id, false);
         },
         events: async (_, {search, filterType}): Promise<EventSchema[]> => {
-          await sleep(500);
+          await sleep(200);
           return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
             .map(i => randomEvent(i, filterType === EventFilterType.ARCHIVED))
             .filter(
