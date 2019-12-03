@@ -12,6 +12,7 @@
     "fs": "^0.0.1-security",
     "fusion-core": "^2.0.6",
     "fusion-plugin-apollo": "^3.3.0",
+    "fusion-plugin-font-loader-react": "^2.0.9",
     "fusion-plugin-jwt": "^2.0.7",
     "fusion-plugin-react-helmet-async": "^2.1.2",
     "fusion-plugin-react-router": "^2.1.0",

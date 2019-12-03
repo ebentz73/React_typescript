@@ -3,7 +3,7 @@ import {useStyletron} from 'baseui';
 import {Search} from 'baseui/icon';
 import {Button, SIZE} from 'baseui/button';
 import {EventFilterType} from '../../data/schema-types';
-import {Input} from 'baseui/input';
+import {Input, SIZE as INPUT_SIZE} from 'baseui/input';
 
 interface Props {
   goToNewEvent: () => void;
@@ -22,15 +22,16 @@ export const EventFilters = ({
 }: Props) => {
   const [css, theme] = useStyletron();
   const commonAnchorStles = {
+    ...theme.typography.font100,
     marginLeft: '28px',
-    fontSize: '18px',
     verticalAlign: 'middle',
     cursor: 'pointer',
+    color: '#0B0C0E',
   };
   const filterAnchorStyles = css(commonAnchorStles);
   const selectedFilterAnchorStyles = css({
     ...commonAnchorStles,
-    borderBottom: `4px solid ${theme.colors.primary}`,
+    borderBottom: `2px solid ${theme.colors.primary}`,
   });
 
   return (
@@ -41,6 +42,7 @@ export const EventFilters = ({
           onChange={e => setSearchQuery(e.currentTarget.value)}
           placeholder="Search..."
           clearable={true}
+          size={INPUT_SIZE.compact}
           overrides={{
             Root: {style: {width: '400px'}},
             Before: {
@@ -52,7 +54,7 @@ export const EventFilters = ({
                     height: '100%',
                   })}
                 >
-                  <Search size={32} />
+                  <Search size={24} />
                 </div>
               ),
             },
@@ -77,9 +79,7 @@ export const EventFilters = ({
       </div>
       <div>
         <Button onClick={goToNewEvent} size={SIZE.compact}>
-          <span className={css({fontSize: theme.typography.font400.fontSize})}>
-            New Event
-          </span>
+          <span className={css({...theme.typography.font200})}>New Event</span>
         </Button>
       </div>
     </div>

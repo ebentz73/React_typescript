@@ -121,3 +121,9 @@ declare module 'graphql-tools' {
 declare module 'fusion-plugin-react-helmet-async' {
   export const Helmet: React.SFC;
 }
+
+declare module 'fusion-plugin-font-loader-react' {
+  export const FontLoaderReactConfigToken: Token<any>;
+  const FontLoaderReact;
+  export default FontLoaderReact;
+}

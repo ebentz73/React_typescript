@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import {useStyletron} from 'baseui';
 import {EventFilters} from '../events/filters';
 import {EventsGrid} from '../events/grid';
 import {Spinner} from 'baseui/spinner';
 import {RoutePaths} from '../../constants';
 import {EventsContextProvider, EventsContext} from '../events/context';
+import {useFrostedStyletron} from '../util';
 
 export const EventsPage = ({history}) => (
   <EventsContextProvider>
@@ -13,7 +13,7 @@ export const EventsPage = ({history}) => (
 );
 
 const EventsPageInternal = ({history}) => {
-  const [css, theme] = useStyletron();
+  const [css, theme] = useFrostedStyletron();
   const {
     state: {events, filterType, searchQuery},
     actions: {setFilterType, setSearchQuery},
@@ -25,7 +25,7 @@ const EventsPageInternal = ({history}) => {
         padding: `0 ${theme.sizing.scale1600}`,
       })}
     >
-      <div className={css({...theme.typography.font750, marginBottom: '32px'})}>
+      <div className={css({...theme.titleFont, marginBottom: '32px'})}>
         Events
       </div>
       <EventFilters

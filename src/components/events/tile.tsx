@@ -1,7 +1,6 @@
 /* global Intl */
 import React, {useState, useContext} from 'react';
 import {EventSchema} from '../../data/schema-types';
-import {useStyletron} from 'baseui';
 import {ProgressBar} from 'baseui/progress-bar';
 import moment from 'moment';
 import {withRouter, RouteComponentProps} from 'react-router';
@@ -9,7 +8,7 @@ import {RoutePaths} from '../../constants';
 import {StatefulPopover, PLACEMENT} from 'baseui/popover';
 import {StatefulMenu} from 'baseui/menu';
 import {Overflow} from 'baseui/icon';
-import {StyledRouterLink} from '../util';
+import {StyledRouterLink, useFrostedStyletron} from '../util';
 import {
   Modal,
   ModalHeader,
@@ -26,10 +25,10 @@ interface Props {
 export const EventTile = ({event, history}: Props & RouteComponentProps) => {
   const {isArchived} = event;
 
-  const [css, theme] = useStyletron();
+  const [css, theme] = useFrostedStyletron();
   const containerStyles = css({
-    width: '244px',
-    height: '232px',
+    width: '194px',
+    height: '218px',
     borderRadius: '4px',
     backgroundColor: '#FFFFFF',
     borderTop: '1px solid #F6F4ED',
@@ -63,7 +62,7 @@ export const EventTile = ({event, history}: Props & RouteComponentProps) => {
   const bottomSectionStyles = css({
     flex: '0 0 40px',
     color: '#0B0C0E',
-    ...theme.typography.font100,
+    ...theme.eventTotalBudgetFont,
   });
 
   const [isArchiving, setIsArchiving] = useState(false);
@@ -130,7 +129,7 @@ export const EventTile = ({event, history}: Props & RouteComponentProps) => {
         <div className={topSectionStyles}>
           <div
             className={css({
-              ...theme.typography.font200,
+              ...theme.eventDateFont,
               color: isArchived ? 'B0AFAF' : '#1E1E1C',
             })}
           >
@@ -152,7 +151,7 @@ export const EventTile = ({event, history}: Props & RouteComponentProps) => {
           </div>
         </div>
         <div className={middleSectionStyles}>
-          <div className={css({...theme.typography.font300, color: '#0B0C0E'})}>
+          <div className={css({...theme.eventTitleFont, color: '#0B0C0E'})}>
             <StyledRouterLink to={RoutePaths.Event(event.id)}>
               {event.name}
             </StyledRouterLink>

@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {useStyletron} from 'baseui';
+import {useFrostedStyletron} from '../util';
 
 export const TimelinePage = () => {
-  const [css, theme] = useStyletron();
+  const [css, theme] = useFrostedStyletron();
 
   return (
     <div>
-      <div className={css({...theme.typography.font750})}>Timeline</div>
+      <div className={css({...theme.titleFont})}>Timeline</div>
     </div>
   );
 };

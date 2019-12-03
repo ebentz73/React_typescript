@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {useStyletron} from 'baseui';
 import {EventForm} from '../events/event-form';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {RoutePaths} from '../../constants';
+import {useFrostedStyletron} from '../util';
 
 export const NewEventPage = ({history}) => {
-  const [css, theme] = useStyletron();
+  const [css, theme] = useFrostedStyletron();
 
   const formStyles = css({
     width: '560px',
@@ -39,7 +39,7 @@ export const NewEventPage = ({history}) => {
     <>
       <div className={formWrapperStyles}>
         <div className={formStyles}>
-          <div className={css({...theme.typography.font750})}>Create event</div>
+          <div className={css({...theme.titleFont})}>Create event</div>
           <div className={css({...theme.typography.font300})}>
             Enter event details and important information
           </div>

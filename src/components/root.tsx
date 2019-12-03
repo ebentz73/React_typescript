@@ -13,11 +13,38 @@ const RootStyles = styled('div', ({$theme: {typography: {font300}}}) => ({
   height: '100%',
 }));
 
-const theme = createTheme({
-  ...lightThemePrimitives,
-  primary: '#CCAF74',
-  primaryFontFamily: '',
-});
+const theme = createTheme(
+  {
+    ...lightThemePrimitives,
+    primary: '#CCAF74',
+    primaryFontFamily: 'Lato',
+  },
+  {
+    titleFont: {
+      fontSize: '28px',
+      lineHeight: '28px',
+      fontFamily: 'Merriweather',
+      fontWeight: 'normal',
+    },
+    eventDateFont: {
+      color: '#1E1E1C',
+      fontSize: '14px',
+      letterSpacing: '0.51px',
+      lineHeight: '26px',
+    },
+    eventTitleFont: {
+      color: '#0B0C0E',
+      fontSize: '16px',
+      lineHeight: '24px',
+    },
+    eventTotalBudgetFont: {
+      color: '0B0C0E',
+      fontSize: '13px',
+      letterSpacing: '0.47px',
+      lineHeight: '32px',
+    },
+  }
+);
 
 // Need BaseWeb to provide more accurate typings to include overrides
 const TsIgnoreBaseProvider: any = BaseProvider;

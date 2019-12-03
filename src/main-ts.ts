@@ -16,7 +16,7 @@ import {
   ApolloClientToken,
   GraphQLSchemaToken,
 } from 'fusion-plugin-apollo';
-import {RenderToken, createPlugin} from 'fusion-core';
+import {RenderToken, createPlugin, assetUrl} from 'fusion-core';
 import {SchemaPlugin} from './data/schema';
 import {MongooseToken, MongoosePlugin} from './data/mongoose';
 import {SecretsToken, SecretsPlugin} from './config/secrets';
@@ -58,6 +58,9 @@ import {
 } from './data/services/timeline-item';
 import {VendorService, VendorServiceToken} from './data/services/vendor';
 import HelmetPlugin from 'fusion-plugin-react-helmet-async';
+import FontLoaderReact, {
+  FontLoaderReactConfigToken,
+} from 'fusion-plugin-font-loader-react';
 
 const setUpServer = app => {
   app.register(SecretsToken, SecretsPlugin);
@@ -95,6 +98,55 @@ const setUpServer = app => {
   app.register(VendorServiceToken, VendorService);
 };
 
+const setUpFonts = app => {
+  app.register(FontLoaderReactConfigToken, {
+    withStyleOverloads: true,
+    fonts: {
+      Lato: [
+        {
+          urls: {
+            woff2: assetUrl('./static/fonts/lato/Lato-Regular.woff2'),
+          },
+          styles: {
+            fontWeight: 'normal',
+          },
+        },
+        {
+          urls: {
+            woff2: assetUrl('./static/fonts/lato/Lato-Bold.woff2'),
+          },
+          styles: {
+            fontWeight: 500,
+          },
+        },
+      ],
+      Merriweather: [
+        {
+          urls: {
+            woff2: assetUrl(
+              './static/fonts/merriweather/Merriweather-Regular.woff2'
+            ),
+          },
+          styles: {
+            fontWeight: 'normal',
+          },
+        },
+        {
+          urls: {
+            woff2: assetUrl(
+              './static/fonts/merriweather/Merriweather-Bold.woff2'
+            ),
+          },
+          styles: {
+            fontWeight: 500,
+          },
+        },
+      ],
+    },
+  });
+  app.register(FontLoaderReact);
+};
+
 export default () => {
   const app = new App(root);
   app.register(Styletron);
@@ -103,6 +155,7 @@ export default () => {
   app.register(ApolloClientToken, ApolloClientPlugin);
   app.register(FetchToken, unfetch);
   app.register(HelmetPlugin);
+  setUpFonts(app);
   if (__NODE__) {
     setUpServer(app);
   }

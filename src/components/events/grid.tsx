@@ -10,7 +10,7 @@ export const EventsGrid = ({events}: Props) => {
   const [css, theme] = useStyletron();
   const containerStyles = css({
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, 320px)',
+    gridTemplateColumns: 'repeat(auto-fill, 268px)',
     justifyContent: 'center',
     gridGap: '24px',
     marginTop: theme.sizing.scale900,
