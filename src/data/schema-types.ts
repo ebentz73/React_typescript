@@ -9,6 +9,7 @@ export interface EventSchema {
   date: number;
   name: string;
   budget: number;
+  isArchived: boolean;
 }
 
 export enum EventFilterType {

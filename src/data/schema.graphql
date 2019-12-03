@@ -11,6 +11,7 @@ type Event {
   date: Date!
   name: String!
   budget: Int!
+  isArchived: Boolean!
 }
 
 enum EventFilterType {
@@ -29,4 +30,5 @@ type Mutation {
   signup(email: String!, password: String!): Session!
   login(email: String!, password: String!): Session!
   logout: Session!
+  archiveEvent(id: ID, isArchived: Boolean): Event!
 }

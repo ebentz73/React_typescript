@@ -1,0 +1,9 @@
+  mutation archiveEvent($id: ID!, $isArchived: Boolean) {
+    archiveEvent(id: $id, isArchived: $isArchived) {
+      id
+      date
+      name
+      budget
+      isArchived
+    }
+  }

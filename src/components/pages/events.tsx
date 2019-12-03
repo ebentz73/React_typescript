@@ -1,24 +1,23 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {useStyletron} from 'baseui';
-import {EventsQueryType, EventsQuery} from '../queries';
-import {useQuery} from '@apollo/react-hooks';
 import {EventFilters} from '../events/filters';
 import {EventsGrid} from '../events/grid';
-import {EventFilterType} from '../../data/schema-types';
 import {Spinner} from 'baseui/spinner';
 import {RoutePaths} from '../../constants';
-import {useDebounce} from 'use-debounce';
+import {EventsContextProvider, EventsContext} from '../events/context';
 
-export const EventsPage = ({history}) => {
+export const EventsPage = ({history}) => (
+  <EventsContextProvider>
+    <EventsPageInternal history={history} />
+  </EventsContextProvider>
+);
+
+const EventsPageInternal = ({history}) => {
   const [css, theme] = useStyletron();
-  const [filterType, setFilterType] = useState<EventFilterType>(
-    EventFilterType.ALL
-  );
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
-  const {data, loading} = useQuery<EventsQueryType>(EventsQuery, {
-    variables: {filterType, search: debouncedSearchQuery},
-  });
+  const {
+    state: {events, filterType, searchQuery},
+    actions: {setFilterType, setSearchQuery},
+  } = useContext(EventsContext);
 
   return (
     <div
@@ -36,7 +35,7 @@ export const EventsPage = ({history}) => {
         setSearchQuery={setSearchQuery}
         goToNewEvent={() => history.push(RoutePaths.NewEvent())}
       ></EventFilters>
-      {loading ? (
+      {events.isLoading ? (
         <div className={css({marginTop: '100px', textAlign: 'center'})}>
           <Spinner
             size="140px"
@@ -47,9 +46,9 @@ export const EventsPage = ({history}) => {
             }}
           />
         </div>
-      ) : data ? (
-        <EventsGrid events={data.events} />
-      ) : null}
+      ) : (
+        <EventsGrid events={events.events} />
+      )}
     </div>
   );
 };

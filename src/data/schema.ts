@@ -3,7 +3,7 @@ import {UserModelToken, UserDocument} from './models/user';
 import {makeExecutableSchema} from 'graphql-tools';
 import {gql} from 'fusion-plugin-apollo';
 import {SessionAuthToken} from '../plugins/session-auth';
-import {EventSchema, SessionSchema} from './schema-types';
+import {EventSchema, SessionSchema, EventFilterType} from './schema-types';
 import uuid from 'uuid/v4';
 
 export const SessionId = 'session';
@@ -14,11 +14,12 @@ const createInvalidSession = error => ({
   error,
 });
 
-const randomEvent = id => ({
-  id: uuid(),
+const randomEvent = (name, isArchived: boolean, id?: string) => ({
+  id: id || uuid(),
   date: new Date(2019, Math.random() * 11, Math.random() * 28).valueOf(),
-  name: `Event ${id}`,
+  name: `Event ${name}`,
   budget: Math.round(Math.random() * 20000),
+  isArchived,
 });
 
 const sleep = (delay: number) =>
@@ -36,12 +37,12 @@ export const SchemaPlugin = createPlugin({
           isLoggedIn: Boolean(sessionAuth.getUserId(ctx)),
         }),
         event: (_, {id}): EventSchema => {
-          return randomEvent(id);
+          return randomEvent(id, false);
         },
-        events: async (_, {search}): Promise<EventSchema[]> => {
+        events: async (_, {search, filterType}): Promise<EventSchema[]> => {
           await sleep(500);
           return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-            .map(randomEvent)
+            .map(i => randomEvent(i, filterType === EventFilterType.ARCHIVED))
             .filter(
               e => e.name.toUpperCase().indexOf(search.toUpperCase()) !== -1
             );
@@ -84,6 +85,14 @@ export const SchemaPlugin = createPlugin({
             return LoggedInSession;
           } else {
             return createInvalidSession('Incorrect password');
+          }
+        },
+        archiveEvent: async (_, {id, isArchived}): Promise<EventSchema> => {
+          await sleep(500);
+          if (isArchived) {
+            return randomEvent('Some archived event', true, id);
+          } else {
+            return randomEvent(uuid(), false, uuid());
           }
         },
       },

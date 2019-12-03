@@ -16,6 +16,7 @@ const RootStyles = styled('div', ({$theme: {typography: {font300}}}) => ({
 const theme = createTheme({
   ...lightThemePrimitives,
   primary: '#CCAF74',
+  primaryFontFamily: '',
 });
 
 // Need BaseWeb to provide more accurate typings to include overrides
