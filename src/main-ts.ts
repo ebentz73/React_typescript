@@ -61,6 +61,8 @@ import HelmetPlugin from 'fusion-plugin-react-helmet-async';
 import FontLoaderReact, {
   FontLoaderReactConfigToken,
 } from 'fusion-plugin-font-loader-react';
+import {AuthResolversToken, AuthResolvers} from './data/resolvers/auth';
+import {EventsResolversToken, EventsResolvers} from './data/resolvers/events';
 
 const setUpServer = app => {
   app.register(SecretsToken, SecretsPlugin);
@@ -96,6 +98,10 @@ const setUpServer = app => {
   app.register(EventServiceToken, EventService);
   app.register(TimelineItemServiceToken, TimelineItemService);
   app.register(VendorServiceToken, VendorService);
+
+  // Resolvers
+  app.register(AuthResolversToken, AuthResolvers);
+  app.register(EventsResolversToken, EventsResolvers);
 };
 
 const setUpFonts = app => {

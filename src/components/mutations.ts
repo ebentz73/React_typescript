@@ -6,3 +6,4 @@ export const LogOutMutation = gql('../data/mutations/logout.graphql');
 export const ArchiveEventMutation = gql(
   '../data/mutations/archiveEvent.graphql'
 );
+export const CreateEventMutation = gql('../data/mutations/createEvent.graphql');

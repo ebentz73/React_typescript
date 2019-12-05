@@ -3,16 +3,10 @@ import {EventFilters} from '../events/filters';
 import {EventsGrid} from '../events/grid';
 import {Spinner} from 'baseui/spinner';
 import {RoutePaths} from '../../constants';
-import {EventsContextProvider, EventsContext} from '../events/context';
+import {EventsContext} from '../events/context';
 import {useFrostedStyletron} from '../util';
 
-export const EventsPage = ({history}) => (
-  <EventsContextProvider>
-    <EventsPageInternal history={history} />
-  </EventsContextProvider>
-);
-
-const EventsPageInternal = ({history}) => {
+export const EventsPage = ({history}) => {
   const [css, theme] = useFrostedStyletron();
   const {
     state: {events, filterType, searchQuery},

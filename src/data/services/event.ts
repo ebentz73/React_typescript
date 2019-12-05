@@ -1,100 +1,58 @@
 import {EVENT_STATUS} from '../../constants/model-constants';
 import {createPlugin, createToken, ServiceType} from 'fusion-core';
-import {ModelMapToken} from '../models/model-map';
 import {ContactModelToken} from '../models/contact';
 import {EventModelToken} from '../models/event';
+import {EventInput} from '../schema-types';
+import {UserDocument} from '../models/user';
+import {unwrap} from '../../util';
 
 export const EventService = createPlugin({
   deps: {
-    modelMap: ModelMapToken,
     ContactModel: ContactModelToken,
     EventModel: EventModelToken,
   },
-  provides: ({modelMap, ContactModel, EventModel}) => ({
-    create: async (reqBody, user) => {
-      return ContactModel.find({
-        name: reqBody.clientName,
-        email: reqBody.email,
-      }).then(contacts => {
-        if (contacts.length === 0) {
-          const newContact = new ContactModel({
-            name: reqBody.clientName,
-            email: reqBody.email,
-            phone: reqBody.phone,
-          });
-          const event = new EventModel({
-            name: reqBody.name,
-            date: reqBody.date,
-            creator: user,
-            client: newContact._id,
-          });
+  provides: ({ContactModel, EventModel}) => {
+    const findById = async (eventId, userId) => {
+      const event = unwrap(await EventModel.findById(eventId).exec());
+      if (event.creator.toString() !== userId) {
+        console.log(`creatorID: ${event.creator} userId: ${userId}`);
+        throw new Error('Unauthorized');
+      }
+      return event;
+    };
 
-          return newContact.save().then(() => event);
-        } else {
-          const event = new EventModel({
-            name: reqBody.name,
-            date: reqBody.date,
-            creator: user,
-            client: contacts[0]._id,
-          });
-
-          return event.save();
-        }
-      });
-    },
-    readAndPopulate(eventId) {
-      return EventModel.findById(eventId)
-        .populate('creator')
-        .populate('client')
-        .populate('vendors')
-        .populate('contacts')
-        .populate('budgetItems')
-        .populate('paymentSchedules')
-        .populate('timelineItems');
-    },
-    findAllAndPopulate(userId) {
-      return EventModel.find({
-        creator: userId,
-        status: EVENT_STATUS.ACTIVE,
-      })
-        .populate('creator')
-        .populate('client')
-        .populate('vendors')
-        .populate('contacts')
-        .populate('budgetItems')
-        .populate('paymentSchedules')
-        .populate('timelineItems');
-    },
-    update(event, reqBody) {
-      const updatedEvent = Object.assign(event, reqBody);
-      return updatedEvent.save();
-    },
-    remove(event) {
-      const items = Object.keys(modelMap);
-
-      return Promise.all(
-        items.map(item =>
-          Promise.all(
-            event[`${item}s`].map(itemId =>
-              modelMap[item].findByIdAndDelete(itemId)
-            )
-          )
-        )
-      ).then(() => event.remove());
-    },
-    archive(event) {
-      event.status = EVENT_STATUS.ARCHIVED;
-      return event.save();
-    },
-    getEventById(eventId) {
-      return EventModel.findById(eventId).then(currentEvent => {
-        if (!currentEvent) {
-          throw new Error('Event is not found');
-        }
-        return currentEvent;
-      });
-    },
-  }),
+    return {
+      create: async (eventInput: EventInput, user: UserDocument) => {
+        const clients = await ContactModel.insertMany(
+          eventInput.clients.map(c => ({
+            name: c.name,
+            email: c.email,
+            phone: c.phone,
+          }))
+        );
+        const event = new EventModel({
+          name: eventInput.name,
+          date: eventInput.date,
+          creator: user,
+          budget: eventInput.budget,
+          clients,
+        });
+        return await event.save();
+      },
+      findById,
+      findAll: async (userId: string, isArchived: boolean) => {
+        return await EventModel.find({
+          creator: userId,
+          status: isArchived ? EVENT_STATUS.ARCHIVED : EVENT_STATUS.ACTIVE,
+        }).exec();
+      },
+      archive: async (eventId: string, isArchived: boolean, userId: string) => {
+        const event = await findById(eventId, userId);
+        event.status = isArchived ? EVENT_STATUS.ARCHIVED : EVENT_STATUS.ACTIVE;
+        return await event.save();
+      },
+    };
+  },
 });
 export const EventServiceToken = createToken<ServiceType<typeof EventService>>(
   'EventService'

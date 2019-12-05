@@ -10,6 +10,7 @@ import {NewEventPage} from './new-event';
 import {RoutePaths} from '../../constants';
 import {MaybeEventContextProvider} from '../event/context';
 import {Header} from '../header';
+import {EventsContextProvider} from '../events/context';
 
 export const Home = () => {
   const [css] = useStyletron();
@@ -58,12 +59,14 @@ export const Home = () => {
           )}
         />
       </Switch>
-      <Switch>
-        <Route exact path={RoutePaths.Events()} component={EventsPage} />
-        <Route exact path={RoutePaths.NewEvent()} component={NewEventPage} />
-        <Route path={RoutePaths.Event()} component={EventPage} />
-        <Route component={PageNotFound} />;
-      </Switch>
+      <EventsContextProvider>
+        <Switch>
+          <Route exact path={RoutePaths.Events()} component={EventsPage} />
+          <Route exact path={RoutePaths.NewEvent()} component={NewEventPage} />
+          <Route path={RoutePaths.Event()} component={EventPage} />
+          <Route component={PageNotFound} />;
+        </Switch>
+      </EventsContextProvider>
     </>
   );
 

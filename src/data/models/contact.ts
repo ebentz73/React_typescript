@@ -6,7 +6,6 @@ export type ContactDocument = Document & {
   name: string;
   phone: string;
   email: string;
-  notes: string;
   vendorId: string;
 };
 
@@ -20,11 +19,6 @@ export const ContactModel = createPlugin({
           name: String,
           phone: String,
           email: String,
-          notes: String,
-          vendorId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Vendor',
-          },
         },
         {timestamps: true}
       )

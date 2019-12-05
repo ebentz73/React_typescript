@@ -1,10 +1,10 @@
 import React, {createContext, ReactNode, useState} from 'react';
 import {useQuery, useMutation} from '@apollo/react-hooks';
-import {EventSchema} from '../../data/schema-types';
+import {EventSchema, EventInput} from '../../data/schema-types';
 import {EventsQueryType, EventsQuery} from '../queries';
 import {EventFilterType} from '../../data/schema-types';
 import {useDebounce} from 'use-debounce';
-import {ArchiveEventMutation} from '../mutations';
+import {ArchiveEventMutation, CreateEventMutation} from '../mutations';
 import {deleteCacheForQuery} from '../../util/apollo';
 
 interface ContextType {
@@ -12,11 +12,13 @@ interface ContextType {
     events: {isLoading: true} | {isLoading: false; events: EventSchema[]};
     filterType: EventFilterType;
     searchQuery: string;
+    createEventLoading: boolean;
   };
   actions: {
     setFilterType: (filterType: EventFilterType) => void;
-    setSearchQuery: (searchQuery: string) => void;
+    setSearchQuery: (searchQuery: string) => Promise<void>;
     archiveEvent: (eventId: string, isArchived: boolean) => void;
+    createEvent: (event: EventInput) => Promise<void>;
   };
 }
 
@@ -38,8 +40,8 @@ export const EventsContextProvider = ({children}: Props) => {
       variables: {filterType, search: debouncedSearchQuery},
     }
   );
-  const [archiveLoading, setArchiveLoading] = useState(false);
-  const [archiveEvent] = useMutation(ArchiveEventMutation, {
+
+  const mutationOptions = {
     update: deleteCacheForQuery('events'),
     refetchQueries: [
       {
@@ -47,7 +49,13 @@ export const EventsContextProvider = ({children}: Props) => {
         variables: {filterType, search: debouncedSearchQuery},
       },
     ],
-  });
+  };
+
+  const [archiveLoading, setArchiveLoading] = useState(false);
+  const [archiveEvent] = useMutation(ArchiveEventMutation, mutationOptions);
+
+  const [createEventLoading, setCreateEventLoading] = useState(false);
+  const [createEvent] = useMutation(CreateEventMutation, mutationOptions);
 
   const service: ContextType = {
     state: {
@@ -57,6 +65,7 @@ export const EventsContextProvider = ({children}: Props) => {
           : {isLoading: false, events: data.events},
       filterType,
       searchQuery,
+      createEventLoading,
     },
     actions: {
       archiveEvent: async (id, isArchived) => {
@@ -66,6 +75,11 @@ export const EventsContextProvider = ({children}: Props) => {
       },
       setFilterType,
       setSearchQuery,
+      createEvent: async event => {
+        setCreateEventLoading(true);
+        await createEvent({variables: {event}});
+        setCreateEventLoading(false);
+      },
     },
   };
 
