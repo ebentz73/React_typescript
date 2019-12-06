@@ -9,7 +9,6 @@
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^2.0.0",
     "dotenv": "^8.2.0",
-    "fs": "^0.0.1-security",
     "fusion-core": "^2.0.6",
     "fusion-plugin-apollo": "^3.3.0",
     "fusion-plugin-font-loader-react": "^2.0.9",
