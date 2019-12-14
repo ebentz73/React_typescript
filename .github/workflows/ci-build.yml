@@ -19,6 +19,12 @@ jobs:
     - name: Yarn install
       run: yarn
     
+    - name: Yarn lint
+      run: yarn lint
+  
+    - name: TypeScript Compile
+      run: yarn check-types
+    
     - name: Yarn build
       run: yarn build
     
