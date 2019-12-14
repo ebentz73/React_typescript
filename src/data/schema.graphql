@@ -67,9 +67,10 @@ input VendorInput {
 }
 
 input ContactInput {
-  name: String!
-  email: String!
-  phone: String!
+  id: ID
+  name: String
+  email: String
+  phone: String
 }
 
 type Mutation {
@@ -78,5 +79,8 @@ type Mutation {
   logout: Session!
   archiveEvent(id: ID, isArchived: Boolean): Event!
   createEvent(event: EventInput!): Event!
+
   createVendor(vendor: VendorInput!): Vendor!
+  editVendor(id: ID!, vendor: VendorInput!): Vendor!
+  deleteVendor(id: ID): ID
 }

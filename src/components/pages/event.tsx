@@ -12,7 +12,7 @@ import {SettingsPage} from './settings';
 import {RoutePaths} from '../../constants';
 import {EventContextProvider} from '../event/context';
 import {NewVendorPage} from './new-vendor';
-import {VendorsContextProvider} from '../contexts/vendors';
+import {EditingVendorContextProvider} from '../contexts/vendors';
 
 export const EventPage = ({
   match: {
@@ -125,11 +125,16 @@ export const EventPage = ({
 
   return (
     <EventContextProvider eventId={eventId}>
-      <VendorsContextProvider>
+      <EditingVendorContextProvider>
         <Switch>
           <Route
             exact
             path={RoutePaths.NewVendor()}
+            component={NewVendorPage}
+          />
+          <Route
+            exact
+            path={RoutePaths.EditVendor()}
             component={NewVendorPage}
           />
           <Route
@@ -183,7 +188,7 @@ export const EventPage = ({
             )}
           ></Route>
         </Switch>
-      </VendorsContextProvider>
+      </EditingVendorContextProvider>
     </EventContextProvider>
   );
 };

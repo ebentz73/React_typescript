@@ -10,3 +10,7 @@ export const CreateEventMutation = gql('../data/mutations/createEvent.graphql');
 export const CreateVendorMutation = gql(
   '../data/mutations/createVendor.graphql'
 );
+export const EditVendorMutation = gql('../data/mutations/editVendor.graphql');
+export const DeleteVendorMutation = gql(
+  '../data/mutations/deleteVendor.graphql'
+);

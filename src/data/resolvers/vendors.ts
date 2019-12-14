@@ -29,7 +29,6 @@ export const VendorsResolvers = createPlugin({
       Event: {
         vendors: async (event: EventSchema): Promise<VendorSchema[]> => {
           const vendors = await vendorService.findAllByEvent(event.id);
-          console.log(`vendors: ${JSON.stringify(vendors)}`);
           return vendors.map(getVendorSchema);
         },
       },
@@ -40,6 +39,18 @@ export const VendorsResolvers = createPlugin({
             await getUser(ctx)
           );
           return getVendorSchema(newVendor);
+        },
+        editVendor: async (_, {id, vendor}, ctx): Promise<VendorSchema> => {
+          const updatedVendor = await vendorService.update(
+            id,
+            vendor,
+            await getUser(ctx)
+          );
+          return getVendorSchema(updatedVendor);
+        },
+        deleteVendor: async (_, {id}, ctx): Promise<string> => {
+          await vendorService.delete(id, await getUser(ctx));
+          return id;
         },
       },
     };

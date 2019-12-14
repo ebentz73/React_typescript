@@ -2,6 +2,7 @@ import React from 'react';
 import {useStyletron} from 'baseui';
 import {useQuery} from '@apollo/react-hooks';
 import {Redirect, Switch, Route} from 'fusion-plugin-react-router';
+import {useRouteMatch} from 'react-router';
 import {SessionQuery, SessionQueryType} from '../queries';
 import PageNotFound from './pageNotFound';
 import {EventsPage} from './events';
@@ -14,6 +15,10 @@ import {EventsContextProvider} from '../events/context';
 
 export const Home = () => {
   const [css] = useStyletron();
+  const newVendorPageMatch = useRouteMatch(RoutePaths.NewVendor());
+  const editVendorPageMatch = useRouteMatch(RoutePaths.EditVendor());
+  const eventPageMatch = useRouteMatch<{eventId: string}>(RoutePaths.Event());
+  const newEventPageMatch = useRouteMatch(RoutePaths.NewEvent());
 
   const containerStyles = css({
     minHeight: '100%',
@@ -42,32 +47,15 @@ export const Home = () => {
 
   const pageContent = (
     <>
-      <Switch>
-        <Route
-          exact
-          path={RoutePaths.NewVendor()}
-          render={() => (
-            <MaybeEventContextProvider eventId={null}>
-              <Header />
-            </MaybeEventContextProvider>
-          )}
-        />
-        <Route
-          path={RoutePaths.Event()}
-          render={props => (
-            <MaybeEventContextProvider eventId={props.match.params.eventId}>
-              <Header />
-            </MaybeEventContextProvider>
-          )}
-        />
-        <Route
-          render={() => (
-            <MaybeEventContextProvider eventId={null}>
-              <Header />
-            </MaybeEventContextProvider>
-          )}
-        />
-      </Switch>
+      {newVendorPageMatch || editVendorPageMatch || !eventPageMatch ? (
+        <MaybeEventContextProvider eventId={null}>
+          <Header />
+        </MaybeEventContextProvider>
+      ) : (
+        <MaybeEventContextProvider eventId={eventPageMatch.params.eventId}>
+          <Header />
+        </MaybeEventContextProvider>
+      )}
       <EventsContextProvider>
         <Switch>
           <Route exact path={RoutePaths.Events()} component={EventsPage} />
@@ -79,23 +67,9 @@ export const Home = () => {
     </>
   );
 
-  return (
-    <Switch>
-      <Route
-        exact
-        path={RoutePaths.NewEvent()}
-        render={() => <div className={containerStyles}>{pageContent}</div>}
-      />
-      <Route
-        exact
-        path={RoutePaths.Event()}
-        render={() => <div className={containerStyles}>{pageContent}</div>}
-      />
-      <Route
-        render={() => (
-          <div className={fullHeightContainerStyles}>{pageContent}</div>
-        )}
-      />
-    </Switch>
+  return newEventPageMatch || (eventPageMatch && eventPageMatch.isExact) ? (
+    <div className={containerStyles}>{pageContent}</div>
+  ) : (
+    <div className={fullHeightContainerStyles}>{pageContent}</div>
   );
 };

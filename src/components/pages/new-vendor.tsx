@@ -1,4 +1,4 @@
-import React, {useContext, useState, useMemo} from 'react';
+import React, {useContext, useState, useMemo, useEffect} from 'react';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {RoutePaths} from '../../constants';
 import {useFrostedStyletron} from '../util';
@@ -7,11 +7,24 @@ import {FormControl} from 'baseui/form-control';
 import {Input} from 'baseui/input';
 import {ClientForm, ClientFormState} from '../events/client-form';
 import {VendorKinds} from '../../constants/vendor-kind';
-import {VendorsContext} from '../contexts/vendors';
+import {
+  VendorsContext,
+  VendorsContextProvider,
+  EditingVendorContext,
+} from '../contexts/vendors';
 import {EventContext} from '../event/context';
 import {Select} from 'baseui/select';
+import {useHistory, useRouteMatch, Redirect} from 'react-router';
+import {unwrap} from '../../util';
 
-export const NewVendorPage = ({history}) => {
+export const NewVendorPage = () => (
+  <VendorsContextProvider>
+    <NewVendorPageInternal />
+  </VendorsContextProvider>
+);
+
+const NewVendorPageInternal = () => {
+  const history = useHistory();
   const [css, theme] = useFrostedStyletron();
 
   const formStyles = css({
@@ -50,10 +63,12 @@ export const NewVendorPage = ({history}) => {
   const titleStyles = css({...theme.typography.font550});
 
   const {
-    state: {createVendorLoading},
-    actions: {createVendor},
+    state: {loading},
+    actions: {createVendor, editVendor},
   } = useContext(VendorsContext);
   const {event} = useContext(EventContext);
+  const {editingVendor} = useContext(EditingVendorContext);
+  const isEditing = useRouteMatch(RoutePaths.EditVendor());
 
   const vendorKindOptions = useMemo(
     () =>
@@ -67,7 +82,8 @@ export const NewVendorPage = ({history}) => {
   const [vendorName, setVendorName] = useState('');
   const [vendorKind, setVendorKind] = useState([vendorKindOptions[0]]);
   const [vendorLocation, setVendorLocation] = useState('');
-  const defaultClientFormState: ClientFormState = {
+  const defaultClientFormState: ClientFormState & {id: string | null} = {
+    id: null,
     name: '',
     email: '',
     phone: '',
@@ -75,11 +91,62 @@ export const NewVendorPage = ({history}) => {
   };
   const [contactInfo, setContactInfo] = useState(defaultClientFormState);
 
+  // If we're editing an existing vendor, pre-fill state on mount
+  useEffect(() => {
+    if (!isEditing || !editingVendor) {
+      return;
+    }
+
+    const phoneParts = editingVendor.contact.phone.split(' ');
+
+    setVendorName(editingVendor.name);
+    setVendorKind([
+      unwrap(vendorKindOptions.find(o => o.id === editingVendor.vendorKind)),
+    ]);
+    setVendorLocation(editingVendor.location);
+    setContactInfo({
+      id: editingVendor.contact.id,
+      name: editingVendor.contact.name,
+      phone: phoneParts[1],
+      email: editingVendor.contact.email,
+      country: COUNTRIES.US, // TODO parse
+    });
+  }, []);
+
+  const submitVendor = async () => {
+    const vendorInput = {
+      eventId: event.id,
+      name: vendorName,
+      location: vendorLocation,
+      vendorKind: vendorKind[0].id as VendorKinds,
+      contact: contactInfo.id
+        ? {
+            id: contactInfo.id,
+          }
+        : {
+            name: contactInfo.name,
+            email: contactInfo.email,
+            phone: contactInfo.country.dialCode + ' ' + contactInfo.phone,
+          },
+    };
+    if (isEditing) {
+      await editVendor(unwrap(editingVendor).id, vendorInput);
+    } else {
+      await createVendor(vendorInput);
+    }
+    history.push(RoutePaths.EventVendors(event.id));
+  };
+
   return (
     <>
+      {isEditing && !editingVendor && (
+        <Redirect to={RoutePaths.EventVendors(event.id)} />
+      )}
       <div className={formWrapperStyles}>
         <div className={formStyles}>
-          <div className={css({...theme.titleFont})}>Add new vendor</div>
+          <div className={css({...theme.titleFont})}>
+            {isEditing ? 'Edit vendor' : 'Add new vendor'}
+          </div>
           <div className={css({...theme.typography.font300})}>
             Enter important information about your vendor
           </div>
@@ -100,7 +167,7 @@ export const NewVendorPage = ({history}) => {
                       flexGrow: 1,
                     })}
                   >
-                    <FormControl label="Date" caption="">
+                    <FormControl label="Category" caption="">
                       <Select
                         options={vendorKindOptions}
                         value={vendorKind}
@@ -121,7 +188,11 @@ export const NewVendorPage = ({history}) => {
                 </div>
               </div>
               <div className={panelStyles}>
-                <ClientForm state={contactInfo} setState={setContactInfo} />
+                <ClientForm
+                  state={contactInfo}
+                  setState={newState => setContactInfo({...newState, id: null})}
+                  title="Contact Information"
+                />
               </div>
             </div>
           </div>
@@ -132,21 +203,8 @@ export const NewVendorPage = ({history}) => {
           <Button
             size={SIZE.compact}
             $style={buttonStyles}
-            isLoading={createVendorLoading}
-            onClick={async () => {
-              await createVendor({
-                eventId: event.id,
-                name: vendorName,
-                location: vendorLocation,
-                vendorKind: vendorKind[0].id as VendorKinds,
-                contact: {
-                  name: contactInfo.name,
-                  email: contactInfo.email,
-                  phone: contactInfo.country.dialCode + contactInfo.phone,
-                },
-              });
-              history.push(RoutePaths.EventVendors(event.id));
-            }}
+            isLoading={loading}
+            onClick={submitVendor}
           >
             Save Changes
           </Button>

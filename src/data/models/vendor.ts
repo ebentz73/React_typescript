@@ -4,6 +4,7 @@ import {createPlugin, createToken, ServiceType} from 'fusion-core';
 import {MongooseToken} from '../mongoose';
 import {VendorKinds} from '../../constants/vendor-kind';
 import {ContactDocument} from './contact';
+import {EventDocument} from './event';
 
 export type VendorDocument = Document & {
   name: string;
@@ -11,6 +12,7 @@ export type VendorDocument = Document & {
   location: string;
   creator: UserDocument;
   contact: ContactDocument;
+  event: EventDocument;
 };
 
 export const VendorModel = createPlugin({

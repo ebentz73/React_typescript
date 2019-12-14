@@ -1,0 +1,14 @@
+mutation editVendor($id: ID!, $vendor: VendorInput!) {
+  editVendor(id: $id, vendor: $vendor) {
+    id
+    name
+    vendorKind
+    location
+    contact {
+      id
+      name
+      phone
+      email
+    }
+  }
+}

@@ -15,15 +15,16 @@ export type ClientFormState = {
 interface Props {
   state: ClientFormState;
   setState: (newState: ClientFormState) => void;
+  title?: string;
 }
 
-export const ClientForm = ({state, setState}: Props) => {
+export const ClientForm = ({state, setState, title}: Props) => {
   const [css, theme] = useStyletron();
   const titleStyles = css({...theme.typography.font550});
 
   return (
     <div>
-      <div className={titleStyles}>Client Information</div>
+      <div className={titleStyles}>{title || 'Client Information'}</div>
       <FormControl label="Name" caption="">
         <Input
           value={state.name}

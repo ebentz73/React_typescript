@@ -15,6 +15,7 @@ export interface EventSchema {
 }
 
 export interface ContactSchema {
+  id: string;
   name: string;
   email: string;
   phone: string;
@@ -44,9 +45,10 @@ export interface VendorInput {
 }
 
 export interface ContactInput {
-  name: string;
-  email: string;
-  phone: string;
+  id?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
 }
 
 export enum EventFilterType {
