@@ -70,45 +70,30 @@ Tasks:
       "type": "shell",
       "label": "debug-dev",
       "command": "yarn dev --debug",
-      "options": {
-        "cwd": "services/guest-rides/"
-      },
       "problemMatcher": []
     },
     {
       "type": "shell",
       "label": "dev",
       "command": "yarn dev",
-      "options": {
-        "cwd": "services/guest-rides/"
-      },
       "problemMatcher": []
     },
     {
       "type": "shell",
       "label": "debug-test",
       "command": "yarn test --debug --match ${input:testName}",
-      "options": {
-        "cwd": "services/guest-rides/"
-      },
       "problemMatcher": []
     },
     {
       "type": "shell",
       "label": "test",
       "command": "yarn test --match ${input:testName}",
-      "options": {
-        "cwd": "services/guest-rides/"
-      },
       "problemMatcher": []
     },
     {
       "type": "shell",
       "label": "cover",
       "command": "yarn cover",
-      "options": {
-        "cwd": "services/guest-rides/"
-      },
       "problemMatcher": []
     }
   ],

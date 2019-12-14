@@ -1,24 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {useFrostedStyletron} from '../util';
 import {StyledTable} from 'baseui/table-grid';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {StatefulMenu} from 'baseui/menu';
 import {StatefulPopover, PLACEMENT} from 'baseui/popover';
 import {Overflow} from 'baseui/icon';
-
-const data = Array(3)
-  .fill(2)
-  .map(() => [
-    `Vendor name`,
-    'Planner',
-    'Denver, CO',
-    'Lee Steen',
-    'steen@deen.com',
-    '(678) 628 5431',
-  ]);
+import {VendorsContext} from '../contexts/vendors';
+import {useHistory} from 'react-router';
+import {RoutePaths} from '../../constants';
+import {EventContext} from '../event/context';
 
 export const VendorsPage = () => {
+  const {
+    state: {vendors},
+  } = useContext(VendorsContext);
+  const {event} = useContext(EventContext);
+  const history = useHistory();
   const [css, theme] = useFrostedStyletron();
+
   const headerCellStyles = css({
     ...theme.fonts.tableHeader,
     color: '#B0AFAF',
@@ -83,7 +82,11 @@ export const VendorsPage = () => {
       >
         <div>Vendors</div>
         <div>
-          <Button kind={KIND.primary} size={SIZE.compact}>
+          <Button
+            kind={KIND.primary}
+            size={SIZE.compact}
+            onClick={() => history.push(RoutePaths.NewVendor(event.id))}
+          >
             +
           </Button>
         </div>
@@ -97,7 +100,7 @@ export const VendorsPage = () => {
           <div className={headerCellStyles}>EMAIL</div>
           <div className={headerCellStyles}>PHONE</div>
           <div className={headerCellStyles}></div>
-          {data.map(row => {
+          {vendors.map(row => {
             const styles =
               hoveredRow === row
                 ? `${cellStyles} ${hoveredCellStyles}`
@@ -105,16 +108,16 @@ export const VendorsPage = () => {
             return (
               <div
                 className={css({display: 'contents'})}
-                key={row[0]}
+                key={row.id}
                 onMouseEnter={() => setHoveredRow(row)}
                 onMouseLeave={() => setHoveredRow(null)}
               >
-                <div className={styles}>{row[0]}</div>
-                <div className={styles}>{row[1]}</div>
-                <div className={styles}>{row[2]}</div>
-                <div className={styles}>{row[3]}</div>
-                <div className={styles}>{row[4]}</div>
-                <div className={styles}>{row[5]}</div>
+                <div className={styles}>{row.name}</div>
+                <div className={styles}>{row.vendorKind}</div>
+                <div className={styles}>{row.location}</div>
+                <div className={styles}>{row.contact.name}</div>
+                <div className={styles}>{row.contact.email}</div>
+                <div className={styles}>{row.contact.phone}</div>
                 <div className={styles}>
                   <div>
                     <StatefulPopover

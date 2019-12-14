@@ -12,6 +12,31 @@ type Event {
   name: String!
   budget: Int!
   isArchived: Boolean!
+  vendors: [Vendor!]!
+}
+
+enum VendorKinds {
+  Venue
+  AV
+  Photographer
+  Caterer
+  Florist
+  Other
+}
+
+type Contact {
+  id: ID!
+  name: String!
+  phone: String!
+  email: String!
+}
+
+type Vendor {
+  id: ID!
+  name: String!
+  vendorKind: VendorKinds!
+  location: String!
+  contact: Contact!
 }
 
 enum EventFilterType {
@@ -33,6 +58,14 @@ input EventInput {
   clients: [ContactInput!]!
 }
 
+input VendorInput {
+  eventId: String!
+  name: String!
+  vendorKind: VendorKinds!
+  location: String!
+  contact: ContactInput!
+}
+
 input ContactInput {
   name: String!
   email: String!
@@ -45,4 +78,5 @@ type Mutation {
   logout: Session!
   archiveEvent(id: ID, isArchived: Boolean): Event!
   createEvent(event: EventInput!): Event!
+  createVendor(vendor: VendorInput!): Vendor!
 }

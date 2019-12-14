@@ -1,0 +1,17 @@
+query vendors($eventId: ID!) {
+  event(id: $eventId) {
+    id
+    vendors {
+      id
+      name
+      vendorKind
+      location
+      contact {
+        id
+        name
+        phone
+        email
+      }
+    }
+  }
+}

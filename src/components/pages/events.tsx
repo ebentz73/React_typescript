@@ -1,10 +1,9 @@
 import React, {useContext} from 'react';
 import {EventFilters} from '../events/filters';
 import {EventsGrid} from '../events/grid';
-import {Spinner} from 'baseui/spinner';
 import {RoutePaths} from '../../constants';
 import {EventsContext} from '../events/context';
-import {useFrostedStyletron} from '../util';
+import {useFrostedStyletron, LoadingSpinner} from '../util';
 
 export const EventsPage = ({history}) => {
   const [css, theme] = useFrostedStyletron();
@@ -31,14 +30,7 @@ export const EventsPage = ({history}) => {
       ></EventFilters>
       {events.isLoading ? (
         <div className={css({marginTop: '100px', textAlign: 'center'})}>
-          <Spinner
-            size="140px"
-            overrides={{
-              ActivePath: {
-                style: {fill: theme.colors.primary},
-              },
-            }}
-          />
+          <LoadingSpinner />
         </div>
       ) : (
         <EventsGrid events={events.events} />

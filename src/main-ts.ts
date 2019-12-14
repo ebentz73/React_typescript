@@ -63,6 +63,10 @@ import FontLoaderReact, {
 } from 'fusion-plugin-font-loader-react';
 import {AuthResolversToken, AuthResolvers} from './data/resolvers/auth';
 import {EventsResolversToken, EventsResolvers} from './data/resolvers/events';
+import {
+  VendorsResolversToken,
+  VendorsResolvers,
+} from './data/resolvers/vendors';
 
 const setUpServer = app => {
   app.register(SecretsToken, SecretsPlugin);
@@ -102,6 +106,7 @@ const setUpServer = app => {
   // Resolvers
   app.register(AuthResolversToken, AuthResolvers);
   app.register(EventsResolversToken, EventsResolvers);
+  app.register(VendorsResolversToken, VendorsResolvers);
 };
 
 const setUpFonts = app => {

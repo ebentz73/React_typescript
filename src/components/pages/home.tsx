@@ -44,6 +44,15 @@ export const Home = () => {
     <>
       <Switch>
         <Route
+          exact
+          path={RoutePaths.NewVendor()}
+          render={() => (
+            <MaybeEventContextProvider eventId={null}>
+              <Header />
+            </MaybeEventContextProvider>
+          )}
+        />
+        <Route
           path={RoutePaths.Event()}
           render={props => (
             <MaybeEventContextProvider eventId={props.match.params.eventId}>

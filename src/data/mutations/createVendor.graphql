@@ -1,0 +1,14 @@
+mutation createVendor($vendor: VendorInput!) {
+  createVendor(vendor: $vendor) {
+    id
+    name
+    vendorKind
+    location
+    contact {
+      id
+      name
+      phone
+      email
+    }
+  }
+}

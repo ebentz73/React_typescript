@@ -7,3 +7,6 @@ export const ArchiveEventMutation = gql(
   '../data/mutations/archiveEvent.graphql'
 );
 export const CreateEventMutation = gql('../data/mutations/createEvent.graphql');
+export const CreateVendorMutation = gql(
+  '../data/mutations/createVendor.graphql'
+);

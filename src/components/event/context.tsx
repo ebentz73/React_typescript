@@ -2,7 +2,7 @@ import React, {createContext, ReactNode} from 'react';
 import {useQuery} from '@apollo/react-hooks';
 import {EventQueryType, EventQuery} from '../queries';
 import {EventSchema} from '../../data/schema-types';
-import {Spinner} from 'baseui/icon';
+import {LoadingSpinner} from '../util';
 
 interface ContextType {
   event: EventSchema;
@@ -47,7 +47,7 @@ export const EventContextProvider = ({children, eventId}: Props) => {
   });
 
   if (loading || !data) {
-    return <Spinner />;
+    return <LoadingSpinner />;
   }
 
   const service = {

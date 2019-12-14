@@ -1,14 +1,16 @@
 import {UserDocument} from './user';
-import {VENDOR_KINDS} from '../../constants/vendor-kind';
-import {Document} from 'mongoose';
+import {Document, Model} from 'mongoose';
 import {createPlugin, createToken, ServiceType} from 'fusion-core';
 import {MongooseToken} from '../mongoose';
+import {VendorKinds} from '../../constants/vendor-kind';
+import {ContactDocument} from './contact';
 
 export type VendorDocument = Document & {
   name: string;
-  vendorKind: string;
+  vendorKind: VendorKinds;
+  location: string;
   creator: UserDocument;
-  events: string[];
+  contact: ContactDocument;
 };
 
 export const VendorModel = createPlugin({
@@ -22,23 +24,28 @@ export const VendorModel = createPlugin({
           vendorKind: {
             type: String,
             required: true,
-            default: VENDOR_KINDS.DEFAULT,
-            enum: Object.values(VENDOR_KINDS),
+            enum: Object.values(VendorKinds),
           },
+          location: {type: String, required: true},
           creator: {
             type: mongoose.Schema.Types.ObjectId,
+            required: true,
             ref: 'User',
           },
-          events: [
-            {
-              type: mongoose.Schema.Types.ObjectId,
-              ref: 'Event',
-            },
-          ],
+          contact: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Contact',
+          },
+          event: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Event',
+          },
         },
         {timestamps: true}
       )
-    ),
+    ) as Model<VendorDocument, {}>,
 });
 export const VendorModelToken = createToken<ServiceType<typeof VendorModel>>(
   'VendorModel'

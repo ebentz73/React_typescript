@@ -11,4 +11,5 @@ export const RoutePaths = {
   EventSettings: (eventId = ':eventId') => `/event/${eventId}/settings`,
   EventTimeline: (eventId = ':eventId') => `/event/${eventId}/timeline`,
   EventVendors: (eventId = ':eventId') => `/event/${eventId}/vendors`,
+  NewVendor: (eventId = ':eventId') => `/event/${eventId}/new-vendor`,
 };

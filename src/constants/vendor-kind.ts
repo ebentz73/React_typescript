@@ -1,8 +1,8 @@
-export const VENDOR_KINDS = {
-  DEFAULT: 'Default',
-  VENUE: 'Venue',
-  AV: 'AV',
-  PHOTOGRAPHER: 'Photographer',
-  CATERER: 'Caterer',
-  FLORIST: 'Florist',
-};
+export enum VendorKinds {
+  Venue = 'Venue',
+  AV = 'AV',
+  Photographer = 'Photographer',
+  Caterer = 'Caterer',
+  Florist = 'Florist',
+  Other = 'Other',
+}

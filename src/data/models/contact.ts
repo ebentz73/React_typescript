@@ -6,7 +6,6 @@ export type ContactDocument = Document & {
   name: string;
   phone: string;
   email: string;
-  vendorId: string;
 };
 
 export const ContactModel = createPlugin({
