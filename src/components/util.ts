@@ -32,6 +32,10 @@ interface FrostedTheme extends Theme {
   eventTitleFont: Font;
   eventDateFont: Font;
   eventTotalBudgetFont: Font;
+  fonts: {
+    tableHeader: Font;
+    tableContents: Font;
+  };
 }
 
 export const useFrostedStyletron = createThemedUseStyletron<FrostedTheme>();

@@ -11,7 +11,6 @@ import {Datepicker} from 'baseui/datepicker';
 import {ClientForm} from '../events/client-form';
 import {StyledLink} from 'baseui/link';
 import moment from 'moment';
-import {unwrap} from '../../util';
 import {assetUrl} from 'fusion-core';
 
 export const NewEventPage = ({history}) => {

@@ -29,7 +29,7 @@ module.exports = {
     // https://reactjs.org/docs/hooks-faq.html#what-exactly-do-the-lint-rules-enforce
     'react-hooks/rules-of-hooks': 'error',
     // https://github.com/facebook/react/issues/14920
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'off',
 
     'require-atomic-updates': 0,
 

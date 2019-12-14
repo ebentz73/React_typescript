@@ -17,9 +17,19 @@ const theme = createTheme(
   {
     ...lightThemePrimitives,
     primary: '#CCAF74',
+    primary100: '#F1EAD9',
     primaryFontFamily: 'Lato',
   },
   {
+    colors: {
+      tableHeadBackgroundColor: '#F3F2F2',
+      tableBackground: '#FFFFFF',
+      tableStripedBackground: '#F6F6F6',
+      tableFilter: '#AFAFAF',
+      tableFilterHeading: '#757575',
+      tableFilterBackground: '#FFFFFF',
+      tableFilterFooterBackground: '#F6F6F6',
+    },
     titleFont: {
       fontSize: '28px',
       lineHeight: '28px',
@@ -42,6 +52,17 @@ const theme = createTheme(
       fontSize: '13px',
       letterSpacing: '0.47px',
       lineHeight: '32px',
+    },
+    fonts: {
+      tableHeader: {
+        fontSize: '12px',
+        letterSpacing: '0.44px',
+        lineHeight: '24px',
+      },
+      tableContents: {
+        fontSize: '14px',
+        lineHeight: '17px',
+      },
     },
   }
 );

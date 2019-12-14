@@ -12,7 +12,7 @@ export const Logout = () => {
 
   useEffect(() => {
     logout();
-  }, [logout]);
+  }, []);
 
   console.log('LOGOUT render: ' + (data ? data.session.isLoggedIn : false));
   if (!data) {

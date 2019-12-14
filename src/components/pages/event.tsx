@@ -23,7 +23,7 @@ export const EventPage = ({
     height: '100%',
   });
   const sidebarStyles = css({
-    width: theme.sizing.scale1600,
+    flex: `0 0 ${theme.sizing.scale1600}`,
     backgroundColor: '#FFFFFF',
     boxShadow: '1px 0 4px 0 #F3F2F2',
     display: 'flex',
@@ -40,8 +40,16 @@ export const EventPage = ({
   });
   const mainStyles = css({
     flexGrow: 1,
-    marginTop: '50px',
-    marginLeft: theme.sizing.scale1600,
+    paddingTop: '50px',
+    paddingLeft: theme.sizing.scale1600,
+    paddingRight: theme.sizing.scale1600,
+    overflow: 'auto',
+  });
+  const mainBodyStyles = css({
+    minWidth: '900px',
+    maxWidth: '1400px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   });
   const selectedStyles = {
     backgroundColor: '#F1EAD9',
@@ -119,45 +127,47 @@ export const EventPage = ({
         <div className={menuContainerStyles}>{menuItems}</div>
       </div>
       <div className={mainStyles}>
-        <EventContextProvider eventId={eventId}>
-          <Switch>
-            <Route
-              exact
-              path={RoutePaths.EventDashboard()}
-              component={DashboardPage}
-            />
-            <Route
-              exact
-              path={RoutePaths.EventVendors()}
-              component={VendorsPage}
-            />
-            <Route
-              exact
-              path={RoutePaths.EventBudget()}
-              component={BudgetPage}
-            />
-            <Route
-              exact
-              path={RoutePaths.EventTimeline()}
-              component={TimelinePage}
-            />
-            <Route
-              exact
-              path={RoutePaths.EventChecklist()}
-              component={ChecklistPage}
-            />
-            <Route
-              exact
-              path={RoutePaths.EventSettings()}
-              component={SettingsPage}
-            />
-            <Route
-              render={() => (
-                <Redirect to={RoutePaths.EventDashboard(eventId)} />
-              )}
-            />
-          </Switch>
-        </EventContextProvider>
+        <div className={mainBodyStyles}>
+          <EventContextProvider eventId={eventId}>
+            <Switch>
+              <Route
+                exact
+                path={RoutePaths.EventDashboard()}
+                component={DashboardPage}
+              />
+              <Route
+                exact
+                path={RoutePaths.EventVendors()}
+                component={VendorsPage}
+              />
+              <Route
+                exact
+                path={RoutePaths.EventBudget()}
+                component={BudgetPage}
+              />
+              <Route
+                exact
+                path={RoutePaths.EventTimeline()}
+                component={TimelinePage}
+              />
+              <Route
+                exact
+                path={RoutePaths.EventChecklist()}
+                component={ChecklistPage}
+              />
+              <Route
+                exact
+                path={RoutePaths.EventSettings()}
+                component={SettingsPage}
+              />
+              <Route
+                render={() => (
+                  <Redirect to={RoutePaths.EventDashboard(eventId)} />
+                )}
+              />
+            </Switch>
+          </EventContextProvider>
+        </div>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ interface ContextType {
   };
   actions: {
     setFilterType: (filterType: EventFilterType) => void;
-    setSearchQuery: (searchQuery: string) => Promise<void>;
+    setSearchQuery: (searchQuery: string) => void;
     archiveEvent: (eventId: string, isArchived: boolean) => void;
     createEvent: (event: EventInput) => Promise<void>;
   };
