@@ -3,6 +3,7 @@ import {createPlugin, createToken, ServiceType} from 'fusion-core';
 import {MongooseToken} from '../mongoose';
 
 export type ContactDocument = Document & {
+  id: string;
   name: string;
   phone: string;
   email: string;

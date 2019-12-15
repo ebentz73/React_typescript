@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState, Children} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import {useQuery, useMutation} from '@apollo/react-hooks';
 import {VendorSchema, VendorInput} from '../../data/schema-types';
 import {EventContext} from '../event/context';
