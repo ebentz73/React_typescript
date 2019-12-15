@@ -48,7 +48,8 @@ enum EventFilterType {
 type Query {
   session: Session!
   events(filterType: EventFilterType!, search: String): [Event!]!
-  event(id: ID): Event!
+  event(id: ID!): Event!
+  vendor(id: ID!): Vendor!
 }
 
 input EventInput {

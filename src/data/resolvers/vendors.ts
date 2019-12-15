@@ -26,6 +26,13 @@ export const VendorsResolvers = createPlugin({
     });
 
     return {
+      Query: {
+        vendor: async (_, {id}, ctx): Promise<VendorSchema> => {
+          return getVendorSchema(
+            await vendorService.findById(id, await getUser(ctx))
+          );
+        },
+      },
       Event: {
         vendors: async (event: EventSchema): Promise<VendorSchema[]> => {
           const vendors = await vendorService.findAllByEvent(event.id);

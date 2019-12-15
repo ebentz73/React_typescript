@@ -15,11 +15,9 @@ interface ContextType {
   state: {
     vendors: VendorSchema[];
     loading: boolean;
-    editingVendor: VendorSchema | null;
   };
   actions: {
     createVendor: (vendor: VendorInput) => Promise<void>;
-    setEditingVendor: (vendor: VendorSchema) => void;
     editVendor: (id: string, vendor: VendorInput) => Promise<void>;
     deleteVendor: (id: string) => Promise<void>;
   };
@@ -86,8 +84,6 @@ export const VendorsContextProvider = ({children}) => {
     }
   );
 
-  const [editingVendor, setEditingVendor] = useState<VendorSchema | null>(null);
-
   if (loading || !data) {
     return <LoadingSpinner />;
   }
@@ -96,13 +92,11 @@ export const VendorsContextProvider = ({children}) => {
     state: {
       vendors: data.event.vendors,
       loading: createVendorLoading || editVendorLoading || deleteVendorLoading,
-      editingVendor,
     },
     actions: {
       createVendor: async vendor => {
         await createVendor({variables: {vendor}});
       },
-      setEditingVendor,
       editVendor: async (id, vendor) => {
         await editVendor({variables: {id, vendor}});
       },

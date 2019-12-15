@@ -78,6 +78,15 @@ export const VendorService = createPlugin({
 
         return id;
       },
+      findById: async (
+        id: string,
+        user: UserDocument
+      ): Promise<VendorDocument> => {
+        const vendor = await findById(id);
+        await EventService.findById(vendor.event, user.id);
+
+        return vendor;
+      },
       findAllByEvent: async (eventId: string): Promise<VendorDocument[]> => {
         return (await VendorModel.find({
           event: eventId,

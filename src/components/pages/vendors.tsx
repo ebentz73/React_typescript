@@ -148,6 +148,9 @@ const VendorsPageInternal = () => {
                   key={row.id}
                   onMouseEnter={() => setHoveredRow(row)}
                   onMouseLeave={() => setHoveredRow(null)}
+                  onClick={() =>
+                    history.push(RoutePaths.EventVendor(event.id, row.id))
+                  }
                 >
                   <div className={styles}>{row.name}</div>
                   <div className={styles}>{row.vendorKind}</div>
@@ -155,7 +158,7 @@ const VendorsPageInternal = () => {
                   <div className={styles}>{row.contact.name}</div>
                   <div className={styles}>{row.contact.email}</div>
                   <div className={styles}>{row.contact.phone}</div>
-                  <div className={styles}>
+                  <div className={styles} onClick={e => e.stopPropagation()}>
                     <div>
                       <StatefulPopover
                         placement={PLACEMENT.bottomRight}

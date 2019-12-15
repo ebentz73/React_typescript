@@ -13,6 +13,7 @@ import {RoutePaths} from '../../constants';
 import {EventContextProvider} from '../event/context';
 import {NewVendorPage} from './new-vendor';
 import {EditingVendorContextProvider} from '../contexts/vendors';
+import {VendorPage} from './vendor/vendor';
 
 export const EventPage = ({
   match: {
@@ -155,6 +156,10 @@ export const EventPage = ({
                         exact
                         path={RoutePaths.EventVendors()}
                         component={VendorsPage}
+                      />
+                      <Route
+                        path={RoutePaths.EventVendor()}
+                        component={VendorPage}
                       />
                       <Route
                         exact
