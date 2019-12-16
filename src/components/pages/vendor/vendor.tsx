@@ -8,10 +8,10 @@ import {unwrap} from '../../../util';
 import {ChevronLeft} from 'baseui/icon';
 import {EventContext} from '../../event/context';
 import {ContactPage} from './contact';
-import {BudgetPage} from '../budget';
-import {PaymentPage} from './payment';
-import {TimelinePage} from '../timeline';
+import {PaymentSchedulePage} from './payment-schedule';
 import {NotesPage} from './notes';
+import {BudgetItemsPage} from './budget-items';
+import {TimelineItemsPage} from './timeline-items';
 
 export const VendorPage = () => {
   const match = useRouteMatch<{vendorId: string}>(RoutePaths.EventVendor());
@@ -44,19 +44,19 @@ const VendorPageInternal = () => {
         title: 'BUDGET ITEMS',
         route: RoutePaths.VendorBudgetItems(event.id, vendor.id),
         matcher: RoutePaths.VendorBudgetItems(),
-        page: () => <BudgetPage />,
+        page: () => <BudgetItemsPage />,
       },
       {
         title: 'PAYMENT SCHEDULE',
         route: RoutePaths.VendorPaymentSchedule(event.id, vendor.id),
         matcher: RoutePaths.VendorPaymentSchedule(),
-        page: () => <PaymentPage />,
+        page: () => <PaymentSchedulePage />,
       },
       {
         title: 'TIMELINE ITEMS',
         route: RoutePaths.VendorTimelineItems(event.id, vendor.id),
         matcher: RoutePaths.VendorTimelineItems(),
-        page: () => <TimelinePage />,
+        page: () => <TimelineItemsPage />,
       },
       {
         title: 'NOTES',

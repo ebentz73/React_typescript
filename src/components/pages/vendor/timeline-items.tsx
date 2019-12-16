@@ -1,5 +1,5 @@
 import React from 'react';
 
-export const TimelinePage = () => {
+export const TimelineItemsPage = () => {
   return <div>TIMELINE ITEMS</div>;
 };

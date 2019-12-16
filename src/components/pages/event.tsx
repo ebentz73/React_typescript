@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {useStyletron} from 'baseui';
 import {Switch, Route, Redirect} from 'react-router';
 import {Link} from 'fusion-plugin-react-router';
@@ -14,6 +14,8 @@ import {EventContextProvider} from '../event/context';
 import {NewVendorPage} from './new-vendor';
 import {EditingVendorContextProvider} from '../contexts/vendors';
 import {VendorPage} from './vendor/vendor';
+import {Show} from 'baseui/icon';
+import {FileViewer} from '../file-viewer';
 
 export const EventPage = ({
   match: {
@@ -48,8 +50,37 @@ export const EventPage = ({
     paddingRight: theme.sizing.scale1600,
     overflow: 'auto',
   });
+  const fileSidebarStyles = css({
+    flex: '0 0 50px',
+    backgroundColor: '#FFFFFF',
+    boxShadow: '1px 0 4px 0 #F3F2F2',
+    borderTopLeftRadius: '20px',
+    borderBottomLeftRadius: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  });
+  const openedFileSidebarStyles = css({
+    flexGrow: 1,
+    backgroundColor: '#FFFFFF',
+    boxShadow: '1px 0 4px 0 #F3F2F2',
+    borderTopLeftRadius: '20px',
+    borderBottomLeftRadius: '20px',
+    minWidth: '450px',
+  });
+  const fileSidebarTextStyles = css({
+    transform: 'rotate(180deg)',
+    writingMode: 'vertical-rl',
+    textOrientation: 'mixed',
+    ...theme.typography.font200,
+    cursor: 'pointer',
+    color: '#757575',
+    ':hover': {
+      color: theme.colors.primary,
+    },
+  });
   const mainBodyStyles = css({
-    minWidth: '900px',
+    minWidth: '700px',
     maxWidth: '1400px',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -92,6 +123,7 @@ export const EventPage = ({
       icon: assetUrl('../../static/vendors.svg'),
       selectedIcon: assetUrl('../../static/vendors-selected.svg'),
       route: RoutePaths.EventVendors(eventId),
+      subRoutes: [RoutePaths.EventVendor(eventId)],
     },
     {
       icon: assetUrl('../../static/budget.svg'),
@@ -113,17 +145,21 @@ export const EventPage = ({
       selectedIcon: assetUrl('../../static/settings-selected.svg'),
       route: RoutePaths.EventSettings(eventId),
     },
-  ].map(({icon, route}) => (
+  ].map(({icon, route, subRoutes}) => (
     <div key={route}>
       <Link to={route}>
         <Switch>
           <Route exact path={route} render={() => renderImage(icon, true)} />
+          {(subRoutes || []).map(r => (
+            <Route key={r} path={r} render={() => renderImage(icon, true)} />
+          ))}
           <Route render={() => renderImage(icon, false)} />
         </Switch>
       </Link>
     </div>
   ));
 
+  const [fileOpen, setFileOpen] = useState(false);
   return (
     <EventContextProvider eventId={eventId}>
       <EditingVendorContextProvider>
@@ -189,6 +225,49 @@ export const EventPage = ({
                     </Switch>
                   </div>
                 </div>
+                <Switch>
+                  <Route
+                    path={RoutePaths.EventVendor()}
+                    render={() => {
+                      if (fileOpen) {
+                        return (
+                          <div className={openedFileSidebarStyles}>
+                            <FileViewer onClose={() => setFileOpen(false)} />
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <div className={fileSidebarStyles}>
+                          <div
+                            className={css({
+                              display: 'flex',
+                              justifyContent: 'center',
+                            })}
+                          >
+                            <div
+                              className={fileSidebarTextStyles}
+                              onClick={() => setFileOpen(true)}
+                            >
+                              VIEW DOCUMENT
+                              <Show
+                                size={24}
+                                overrides={{
+                                  Svg: {
+                                    style: {
+                                      transform: 'rotate(90deg)',
+                                      marginTop: '10px',
+                                    },
+                                  },
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }}
+                  />
+                </Switch>
               </div>
             )}
           ></Route>

@@ -1,5 +1,5 @@
 import React from 'react';
 
-export const PaymentPage = () => {
+export const PaymentSchedulePage = () => {
   return <div>PAYMENT SCHEDULE</div>;
 };
