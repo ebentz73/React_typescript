@@ -37,7 +37,7 @@ export const EventPage = ({
     alignItems: 'center',
   });
   const menuContainerStyles = css({
-    height: '400px',
+    height: '350px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',

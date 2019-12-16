@@ -68,6 +68,7 @@ const VendorsPageInternal = () => {
     display: 'flex',
     alignItems: 'center',
     height: '72px',
+    overflow: 'hidden',
   });
   const hoveredCellStyles = css({
     backgroundColor: theme.colors.primary100,
@@ -129,7 +130,7 @@ const VendorsPageInternal = () => {
           </div>
         </div>
         <div className={css({marginTop: '24px'})}>
-          <StyledTable $gridTemplateColumns="24% 14% 14% 14% 14% 14% 6%">
+          <StyledTable $gridTemplateColumns="20% 10% 15% 15% 19% 15% 6%">
             <div className={headerCellStyles}>VENDOR</div>
             <div className={headerCellStyles}>CATEGORY</div>
             <div className={headerCellStyles}>LOCATION</div>
