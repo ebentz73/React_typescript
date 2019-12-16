@@ -80,6 +80,14 @@ const VendorPageInternal = () => {
     ...commonAnchorStles,
     borderBottom: `2px solid ${theme.colors.primary}`,
   });
+  const mainContentStyles = css({
+    marginTop: '24px',
+    backgroundColor: '#FFFFFF',
+    minHeight: '200px',
+    border: '1px solid #F3F2F2',
+    boxShadow: '0 13px 10px 0 rgba(239,233,233,1)',
+    borderRadius: '4px',
+  });
 
   const isTopLevelPage = useRouteMatch(RoutePaths.EventVendor());
 
@@ -138,7 +146,7 @@ const VendorPageInternal = () => {
             );
           })}
         </div>
-        <div className={css({marginTop: '24px'})}>
+        <div className={mainContentStyles}>
           {subPages.map(page => {
             return (
               <Switch key={page.title}>

@@ -18,6 +18,7 @@ const theme = createTheme(
     ...lightThemePrimitives,
     primary: '#CCAF74',
     primary100: '#F1EAD9',
+    primary200: '#CCAF74',
     primaryFontFamily: 'Lato',
   },
   {

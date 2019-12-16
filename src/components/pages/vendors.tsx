@@ -1,5 +1,5 @@
 import React, {useState, useContext, useRef} from 'react';
-import {useFrostedStyletron} from '../util';
+import {useFrostedStyletron, getTableStyles} from '../util';
 import {StyledTable} from 'baseui/table-grid';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {StatefulMenu} from 'baseui/menu';
@@ -39,37 +39,9 @@ const VendorsPageInternal = () => {
   const history = useHistory();
   const [css, theme] = useFrostedStyletron();
 
-  const headerCellStyles = css({
-    ...theme.fonts.tableHeader,
-    color: '#B0AFAF',
-    backgroundColor: theme.colors.tableHeadBackgroundColor,
-    boxShadow: theme.lighting.shadow400,
-    ...theme.borders.border300,
-    borderTop: 'none',
-    borderBottom: 'none',
-    borderLeft: 'none',
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingTop: theme.sizing.scale500,
-    paddingRight: theme.sizing.scale600,
-    paddingBottom: theme.sizing.scale500,
-    paddingLeft: theme.sizing.scale600,
-    ':last-of-type': {
-      borderRight: 'none',
-    },
-  });
-  const cellStyles = css({
-    ...theme.fonts.tableContents,
-    color: '#0B0C0E',
-    paddingTop: theme.sizing.scale300,
-    paddingRight: theme.sizing.scale600,
-    paddingBottom: theme.sizing.scale300,
-    paddingLeft: theme.sizing.scale600,
-    display: 'flex',
-    alignItems: 'center',
-    height: '72px',
-    overflow: 'hidden',
-  });
+  const tableStyles = getTableStyles(theme);
+  const headerCellStyles = css(tableStyles.header);
+  const cellStyles = css(tableStyles.cell);
   const hoveredCellStyles = css({
     backgroundColor: theme.colors.primary100,
     cursor: 'pointer',
