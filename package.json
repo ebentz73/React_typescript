@@ -45,8 +45,9 @@
     "test": "TEST_MATCH='**/__tests__/**/*.tsx,**/__tests__/**/*.ts' fusion test",
     "build": "fusion build",
     "build-production": "fusion build --production",
-    "start": "fusion start",
-    "check-types": "tsc"
+    "start": "node ./node_modules/lee-ts-fusion-cli/bin/cli.js start",
+    "check-types": "tsc",
+    "heroku-postbuild": "fusion build --production && sed -i \"s;$(pwd);/app;g\" .fusion/dist/production/server/server-main.js"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.7.0",
