@@ -13,60 +13,68 @@ const RootStyles = styled('div', ({$theme: {typography: {font300}}}) => ({
   height: '100%',
 }));
 
-const theme = createTheme(
-  {
-    ...lightThemePrimitives,
-    primary: '#CCAF74',
-    primary100: '#F1EAD9',
-    primary200: '#CCAF74',
-    primaryFontFamily: 'Lato',
+const primitives = {
+  ...lightThemePrimitives,
+  primary: '#CCAF74',
+  primary100: '#F1EAD9',
+  primary200: '#F7F3EB',
+  primary300: '#F0E8D7',
+  primary400: '#E9DCC3',
+  primary500: '#E1D1AF',
+  primary600: '#DAC59B',
+  primary700: '#D3BA87',
+  primaryFontFamily: 'Lato',
+};
+
+const theme = createTheme(primitives, {
+  colors: {
+    tableHeadBackgroundColor: '#F3F2F2',
+    tableBackground: '#FFFFFF',
+    tableStripedBackground: '#F6F6F6',
+    tableFilter: '#AFAFAF',
+    tableFilterHeading: '#757575',
+    tableFilterBackground: '#FFFFFF',
+    tableFilterFooterBackground: '#F6F6F6',
+    buttonSecondaryFill: '#FFFFFF',
+    buttonSecondaryText: primitives.primary,
+    buttonSecondaryHover: primitives.primary300,
+    buttonSecondaryActive: primitives.primary500,
   },
-  {
-    colors: {
-      tableHeadBackgroundColor: '#F3F2F2',
-      tableBackground: '#FFFFFF',
-      tableStripedBackground: '#F6F6F6',
-      tableFilter: '#AFAFAF',
-      tableFilterHeading: '#757575',
-      tableFilterBackground: '#FFFFFF',
-      tableFilterFooterBackground: '#F6F6F6',
-    },
-    titleFont: {
-      fontSize: '28px',
-      lineHeight: '28px',
-      fontFamily: 'Merriweather',
-      fontWeight: 'normal',
-    },
-    eventDateFont: {
-      color: '#1E1E1C',
-      fontSize: '14px',
-      letterSpacing: '0.51px',
-      lineHeight: '26px',
-    },
-    eventTitleFont: {
-      color: '#0B0C0E',
-      fontSize: '16px',
+  titleFont: {
+    fontSize: '28px',
+    lineHeight: '28px',
+    fontFamily: 'Merriweather',
+    fontWeight: 'normal',
+  },
+  eventDateFont: {
+    color: '#1E1E1C',
+    fontSize: '14px',
+    letterSpacing: '0.51px',
+    lineHeight: '26px',
+  },
+  eventTitleFont: {
+    color: '#0B0C0E',
+    fontSize: '16px',
+    lineHeight: '24px',
+  },
+  eventTotalBudgetFont: {
+    color: '0B0C0E',
+    fontSize: '13px',
+    letterSpacing: '0.47px',
+    lineHeight: '32px',
+  },
+  fonts: {
+    tableHeader: {
+      fontSize: '12px',
+      letterSpacing: '0.44px',
       lineHeight: '24px',
     },
-    eventTotalBudgetFont: {
-      color: '0B0C0E',
-      fontSize: '13px',
-      letterSpacing: '0.47px',
-      lineHeight: '32px',
+    tableContents: {
+      fontSize: '14px',
+      lineHeight: '17px',
     },
-    fonts: {
-      tableHeader: {
-        fontSize: '12px',
-        letterSpacing: '0.44px',
-        lineHeight: '24px',
-      },
-      tableContents: {
-        fontSize: '14px',
-        lineHeight: '17px',
-      },
-    },
-  }
-);
+  },
+});
 
 // Need BaseWeb to provide more accurate typings to include overrides
 const TsIgnoreBaseProvider: any = BaseProvider;

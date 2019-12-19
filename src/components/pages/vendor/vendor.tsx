@@ -1,6 +1,5 @@
-import React, {useContext, useMemo} from 'react';
-import {useFrostedStyletron} from '../../util';
-import {Button, KIND, SIZE} from 'baseui/button';
+import React, {useContext, useMemo, useCallback} from 'react';
+import {useFrostedStyletron, MoreOptionsButton} from '../../util';
 import {VendorContextProvider, VendorContext} from '../../contexts/vendor';
 import {useRouteMatch, useHistory, Switch, Route, Redirect} from 'react-router';
 import {RoutePaths} from '../../../constants';
@@ -90,7 +89,12 @@ const VendorPageInternal = () => {
   });
 
   const isTopLevelPage = useRouteMatch(RoutePaths.EventVendor());
-
+  const moreOptionsMenuItems = useMemo(() => [{label: 'Edit'}], []);
+  const moreOptionsSelected = useCallback(item => {
+    if (item.label === 'Edit') {
+      return;
+    }
+  }, []);
   return (
     <>
       {isTopLevelPage && isTopLevelPage.isExact && (
@@ -114,10 +118,11 @@ const VendorPageInternal = () => {
             </div>
             {vendor.name}
           </div>
-          <div>
-            <Button kind={KIND.primary} size={SIZE.compact}>
-              +
-            </Button>
+          <div className={css({display: 'flex'})}>
+            <MoreOptionsButton
+              menuItems={moreOptionsMenuItems}
+              onItemSelect={moreOptionsSelected}
+            />
           </div>
         </div>
         <div className={css({marginTop: '16px'})}>

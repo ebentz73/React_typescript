@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {styled, createThemedUseStyletron} from 'baseui';
 import {Link} from 'fusion-plugin-react-router';
 import {Theme} from 'baseui/theme';
 import {Spinner} from 'baseui/spinner';
 import {withStyle} from 'styletron-react';
 import {StyledTable} from 'baseui/table-grid';
+import {Button, KIND, SIZE} from 'baseui/button';
+import {StatefulPopover, PLACEMENT} from 'baseui/popover';
+import {StatefulMenu} from 'baseui/menu';
+import {Overflow} from 'baseui/icon';
 
 export const useFrostedStyletron = createThemedUseStyletron<FrostedTheme>();
 
@@ -90,3 +94,66 @@ export const BorderlessTable = withStyle(StyledTable, {
   borderTop: 'none',
   borderBottom: 'none',
 });
+
+export const MoreOptionsButton = ({
+  children,
+  menuItems,
+  onItemSelect,
+}: {
+  children?: ReactNode;
+  menuItems: any;
+  onItemSelect: (item: any) => void;
+}) => {
+  const renderMenu = close => (
+    <StatefulMenu
+      items={menuItems}
+      overrides={{
+        List: {
+          style: {
+            backgroundColor: '#1F2532',
+            borderTopLeftRadius: '4px',
+            borderTopRightRadius: '4px',
+            borderBottomLeftRadius: '4px',
+            borderBottomRightRadius: '4px',
+            outline: 'none',
+          },
+        },
+        Option: {style: {backgroundColor: '#1F2532', color: '#FFFFFF'}},
+      }}
+      onItemSelect={e => {
+        onItemSelect(e.item);
+        close();
+      }}
+    />
+  );
+
+  return (
+    <StatefulPopover
+      placement={PLACEMENT.bottomRight}
+      content={({close}) => renderMenu(close)}
+    >
+      {!children ? (
+        <Button
+          kind={KIND.secondary}
+          size={SIZE.compact}
+          overrides={{
+            BaseButton: {
+              style: {
+                height: '36px',
+                width: '36px',
+                paddingLeft: 'unset',
+                paddingRight: 'unset',
+                paddingTop: 'unset',
+                paddingBottom: 'unset',
+              },
+            },
+          }}
+        >
+          <Overflow size={24} />
+        </Button>
+      ) : (
+        children
+      )}
+    </StatefulPopover>
+  );
+};

@@ -1,14 +1,16 @@
 /* global Intl */
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useMemo, useCallback} from 'react';
 import {EventSchema} from '../../data/schema-types';
 import {ProgressBar} from 'baseui/progress-bar';
 import moment from 'moment';
 import {withRouter, RouteComponentProps} from 'react-router';
 import {RoutePaths} from '../../constants';
-import {StatefulPopover, PLACEMENT} from 'baseui/popover';
-import {StatefulMenu} from 'baseui/menu';
 import {Overflow} from 'baseui/icon';
-import {StyledRouterLink, useFrostedStyletron} from '../util';
+import {
+  StyledRouterLink,
+  useFrostedStyletron,
+  MoreOptionsButton,
+} from '../util';
 import {
   Modal,
   ModalHeader,
@@ -40,12 +42,12 @@ export const EventTile = ({event, history}: Props & RouteComponentProps) => {
     ...(isArchived
       ? {
           borderLeft: '4px solid #B0AFAF',
-          boxShadow: '1px 0 1px 0 rgba(174,186,196,0.14)',
+          boxShadow: '1px 0 1px 0 rgba(174,186,196,0.5)',
         }
       : {
           borderLeft: '4px solid #E2D4B6',
           boxShadow:
-            '9px 17px 27px 0 #F6F4ED, 1px 0 1px 0 rgba(174,186,196,0.14)',
+            '9px 17px 27px 0 #F6F4ED, 1px 0 1px 0 rgba(174,186,196,0.5)',
         }),
   });
   const topSectionStyles = css({
@@ -70,37 +72,26 @@ export const EventTile = ({event, history}: Props & RouteComponentProps) => {
     actions: {archiveEvent},
   } = useContext(EventsContext);
 
-  const menuItems = [
-    {label: 'View'},
-    {label: 'Edit'},
-    {label: isArchived ? 'Unarchive' : 'Archive'},
-  ];
-  const renderMenu = close => (
-    <StatefulMenu
-      items={menuItems}
-      overrides={{
-        List: {
-          style: {
-            backgroundColor: '#1F2532',
-            borderRadius: '4px',
-            outline: 'none',
-          },
-        },
-        Option: {style: {backgroundColor: '#1F2532', color: '#FFFFFF'}},
-      }}
-      onItemSelect={e => {
-        if (e.item.label === 'Archive') {
-          setIsArchiving(true);
-        } else if (e.item.label === 'Unarchive') {
-          archiveEvent(event.id, false);
-        } else {
-          history.push(RoutePaths.Event(event.id));
-        }
-        close();
-      }}
-    />
+  const menuItems = useMemo(
+    () => [
+      {label: 'View'},
+      {label: 'Edit'},
+      {label: isArchived ? 'Unarchive' : 'Archive'},
+    ],
+    [isArchived]
   );
-
+  const onMenuItemSelect = useCallback(
+    item => {
+      if (item.label === 'Archive') {
+        setIsArchiving(true);
+      } else if (item.label === 'Unarchive') {
+        archiveEvent(event.id, false);
+      } else {
+        history.push(RoutePaths.Event(event.id));
+      }
+    },
+    [event]
+  );
   return (
     <>
       <Modal
@@ -135,20 +126,18 @@ export const EventTile = ({event, history}: Props & RouteComponentProps) => {
           >
             {isArchived ? 'ARCHIVED' : moment(event.date).format("D MMM 'YY")}
           </div>
-          <div>
-            <StatefulPopover
-              placement={PLACEMENT.bottomRight}
-              content={({close}) => renderMenu(close)}
-            >
-              <div>
-                <Overflow
-                  size={24}
-                  color="#B0AFAF"
-                  overrides={{Svg: {style: {cursor: 'pointer'}}}}
-                />
-              </div>
-            </StatefulPopover>
-          </div>
+          <MoreOptionsButton
+            menuItems={menuItems}
+            onItemSelect={onMenuItemSelect}
+          >
+            <div>
+              <Overflow
+                size={24}
+                color="#B0AFAF"
+                overrides={{Svg: {style: {cursor: 'pointer'}}}}
+              />
+            </div>
+          </MoreOptionsButton>
         </div>
         <div className={middleSectionStyles}>
           <div className={css({...theme.eventTitleFont, color: '#0B0C0E'})}>
