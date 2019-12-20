@@ -1,9 +1,7 @@
-import React, {useState, useContext, useRef, useMemo, useCallback} from 'react';
+import React, {useState, useContext, useRef, useMemo} from 'react';
 import {useFrostedStyletron, getTableStyles, MoreOptionsButton} from '../util';
 import {StyledTable} from 'baseui/table-grid';
 import {Button, KIND, SIZE} from 'baseui/button';
-import {StatefulMenu} from 'baseui/menu';
-import {StatefulPopover, PLACEMENT} from 'baseui/popover';
 import {Overflow} from 'baseui/icon';
 import {
   VendorsContext,
@@ -21,7 +19,6 @@ import {
   ModalButton,
 } from 'baseui/modal';
 import {unwrap} from '../../util';
-import {VendorSchema} from '../../data/schema-types';
 
 export const VendorsPage = () => (
   <VendorsContextProvider>
