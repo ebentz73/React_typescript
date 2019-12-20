@@ -27,7 +27,10 @@ export const TimelineItemsPage = () => {
   const addRowStyles = css({
     ...tableStyles.cell,
     gridColumn: '1 / span 5',
-    padding: '16px',
+    paddingTop: '16px',
+    paddingRight: '16px',
+    paddingBottom: '16px',
+    paddingLeft: '16px',
   });
   const addRowContentStyles = css(getAddRowStyles(theme));
   return (
