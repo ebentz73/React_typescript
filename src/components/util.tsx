@@ -121,8 +121,8 @@ export const MoreOptionsButton = ({
         Option: {style: {backgroundColor: '#1F2532', color: '#FFFFFF'}},
       }}
       onItemSelect={e => {
-        onItemSelect(e.item);
         close();
+        onItemSelect(e.item);
       }}
     />
   );

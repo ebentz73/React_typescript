@@ -1,5 +1,5 @@
-import React, {useState, useContext, useRef} from 'react';
-import {useFrostedStyletron, getTableStyles} from '../util';
+import React, {useState, useContext, useRef, useMemo, useCallback} from 'react';
+import {useFrostedStyletron, getTableStyles, MoreOptionsButton} from '../util';
 import {StyledTable} from 'baseui/table-grid';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {StatefulMenu} from 'baseui/menu';
@@ -50,32 +50,7 @@ const VendorsPageInternal = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const deletingVendorId = useRef<string | null>(null);
 
-  const menuItems = [{label: 'Edit'}, {label: 'Delete'}];
-  const renderMenu = (close, vendor: VendorSchema) => (
-    <StatefulMenu
-      items={menuItems}
-      overrides={{
-        List: {
-          style: {
-            backgroundColor: '#1F2532',
-            borderRadius: '4px',
-            outline: 'none',
-          },
-        },
-        Option: {style: {backgroundColor: '#1F2532', color: '#FFFFFF'}},
-      }}
-      onItemSelect={e => {
-        close();
-        if (e.item.label === 'Delete') {
-          deletingVendorId.current = vendor.id;
-          setIsDeleting(true);
-        } else if (e.item.label === 'Edit') {
-          setEditingVendor(vendor);
-          history.push(RoutePaths.EditVendor(event.id));
-        }
-      }}
-    />
-  );
+  const menuItems = useMemo(() => [{label: 'Edit'}, {label: 'Delete'}], []);
   return (
     <>
       <div>
@@ -133,9 +108,17 @@ const VendorsPageInternal = () => {
                   <div className={styles}>{row.contact.phone}</div>
                   <div className={styles} onClick={e => e.stopPropagation()}>
                     <div>
-                      <StatefulPopover
-                        placement={PLACEMENT.bottomRight}
-                        content={({close}) => renderMenu(close, row)}
+                      <MoreOptionsButton
+                        menuItems={menuItems}
+                        onItemSelect={item => {
+                          if (item.label === 'Delete') {
+                            deletingVendorId.current = row.id;
+                            setIsDeleting(true);
+                          } else if (item.label === 'Edit') {
+                            setEditingVendor(row);
+                            history.push(RoutePaths.EditVendor(event.id));
+                          }
+                        }}
                       >
                         <div>
                           <Overflow
@@ -144,7 +127,7 @@ const VendorsPageInternal = () => {
                             overrides={{Svg: {style: {cursor: 'pointer'}}}}
                           />
                         </div>
-                      </StatefulPopover>
+                      </MoreOptionsButton>
                     </div>
                   </div>
                 </div>
