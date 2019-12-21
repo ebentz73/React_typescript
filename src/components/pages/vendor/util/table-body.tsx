@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {sleep} from '../../../../util';
 import {useFrostedStyletron, getTableStyles} from '../../../util';
-import {getAddRowStyles} from '../util';
 import {Plus} from 'baseui/icon';
 
 interface IdentifiableType {
@@ -11,7 +10,7 @@ interface IdentifiableType {
 interface TableRowProps<T extends IdentifiableType> {
   row: T;
   isNewRow: boolean;
-  onAdd?: () => Promise<void>;
+  onAdd?: () => Promise<boolean>;
   onRemove: () => Promise<void>;
   onEdit: (newRow: T) => Promise<void>;
 }
@@ -22,12 +21,14 @@ export function TableBody<T extends IdentifiableType>({
   setRows,
   createEmptyRow,
   addRowHeader,
+  validateNewRow,
 }: {
   RowComponent: React.FC<TableRowProps<T>>;
   rows: T[];
   setRows: (newRows: T[]) => void;
   createEmptyRow: () => T;
   addRowHeader: string;
+  validateNewRow: (newRow: T) => boolean;
 }) {
   const [css, theme] = useFrostedStyletron();
   const tableStyles = getTableStyles(theme);
@@ -39,7 +40,18 @@ export function TableBody<T extends IdentifiableType>({
     paddingBottom: '16px',
     paddingLeft: '16px',
   });
-  const addRowContentStyles = css(getAddRowStyles(theme));
+  const addRowContentStyles = css({
+    border: `1px dashed ${theme.colors.primary}`,
+    borderRadius: '4px',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: theme.colors.primary,
+    fontSize: '12px',
+    cursor: 'pointer',
+  });
 
   const [newRow, setNewRow] = useState<T | null>(null);
   return (
@@ -59,9 +71,13 @@ export function TableBody<T extends IdentifiableType>({
           row={newRow}
           isNewRow={true}
           onAdd={async () => {
+            if (!validateNewRow(newRow)) {
+              return false;
+            }
             await sleep(1000);
             setRows(rows.concat(newRow));
             setNewRow(null);
+            return true;
           }}
           onRemove={async () => {
             setNewRow(null);

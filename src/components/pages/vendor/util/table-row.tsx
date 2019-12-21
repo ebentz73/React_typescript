@@ -20,7 +20,7 @@ export const TableRow = ({
     add: () => void
   ) => ReactNode;
   onRemove: () => Promise<void>;
-  onAdd?: () => Promise<void>;
+  onAdd?: () => Promise<boolean>;
 }) => {
   const [css, theme] = useFrostedStyletron();
   const tableStyles = getTableStyles(theme);
@@ -46,7 +46,9 @@ export const TableRow = ({
   };
   const add = async () => {
     setLoading(true);
-    await unwrap(onAdd)();
+    if (!(await unwrap(onAdd)())) {
+      setLoading(false);
+    }
   };
   return (
     <HoverableDiv

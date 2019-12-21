@@ -47,6 +47,9 @@ export const ContactPage = () => {
             phone: '',
             email: '',
           })}
+          validateNewRow={newRow =>
+            Boolean(newRow.name && newRow.phone && newRow.email)
+          }
         />
       </BorderlessTable>
     </div>
@@ -62,7 +65,7 @@ function ContactRow({
 }: {
   row: Row;
   isNewRow: boolean;
-  onAdd?: () => Promise<void>;
+  onAdd?: () => Promise<boolean>;
   onRemove: () => Promise<void>;
   onEdit: (newRow: Row) => Promise<void>;
 }) {
