@@ -1,8 +1,17 @@
 import React, {useState} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
-import {Plus} from 'baseui/icon';
-import {getAddRowStyles} from './util';
+import {EditableTextField} from '../../common/fields';
+import {TableRow} from './util/table-row';
+import uuid from 'uuid/v4';
+import {TableBody} from './util/table-body';
 
+interface Row {
+  id: string;
+  name: string;
+  type: string;
+  phone: string;
+  email: string;
+}
 export const ContactPage = () => {
   const [css, theme] = useFrostedStyletron();
   const headerStyles = css({
@@ -11,65 +20,87 @@ export const ContactPage = () => {
     marginTop: '20px',
     marginBottom: '26px',
   });
-  const rows = [
-    {
-      name: 'Lee Alexander',
-      type: 'Primary',
-      phone: '+1 6786285431',
-      email: 'rlalexander@deen.com',
-    },
-  ];
+  const [rows, setRows] = useState<Row[]>([]);
   const tableStyles = getTableStyles(theme);
   const headerCellStyles = css({
     ...tableStyles.header,
     border: 'none',
   });
-  const cellStyles = css(tableStyles.cell);
-  const [, setHoveredRow] = useState(null as any);
-  const addRowStyles = css({
-    ...tableStyles.cell,
-    gridColumn: '1 / span 5',
-    paddingTop: '16px',
-    paddingRight: '16px',
-    paddingBottom: '16px',
-    paddingLeft: '16px',
-  });
-  const addRowContentStyles = css(getAddRowStyles(theme));
   return (
     <div>
       <div className={headerStyles}>Contact Information</div>
-      <BorderlessTable $gridTemplateColumns="32% 15% 15% 32% 6%">
+      <BorderlessTable $gridTemplateColumns="32% 14% 14% 32% 8%">
         <div className={headerCellStyles}>NAME</div>
         <div className={headerCellStyles}>TYPE</div>
         <div className={headerCellStyles}>PHONE</div>
         <div className={headerCellStyles}>EMAIL</div>
         <div className={headerCellStyles}></div>
-        <div className={addRowStyles}>
-          <div className={addRowContentStyles}>
-            <Plus />
-            ADD CONTACT
-          </div>
-        </div>
-        {rows.map(row => {
-          return (
-            <div
-              className={css({display: 'contents'})}
-              key={row.name}
-              onMouseEnter={() => setHoveredRow(row)}
-              onMouseLeave={() => setHoveredRow(null)}
-            >
-              <div className={cellStyles}>{row.name}</div>
-              <div className={cellStyles}>{row.type}</div>
-              <div className={cellStyles}>{row.phone}</div>
-              <div className={cellStyles}>{row.email}</div>
-              <div
-                className={cellStyles}
-                onClick={e => e.stopPropagation()}
-              ></div>
-            </div>
-          );
-        })}
+        <TableBody
+          rows={rows}
+          setRows={setRows}
+          addRowHeader="ADD CONTACT"
+          RowComponent={ContactRow}
+          createEmptyRow={() => ({
+            id: uuid(),
+            name: '',
+            type: 'Primary',
+            phone: '',
+            email: '',
+          })}
+        />
       </BorderlessTable>
     </div>
   );
 };
+
+function ContactRow({
+  row,
+  isNewRow,
+  onAdd,
+  onRemove,
+  onEdit,
+}: {
+  row: Row;
+  isNewRow: boolean;
+  onAdd?: () => Promise<void>;
+  onRemove: () => Promise<void>;
+  onEdit: (newRow: Row) => Promise<void>;
+}) {
+  return (
+    <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
+      {({mainStyles, leftStyles}, add) => (
+        <>
+          <EditableTextField
+            className={`${mainStyles} ${leftStyles}`}
+            value={row.name}
+            onValueChanged={e => onEdit({...row, name: e})}
+            placeholder="Enter name"
+            alwaysEditing={isNewRow}
+          />
+          <EditableTextField
+            className={mainStyles}
+            value={row.type}
+            onValueChanged={e => onEdit({...row, type: e})}
+            placeholder="Select type"
+            alwaysEditing={isNewRow}
+          />
+          <EditableTextField
+            className={mainStyles}
+            value={row.phone}
+            onValueChanged={e => onEdit({...row, phone: e})}
+            placeholder="Enter phone"
+            alwaysEditing={isNewRow}
+          />
+          <EditableTextField
+            className={mainStyles}
+            value={row.email}
+            onValueChanged={async e => await onEdit({...row, email: e})}
+            placeholder="Enter email"
+            alwaysEditing={isNewRow}
+            onEnter={() => isNewRow && add()}
+          />
+        </>
+      )}
+    </TableRow>
+  );
+}

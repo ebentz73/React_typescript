@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useRef, useEffect} from 'react';
 import {styled, createThemedUseStyletron} from 'baseui';
 import {Link} from 'fusion-plugin-react-router';
 import {Theme} from 'baseui/theme';
@@ -20,11 +20,11 @@ export const StyledRouterLink = styled(Link, {
   },
 });
 
-export const LoadingSpinner = () => {
+export const LoadingSpinner = ({size}: {size?: string}) => {
   const [, theme] = useFrostedStyletron();
   return (
     <Spinner
-      size="140px"
+      size={size || '140px'}
       overrides={{
         ActivePath: {
           style: {fill: theme.colors.primary},
@@ -32,6 +32,14 @@ export const LoadingSpinner = () => {
       }}
     />
   );
+};
+
+export const useLatestValue = (value: any) => {
+  const ref = useRef(value);
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref;
 };
 
 interface Font {
