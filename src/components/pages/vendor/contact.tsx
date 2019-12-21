@@ -29,7 +29,7 @@ export const ContactPage = () => {
   return (
     <div>
       <div className={headerStyles}>Contact Information</div>
-      <BorderlessTable $gridTemplateColumns="32% 14% 14% 32% 8%">
+      <BorderlessTable $gridTemplateColumns="28% 14% 18% 32% 8%">
         <div className={headerCellStyles}>NAME</div>
         <div className={headerCellStyles}>TYPE</div>
         <div className={headerCellStyles}>PHONE</div>
@@ -93,6 +93,7 @@ function ContactRow({
             onValueChanged={e => onEdit({...row, phone: e})}
             placeholder="Enter phone"
             alwaysEditing={isNewRow}
+            type="phone"
           />
           <EditableTextField
             className={mainStyles}

@@ -3,6 +3,7 @@ import {LoadingSpinner, useLatestValue} from '../../util';
 import {Input} from 'baseui/input';
 import {safeUnwrap} from '../../../util';
 import {EditableField} from './editable-field';
+import {parsePhoneInput} from '../util';
 
 export const EditableTextField = ({
   value,
@@ -19,7 +20,7 @@ export const EditableTextField = ({
   placeholder: string;
   alwaysEditing?: boolean;
   onEnter?: () => void;
-  type?: string;
+  type?: 'phone' | 'text' | 'number';
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const onEnterRef = useLatestValue(onEnter);
@@ -39,13 +40,20 @@ export const EditableTextField = ({
         isLoading,
         saveChanges,
       }) => {
+        const isPhone = type === 'phone';
         return (
           <Input
             value={editingValue}
             placeholder={placeholder}
             inputRef={inputRef}
-            type={type}
-            onChange={e => setEditingValue(e.currentTarget.value)}
+            type={isPhone ? 'text' : type}
+            onChange={e =>
+              setEditingValue(
+                isPhone
+                  ? parsePhoneInput(editingValue, e.currentTarget.value)
+                  : e.currentTarget.value
+              )
+            }
             onKeyDown={async e => {
               if (e.key === 'Enter') {
                 await saveChanges();

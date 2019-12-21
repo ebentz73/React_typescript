@@ -1,4 +1,5 @@
 import React, {ReactNode, useState} from 'react';
+import {AsYouType} from 'libphonenumber-js';
 
 export const HoverableDiv = ({
   children,
@@ -19,3 +20,11 @@ export const HoverableDiv = ({
     </div>
   );
 };
+
+export function parsePhoneInput(oldValue: string, newValue: string) {
+  const parsedVal = new AsYouType('US').input(newValue);
+  if (parsedVal === oldValue && parsedVal.indexOf(newValue) === 0) {
+    return parsedVal.slice(0, -1);
+  }
+  return parsedVal;
+}
