@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
-import {EditableTextField} from '../../common/fields';
+import {EditableTextField} from '../../common/fields/editable-text-field';
 import {TableRow} from './util/table-row';
 import uuid from 'uuid/v4';
 import {TableBody} from './util/table-body';

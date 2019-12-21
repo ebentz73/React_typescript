@@ -12,6 +12,7 @@ import {ClientForm} from '../events/client-form';
 import {StyledLink} from 'baseui/link';
 import moment from 'moment';
 import {assetUrl} from 'fusion-core';
+import {CurrencyInput} from '../common/fields/currency-input';
 
 export const NewEventPage = ({history}) => {
   const [css, theme] = useFrostedStyletron();
@@ -141,12 +142,9 @@ export const NewEventPage = ({history}) => {
                   </div>
                   <div className={css({flexGrow: 1})}>
                     <FormControl label="Budget" caption="">
-                      <Input
-                        value={eventBudget}
-                        onChange={(e: any) => setEventBudget(e.target.value)}
-                        type="number"
-                        startEnhancer="$"
-                        endEnhancer=".00"
+                      <CurrencyInput
+                        value={eventBudget as any}
+                        onChange={value => setEventBudget(value as any)}
                       />
                     </FormControl>
                   </div>

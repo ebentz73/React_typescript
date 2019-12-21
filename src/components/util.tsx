@@ -1,4 +1,6 @@
-import React, {ReactNode, useRef, useEffect} from 'react';
+/* global Intl */
+
+import React, {ReactNode, useRef} from 'react';
 import {styled, createThemedUseStyletron} from 'baseui';
 import {Link} from 'fusion-plugin-react-router';
 import {Theme} from 'baseui/theme';
@@ -36,10 +38,15 @@ export const LoadingSpinner = ({size}: {size?: string}) => {
 
 export const useLatestValue = (value: any) => {
   const ref = useRef(value);
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
+  ref.current = value;
   return ref;
+};
+
+export const formatUSD = (value: number): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(value);
 };
 
 interface Font {

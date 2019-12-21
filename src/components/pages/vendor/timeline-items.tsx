@@ -3,7 +3,7 @@ import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
 import {TableBody} from './util/table-body';
 import uuid from 'uuid/v4';
 import {TableRow} from './util/table-row';
-import {EditableTextField} from '../../common/fields';
+import {EditableTextField} from '../../common/fields/editable-text-field';
 
 interface Row {
   id: string;

@@ -3,14 +3,15 @@ import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
 import {TableBody} from './util/table-body';
 import uuid from 'uuid/v4';
 import {TableRow} from './util/table-row';
-import {EditableTextField} from '../../common/fields';
+import {EditableTextField} from '../../common/fields/editable-text-field';
+import {EditableCurrencyField} from '../../common/fields/editable-currency-field';
 
 interface Row {
   id: string;
   name: string;
   description: string;
   dueDate: string;
-  amount: string;
+  amount: number | null;
 }
 
 export const PaymentSchedulePage = () => {
@@ -30,7 +31,7 @@ export const PaymentSchedulePage = () => {
   return (
     <div>
       <div className={headerStyles}>Payment Schedule</div>
-      <BorderlessTable $gridTemplateColumns="22% 42% 15% 15% 6%">
+      <BorderlessTable $gridTemplateColumns="22% 37% 15% 20% 6%">
         <div className={headerCellStyles}>ITEM</div>
         <div className={headerCellStyles}></div>
         <div className={headerCellStyles}>DUE DATE</div>
@@ -46,7 +47,7 @@ export const PaymentSchedulePage = () => {
             name: '',
             description: '',
             dueDate: '',
-            amount: '',
+            amount: null,
           })}
           validateNewRow={newRow =>
             Boolean(newRow.name && newRow.dueDate && newRow.amount)
@@ -92,14 +93,14 @@ function PaymentScheduleRow({
             className={mainStyles}
             value={row.dueDate}
             onValueChanged={e => onEdit({...row, dueDate: e})}
-            placeholder="Select type"
+            placeholder="Enter due date"
             alwaysEditing={isNewRow}
           />
-          <EditableTextField
+          <EditableCurrencyField
             className={mainStyles}
             value={row.amount}
-            onValueChanged={e => onEdit({...row, amount: e})}
-            placeholder="Enter phone"
+            onValueChanged={amount => onEdit({...row, amount})}
+            placeholder="Enter amount"
             alwaysEditing={isNewRow}
             onEnter={() => isNewRow && add()}
           />

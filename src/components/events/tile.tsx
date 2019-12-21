@@ -1,4 +1,3 @@
-/* global Intl */
 import React, {useState, useContext, useMemo, useCallback} from 'react';
 import {EventSchema} from '../../data/schema-types';
 import {ProgressBar} from 'baseui/progress-bar';
@@ -10,6 +9,7 @@ import {
   StyledRouterLink,
   useFrostedStyletron,
   MoreOptionsButton,
+  formatUSD,
 } from '../util';
 import {
   Modal,
@@ -160,12 +160,7 @@ export const EventTile = ({event, history}: Props & RouteComponentProps) => {
             />
           </div>
         </div>
-        <div className={bottomSectionStyles}>
-          {new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-          }).format(event.budget)}
-        </div>
+        <div className={bottomSectionStyles}>{formatUSD(event.budget)}</div>
       </div>
     </>
   );

@@ -1,15 +1,21 @@
 import React, {useState} from 'react';
-import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
+import {
+  useFrostedStyletron,
+  getTableStyles,
+  BorderlessTable,
+  formatUSD,
+} from '../../util';
 import {TableBody} from './util/table-body';
 import uuid from 'uuid/v4';
 import {TableRow} from './util/table-row';
-import {EditableTextField} from '../../common/fields';
+import {EditableTextField} from '../../common/fields/editable-text-field';
+import {EditableCurrencyField} from '../../common/fields/editable-currency-field';
 
 interface Row {
   id: string;
   name: string;
-  quantity: string;
-  amount: string;
+  quantity: number;
+  amount: number | null;
   total: string;
 }
 
@@ -30,7 +36,7 @@ export const BudgetItemsPage = () => {
   return (
     <div>
       <div className={headerStyles}>Budget Items</div>
-      <BorderlessTable $gridTemplateColumns="32% 15% 15% 32% 6%">
+      <BorderlessTable $gridTemplateColumns="32% 15% 20% 27% 6%">
         <div className={headerCellStyles}>ITEM</div>
         <div className={headerCellStyles}>QUANTITY</div>
         <div className={headerCellStyles}>AMOUNT</div>
@@ -44,8 +50,8 @@ export const BudgetItemsPage = () => {
           createEmptyRow={() => ({
             id: uuid(),
             name: '',
-            quantity: '',
-            amount: '',
+            quantity: 1,
+            amount: null,
             total: '$99.99',
           })}
           validateNewRow={newRow =>
@@ -72,6 +78,11 @@ function BudgetItemRow({
   onRemove: () => Promise<void>;
   onEdit: (newRow: Row) => Promise<void>;
 }) {
+  const recalculateTotal = (row: Row) => ({
+    ...row,
+    total:
+      row.amount && row.quantity ? formatUSD(row.amount * row.quantity) : '',
+  });
   return (
     <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
       {({mainStyles, leftStyles}, add) => (
@@ -86,14 +97,19 @@ function BudgetItemRow({
           <EditableTextField
             className={mainStyles}
             value={row.quantity.toString()}
-            onValueChanged={e => onEdit({...row, quantity: e})}
+            onValueChanged={e =>
+              onEdit(recalculateTotal({...row, quantity: parseInt(e)}))
+            }
             placeholder="Enter quantity"
             alwaysEditing={isNewRow}
+            type="number"
           />
-          <EditableTextField
+          <EditableCurrencyField
             className={mainStyles}
             value={row.amount}
-            onValueChanged={e => onEdit({...row, amount: e})}
+            onValueChanged={amount =>
+              onEdit(recalculateTotal({...row, amount}))
+            }
             placeholder="Enter amount"
             alwaysEditing={isNewRow}
             onEnter={() => isNewRow && add()}
