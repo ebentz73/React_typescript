@@ -1,5 +1,5 @@
 import React, {ReactNode, useState} from 'react';
-import {useFrostedStyletron} from '../../util';
+import {useFrostedStyletron, useLatestValue} from '../../util';
 import {HoverableDiv} from '../util';
 import {ChevronLeft} from 'baseui/icon';
 
@@ -22,7 +22,7 @@ export function EditableField<T>({
     saveChanges: () => Promise<void>;
   }) => ReactNode;
   className: string;
-  onEditBegin: () => void;
+  onEditBegin?: () => void;
   alwaysEditing?: boolean;
 }) {
   const [isEditing, setEditing] = useState(alwaysEditing);
@@ -37,10 +37,11 @@ export function EditableField<T>({
     cursor: 'pointer',
   });
 
+  const latestEditingValue = useLatestValue(editingValue);
   const saveChanges = async () => {
     setLoading(true);
     try {
-      await onValueChanged(editingValue);
+      await onValueChanged(latestEditingValue.current);
     } finally {
       setLoading(false);
       if (!alwaysEditing) {
@@ -65,7 +66,7 @@ export function EditableField<T>({
             onClick={() => {
               setEditing(true);
               setEditingValue(value);
-              onEditBegin();
+              onEditBegin && onEditBegin();
             }}
           >
             <div>{regularContent()}</div>

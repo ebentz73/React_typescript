@@ -1,17 +1,20 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
 import {EditableTextField} from '../../common/fields/editable-text-field';
 import {TableRow} from './util/table-row';
 import uuid from 'uuid/v4';
 import {TableBody} from './util/table-body';
+import {EditableSelectField} from '../../common/fields/editable-select-field';
+import {Option} from 'baseui/select';
 
 interface Row {
   id: string;
   name: string;
-  type: string;
+  type: Option;
   phone: string;
   email: string;
 }
+
 export const ContactPage = () => {
   const [css, theme] = useFrostedStyletron();
   const headerStyles = css({
@@ -43,7 +46,7 @@ export const ContactPage = () => {
           createEmptyRow={() => ({
             id: uuid(),
             name: '',
-            type: 'Primary',
+            type: {id: 'Primary', label: 'Primary'},
             phone: '',
             email: '',
           })}
@@ -69,6 +72,14 @@ function ContactRow({
   onRemove: () => Promise<void>;
   onEdit: (newRow: Row) => Promise<void>;
 }) {
+  const typeOptions = useMemo(
+    () => [
+      {id: 'Primary', label: 'Primary'},
+      {id: 'DayOf', label: 'Day-of'},
+      {id: 'Other', label: 'Other'},
+    ],
+    []
+  );
   return (
     <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
       {({mainStyles, leftStyles}, add) => (
@@ -80,11 +91,11 @@ function ContactRow({
             placeholder="Enter name"
             alwaysEditing={isNewRow}
           />
-          <EditableTextField
+          <EditableSelectField
+            options={typeOptions}
             className={mainStyles}
             value={row.type}
             onValueChanged={e => onEdit({...row, type: e})}
-            placeholder="Select type"
             alwaysEditing={isNewRow}
           />
           <EditableTextField

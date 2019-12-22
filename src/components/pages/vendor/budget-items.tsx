@@ -36,7 +36,7 @@ export const BudgetItemsPage = () => {
   return (
     <div>
       <div className={headerStyles}>Budget Items</div>
-      <BorderlessTable $gridTemplateColumns="32% 15% 20% 27% 6%">
+      <BorderlessTable $gridTemplateColumns="32% 15% 27% 17% 9%">
         <div className={headerCellStyles}>ITEM</div>
         <div className={headerCellStyles}>QUANTITY</div>
         <div className={headerCellStyles}>AMOUNT</div>
@@ -52,7 +52,7 @@ export const BudgetItemsPage = () => {
             name: '',
             quantity: 1,
             amount: null,
-            total: '$99.99',
+            total: 'N/A',
           })}
           validateNewRow={newRow =>
             Boolean(
@@ -81,7 +81,7 @@ function BudgetItemRow({
   const recalculateTotal = (row: Row) => ({
     ...row,
     total:
-      row.amount && row.quantity ? formatUSD(row.amount * row.quantity) : '',
+      row.amount && row.quantity ? formatUSD(row.amount * row.quantity) : 'N/A',
   });
   return (
     <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
