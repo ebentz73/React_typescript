@@ -127,3 +127,8 @@ declare module 'fusion-plugin-font-loader-react' {
   const FontLoaderReact;
   export default FontLoaderReact;
 }
+
+declare module 'baseui/select/select-component' {
+  import {Select} from 'baseui/select';
+  export default Select;
+}
