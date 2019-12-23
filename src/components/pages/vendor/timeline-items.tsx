@@ -4,10 +4,11 @@ import {TableBody} from './util/table-body';
 import uuid from 'uuid/v4';
 import {TableRow} from './util/table-row';
 import {EditableTextField} from '../../common/fields/editable-text-field';
+import {EditableDateField} from '../../common/fields/editable-date-field';
 
 interface Row {
   id: string;
-  date: string;
+  date: Date;
   time: string;
   description: string;
 }
@@ -42,7 +43,7 @@ export const TimelineItemsPage = () => {
           RowComponent={TimelineItemRow}
           createEmptyRow={() => ({
             id: uuid(),
-            date: '',
+            date: new Date(),
             time: '',
             description: '',
           })}
@@ -72,18 +73,17 @@ function TimelineItemRow({
     <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
       {({mainStyles, leftStyles}) => (
         <>
-          <EditableTextField
+          <EditableDateField
             className={`${mainStyles} ${leftStyles}`}
             value={row.date}
             onValueChanged={e => onEdit({...row, date: e})}
-            placeholder="Select date"
             alwaysEditing={isNewRow}
           />
           <EditableTextField
             className={mainStyles}
             value={row.time}
             onValueChanged={e => onEdit({...row, time: e})}
-            placeholder="Select time"
+            placeholder="Time"
             alwaysEditing={isNewRow}
           />
           <EditableTextField

@@ -110,7 +110,7 @@ function BudgetItemRow({
             onValueChanged={amount =>
               onEdit(recalculateTotal({...row, amount}))
             }
-            placeholder="Enter amount"
+            placeholder="Amount"
             alwaysEditing={isNewRow}
             onEnter={() => isNewRow && add()}
           />

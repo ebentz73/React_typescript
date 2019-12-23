@@ -5,12 +5,13 @@ import uuid from 'uuid/v4';
 import {TableRow} from './util/table-row';
 import {EditableTextField} from '../../common/fields/editable-text-field';
 import {EditableCurrencyField} from '../../common/fields/editable-currency-field';
+import {EditableDateField} from '../../common/fields/editable-date-field';
 
 interface Row {
   id: string;
   name: string;
   description: string;
-  dueDate: string;
+  dueDate: Date;
   amount: number | null;
 }
 
@@ -31,7 +32,7 @@ export const PaymentSchedulePage = () => {
   return (
     <div>
       <div className={headerStyles}>Payment Schedule</div>
-      <BorderlessTable $gridTemplateColumns="22% 37% 15% 20% 6%">
+      <BorderlessTable $gridTemplateColumns="22% 35% 15% 20% 8%">
         <div className={headerCellStyles}>ITEM</div>
         <div className={headerCellStyles}></div>
         <div className={headerCellStyles}>DUE DATE</div>
@@ -46,7 +47,7 @@ export const PaymentSchedulePage = () => {
             id: uuid(),
             name: '',
             description: '',
-            dueDate: '',
+            dueDate: new Date(),
             amount: null,
           })}
           validateNewRow={newRow =>
@@ -89,18 +90,17 @@ function PaymentScheduleRow({
             placeholder="Enter description"
             alwaysEditing={isNewRow}
           />
-          <EditableTextField
+          <EditableDateField
             className={mainStyles}
             value={row.dueDate}
             onValueChanged={e => onEdit({...row, dueDate: e})}
-            placeholder="Enter due date"
             alwaysEditing={isNewRow}
           />
           <EditableCurrencyField
             className={mainStyles}
             value={row.amount}
             onValueChanged={amount => onEdit({...row, amount})}
-            placeholder="Enter amount"
+            placeholder="Amount"
             alwaysEditing={isNewRow}
             onEnter={() => isNewRow && add()}
           />

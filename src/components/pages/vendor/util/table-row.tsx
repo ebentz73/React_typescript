@@ -37,7 +37,9 @@ export const TableRow = ({
     Svg: {style: {':hover': {color: theme.colors.primary, cursor: 'pointer'}}},
   };
   const leftCellStyles = isNewRow ? css({borderLeft: borderStyle}) : '';
-  const rightCellStyles = isNewRow ? css({borderRight: borderStyle}) : '';
+  const rightCellStyles = isNewRow
+    ? css({borderRight: borderStyle, paddingLeft: '0'})
+    : css({paddingLeft: '0'});
 
   const [isLoading, setLoading] = useState(false);
   const remove = async () => {
