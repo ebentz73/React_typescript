@@ -38,11 +38,13 @@ export const DateInput = ({
                   className={css({
                     marginTop: '10px',
                     marginLeft: '8px',
+                    cursor: 'pointer',
                   })}
                   src={assetUrl('../../../static/calendar_icon.svg')}
                 />
               ),
               Input: {
+                style: {cursor: 'pointer'},
                 props: {
                   readonly: 'readonly',
                 },

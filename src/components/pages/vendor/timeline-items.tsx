@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
 import {TableBody} from './util/table-body';
 import uuid from 'uuid/v4';
 import {TableRow} from './util/table-row';
 import {EditableTextField} from '../../common/editable-fields/editable-text-field';
 import {EditableDateField} from '../../common/editable-fields/editable-date-field';
+import {EditableSelectField} from '../../common/editable-fields/editable-select-field';
+import {createTimeInputOptions} from '../../common/inputs/time-input';
+import {Option} from 'baseui/select';
+import moment from 'moment';
 
 interface Row {
   id: string;
   date: Date;
-  time: string;
+  time: Option;
   description: string;
 }
 
@@ -44,7 +48,14 @@ export const TimelineItemsPage = () => {
           createEmptyRow={() => ({
             id: uuid(),
             date: new Date(),
-            time: '',
+            time: {
+              id: moment()
+                .startOf('day')
+                .valueOf(),
+              label: moment()
+                .startOf('day')
+                .format('LT'),
+            },
             description: '',
           })}
           validateNewRow={newRow =>
@@ -69,6 +80,7 @@ function TimelineItemRow({
   onRemove: () => Promise<void>;
   onEdit: (newRow: Row) => Promise<void>;
 }) {
+  const timeOptions = useMemo(() => createTimeInputOptions(), []);
   return (
     <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
       {({mainStyles, leftStyles}) => (
@@ -79,12 +91,13 @@ function TimelineItemRow({
             onValueChanged={e => onEdit({...row, date: e})}
             alwaysEditing={isNewRow}
           />
-          <EditableTextField
+          <EditableSelectField
+            options={timeOptions}
             className={mainStyles}
             value={row.time}
             onValueChanged={e => onEdit({...row, time: e})}
-            placeholder="Time"
             alwaysEditing={isNewRow}
+            isVirtualList={true}
           />
           <EditableTextField
             className={mainStyles}
