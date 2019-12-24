@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, ReactNode} from 'react';
 import {LoadingSpinner, useLatestValue} from '../../util';
 import {Input} from 'baseui/input';
 import {safeUnwrap} from '../../../util';
@@ -13,6 +13,7 @@ export const EditableTextField = ({
   alwaysEditing,
   onEnter,
   type,
+  regularContent,
 }: {
   value: string;
   onValueChanged: (newValue: string) => Promise<void>;
@@ -21,6 +22,7 @@ export const EditableTextField = ({
   alwaysEditing?: boolean;
   onEnter?: () => void;
   type?: 'phone' | 'text' | 'number';
+  regularContent?: () => ReactNode;
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const onEnterRef = useLatestValue(onEnter);
@@ -29,7 +31,7 @@ export const EditableTextField = ({
       value={value}
       onValueChanged={onValueChanged}
       className={className}
-      regularContent={() => value}
+      regularContent={regularContent || (() => value)}
       alwaysEditing={alwaysEditing}
       onEditBegin={() => {
         setTimeout(() => safeUnwrap(inputRef.current, c => c.focus()));

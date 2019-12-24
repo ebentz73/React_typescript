@@ -1,6 +1,6 @@
 /* global Intl */
 
-import React, {ReactNode, useRef} from 'react';
+import React, {ReactNode, useRef, useEffect} from 'react';
 import {styled, createThemedUseStyletron} from 'baseui';
 import {Link} from 'fusion-plugin-react-router';
 import {Theme} from 'baseui/theme';
@@ -39,6 +39,17 @@ export const LoadingSpinner = ({size}: {size?: string}) => {
 export const useLatestValue = (value: any) => {
   const ref = useRef(value);
   ref.current = value;
+  return ref;
+};
+
+export const useMounted = () => {
+  const ref = useRef(false);
+  useEffect(() => {
+    ref.current = true;
+    return () => {
+      ref.current = false;
+    };
+  }, []);
   return ref;
 };
 

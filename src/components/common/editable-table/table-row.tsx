@@ -1,14 +1,27 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useState, useMemo, useCallback} from 'react';
 import {HoverableDiv} from '../util';
-import {useFrostedStyletron, getTableStyles, LoadingSpinner} from '../../util';
-import {Delete} from 'baseui/icon';
-import {unwrap} from '../../../util';
+import {
+  useFrostedStyletron,
+  getTableStyles,
+  LoadingSpinner,
+  MoreOptionsButton,
+  useMounted,
+} from '../../util';
+import {Delete, Overflow} from 'baseui/icon';
+import {unwrap, safeUnwrap} from '../../../util';
+
+interface CustomContextAction {
+  id: string;
+  label: string;
+  action: () => Promise<void>;
+}
 
 export const TableRow = ({
   isNewRow,
   children,
   onRemove,
   onAdd,
+  customContextActions,
 }: {
   isNewRow: boolean;
   children: (
@@ -17,6 +30,7 @@ export const TableRow = ({
   ) => ReactNode;
   onRemove: () => Promise<void>;
   onAdd?: () => Promise<boolean>;
+  customContextActions?: CustomContextAction[];
 }) => {
   const [css, theme] = useFrostedStyletron();
   const tableStyles = getTableStyles(theme);
@@ -58,6 +72,57 @@ export const TableRow = ({
       setLoading(false);
     }
   };
+
+  const isMounted = useMounted();
+  const contextMenuItems = useMemo(
+    () =>
+      safeUnwrap(customContextActions, actions =>
+        actions.map(a => ({
+          id: a.id,
+          label: a.label,
+        }))
+      ),
+    [customContextActions]
+  );
+  const contextMenuOnItemSelect = useCallback(
+    async selectedItem => {
+      const contextAction = unwrap(customContextActions).find(
+        i => i.id === selectedItem.id
+      );
+      if (!contextAction) {
+        return;
+      }
+      setLoading(true);
+      await contextAction.action();
+      isMounted.current && setLoading(false);
+    },
+    [customContextActions]
+  );
+
+  const getContextActions = () => {
+    if (!customContextActions) {
+      return (
+        <div onClick={async () => await remove()}>
+          <Delete size={24} overrides={iconHoverOverrides} />
+        </div>
+      );
+    }
+    return (
+      <MoreOptionsButton
+        menuItems={contextMenuItems}
+        onItemSelect={contextMenuOnItemSelect}
+      >
+        <div>
+          <Overflow
+            size={24}
+            color="#B0AFAF"
+            overrides={{Svg: {style: {cursor: 'pointer'}}}}
+          />
+        </div>
+      </MoreOptionsButton>
+    );
+  };
+
   return (
     <HoverableDiv
       className={css({
@@ -95,9 +160,7 @@ export const TableRow = ({
                   </div>
                 </div>
               ) : isRowHovered ? (
-                <div onClick={async () => await remove()}>
-                  <Delete size={24} overrides={iconHoverOverrides} />
-                </div>
+                getContextActions()
               ) : null}
             </div>
           </>

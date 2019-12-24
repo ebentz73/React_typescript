@@ -16,7 +16,7 @@ interface Row {
   name: string;
   quantity: number;
   amount: number | null;
-  total: string;
+  total: number;
 }
 
 export const BudgetItemsPage = () => {
@@ -24,8 +24,11 @@ export const BudgetItemsPage = () => {
   const headerStyles = css({
     fontSize: '18px',
     marginLeft: '32px',
+    marginRight: '32px',
     marginTop: '20px',
     marginBottom: '26px',
+    display: 'flex',
+    justifyContent: 'space-between',
   });
   const [rows, setRows] = useState<Row[]>([]);
   const tableStyles = getTableStyles(theme);
@@ -35,7 +38,10 @@ export const BudgetItemsPage = () => {
   });
   return (
     <div>
-      <div className={headerStyles}>Budget Items</div>
+      <div className={headerStyles}>
+        <div>Budget Items</div>
+        <div>Total: {formatUSD(rows.reduce((sum, r) => sum + r.total, 0))}</div>
+      </div>
       <BorderlessTable $gridTemplateColumns="32fr 15fr 27fr 17fr 85px">
         <div className={headerCellStyles}>ITEM</div>
         <div className={headerCellStyles}>QUANTITY</div>
@@ -52,7 +58,7 @@ export const BudgetItemsPage = () => {
             name: '',
             quantity: 1,
             amount: null,
-            total: 'N/A',
+            total: 0,
           })}
           validateNewRow={newRow =>
             Boolean(
@@ -80,8 +86,7 @@ function BudgetItemRow({
 }) {
   const recalculateTotal = (row: Row) => ({
     ...row,
-    total:
-      row.amount && row.quantity ? formatUSD(row.amount * row.quantity) : 'N/A',
+    total: row.amount && row.quantity ? row.amount * row.quantity : 0,
   });
   return (
     <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
@@ -114,7 +119,7 @@ function BudgetItemRow({
             alwaysEditing={isNewRow}
             onEnter={() => isNewRow && add()}
           />
-          <div className={mainStyles}>{row.total}</div>
+          <div className={mainStyles}>{formatUSD(row.total)}</div>
         </>
       )}
     </TableRow>

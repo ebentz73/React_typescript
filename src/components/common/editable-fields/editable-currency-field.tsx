@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {LoadingSpinner, useLatestValue} from '../../util';
+import {LoadingSpinner, useLatestValue, formatUSD} from '../../util';
 import {safeUnwrap} from '../../../util';
 import {EditableField} from './editable-field';
 import {CurrencyInput} from '../inputs/currency-input';
@@ -26,7 +26,7 @@ export const EditableCurrencyField = ({
       value={value}
       onValueChanged={onValueChanged}
       className={className}
-      regularContent={() => value}
+      regularContent={() => formatUSD(value || 0)}
       alwaysEditing={alwaysEditing}
       onEditBegin={() => {
         safeUnwrap(inputRef.current, c => setTimeout(() => c.focus()));
