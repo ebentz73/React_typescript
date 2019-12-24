@@ -5,9 +5,9 @@ import {
   BorderlessTable,
   formatUSD,
 } from '../../util';
-import {TableBody} from './util/table-body';
+import {TableBody} from '../../common/editable-table/table-body';
 import uuid from 'uuid/v4';
-import {TableRow} from './util/table-row';
+import {TableRow} from '../../common/editable-table/table-row';
 import {EditableTextField} from '../../common/editable-fields/editable-text-field';
 import {EditableCurrencyField} from '../../common/editable-fields/editable-currency-field';
 
@@ -36,7 +36,7 @@ export const BudgetItemsPage = () => {
   return (
     <div>
       <div className={headerStyles}>Budget Items</div>
-      <BorderlessTable $gridTemplateColumns="32% 15% 27% 17% 9%">
+      <BorderlessTable $gridTemplateColumns="32fr 15fr 27fr 17fr 85px">
         <div className={headerCellStyles}>ITEM</div>
         <div className={headerCellStyles}>QUANTITY</div>
         <div className={headerCellStyles}>AMOUNT</div>

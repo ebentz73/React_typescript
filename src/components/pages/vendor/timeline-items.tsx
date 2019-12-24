@@ -1,8 +1,8 @@
 import React, {useState, useMemo} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
-import {TableBody} from './util/table-body';
+import {TableBody} from '../../common/editable-table/table-body';
 import uuid from 'uuid/v4';
-import {TableRow} from './util/table-row';
+import {TableRow} from '../../common/editable-table/table-row';
 import {EditableTextField} from '../../common/editable-fields/editable-text-field';
 import {EditableDateField} from '../../common/editable-fields/editable-date-field';
 import {EditableSelectField} from '../../common/editable-fields/editable-select-field';
@@ -34,7 +34,7 @@ export const TimelineItemsPage = () => {
   return (
     <div>
       <div className={headerStyles}>Timeline Items</div>
-      <BorderlessTable $gridTemplateColumns="15% 15% 31% 31% 8%">
+      <BorderlessTable $gridTemplateColumns="1fr 1fr 2fr 2fr 85px">
         <div className={headerCellStyles}>DATE</div>
         <div className={headerCellStyles}></div>
         <div className={headerCellStyles}>DESCRIPTION</div>

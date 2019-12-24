@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {sleep} from '../../../../util';
-import {useFrostedStyletron, getTableStyles} from '../../../util';
+import {sleep} from '../../../util';
+import {useFrostedStyletron, getTableStyles} from '../../util';
 import {Plus} from 'baseui/icon';
 
 interface IdentifiableType {

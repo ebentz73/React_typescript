@@ -1,9 +1,9 @@
 import React, {useState, useMemo} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
 import {EditableTextField} from '../../common/editable-fields/editable-text-field';
-import {TableRow} from './util/table-row';
+import {TableRow} from '../../common/editable-table/table-row';
 import uuid from 'uuid/v4';
-import {TableBody} from './util/table-body';
+import {TableBody} from '../../common/editable-table/table-body';
 import {EditableSelectField} from '../../common/editable-fields/editable-select-field';
 import {Option} from 'baseui/select';
 
@@ -32,7 +32,7 @@ export const ContactPage = () => {
   return (
     <div>
       <div className={headerStyles}>Contact Information</div>
-      <BorderlessTable $gridTemplateColumns="28% 14% 18% 32% 8%">
+      <BorderlessTable $gridTemplateColumns="28fr 14fr 18fr 32fr 85px">
         <div className={headerCellStyles}>NAME</div>
         <div className={headerCellStyles}>TYPE</div>
         <div className={headerCellStyles}>PHONE</div>

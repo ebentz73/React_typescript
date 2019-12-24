@@ -1,12 +1,8 @@
 import React, {ReactNode, useState} from 'react';
-import {HoverableDiv} from '../../../common/util';
-import {
-  useFrostedStyletron,
-  getTableStyles,
-  LoadingSpinner,
-} from '../../../util';
-import {DeleteAlt, Plus} from 'baseui/icon';
-import {unwrap} from '../../../../util';
+import {HoverableDiv} from '../util';
+import {useFrostedStyletron, getTableStyles, LoadingSpinner} from '../../util';
+import {Delete} from 'baseui/icon';
+import {unwrap} from '../../../util';
 
 export const TableRow = ({
   isNewRow,
@@ -40,6 +36,16 @@ export const TableRow = ({
   const rightCellStyles = isNewRow
     ? css({borderRight: borderStyle, paddingLeft: '0'})
     : css({paddingLeft: '0'});
+  const addCellContainerStyles = css({
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+  });
+  const addButtonStyles = css({
+    color: theme.colors.primary,
+    cursor: 'pointer',
+    paddingTop: '3px',
+  });
 
   const [isLoading, setLoading] = useState(false);
   const remove = async () => {
@@ -73,25 +79,24 @@ export const TableRow = ({
               {isLoading ? (
                 <LoadingSpinner size="32px" />
               ) : isNewRow ? (
-                <div className={css({display: 'flex'})}>
+                <div className={addCellContainerStyles}>
                   <div onClick={async () => await remove()}>
-                    <DeleteAlt
+                    <Delete
                       size={24}
                       color={theme.colors.primary}
                       overrides={iconHoverOverrides}
                     />
                   </div>
-                  <div onClick={async () => await add()}>
-                    <Plus
-                      size={24}
-                      color={theme.colors.primary}
-                      overrides={iconHoverOverrides}
-                    />
+                  <div
+                    onClick={async () => await add()}
+                    className={addButtonStyles}
+                  >
+                    ADD
                   </div>
                 </div>
               ) : isRowHovered ? (
                 <div onClick={async () => await remove()}>
-                  <DeleteAlt size={24} overrides={iconHoverOverrides} />
+                  <Delete size={24} overrides={iconHoverOverrides} />
                 </div>
               ) : null}
             </div>

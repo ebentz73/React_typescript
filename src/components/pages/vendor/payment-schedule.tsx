@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
-import {TableBody} from './util/table-body';
+import {TableBody} from '../../common/editable-table/table-body';
 import uuid from 'uuid/v4';
-import {TableRow} from './util/table-row';
+import {TableRow} from '../../common/editable-table/table-row';
 import {EditableTextField} from '../../common/editable-fields/editable-text-field';
 import {EditableCurrencyField} from '../../common/editable-fields/editable-currency-field';
 import {EditableDateField} from '../../common/editable-fields/editable-date-field';
@@ -32,7 +32,7 @@ export const PaymentSchedulePage = () => {
   return (
     <div>
       <div className={headerStyles}>Payment Schedule</div>
-      <BorderlessTable $gridTemplateColumns="22% 35% 15% 20% 8%">
+      <BorderlessTable $gridTemplateColumns="22fr 35fr 15fr 20fr 85px">
         <div className={headerCellStyles}>ITEM</div>
         <div className={headerCellStyles}></div>
         <div className={headerCellStyles}>DUE DATE</div>

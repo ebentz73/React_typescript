@@ -80,7 +80,7 @@ export const EventPage = ({
     },
   });
   const mainBodyStyles = css({
-    minWidth: '700px',
+    minWidth: '800px',
     maxWidth: '1400px',
     marginLeft: 'auto',
     marginRight: 'auto',
