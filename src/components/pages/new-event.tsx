@@ -12,7 +12,7 @@ import {ClientForm} from '../events/client-form';
 import {StyledLink} from 'baseui/link';
 import moment from 'moment';
 import {assetUrl} from 'fusion-core';
-import {CurrencyInput} from '../common/fields/currency-input';
+import {CurrencyInput} from '../common/inputs/currency-input';
 
 export const NewEventPage = ({history}) => {
   const [css, theme] = useFrostedStyletron();

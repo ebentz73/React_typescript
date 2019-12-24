@@ -1,10 +1,10 @@
 import React, {useState, useMemo} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
-import {EditableTextField} from '../../common/fields/editable-text-field';
+import {EditableTextField} from '../../common/editable-fields/editable-text-field';
 import {TableRow} from './util/table-row';
 import uuid from 'uuid/v4';
 import {TableBody} from './util/table-body';
-import {EditableSelectField} from '../../common/fields/editable-select-field';
+import {EditableSelectField} from '../../common/editable-fields/editable-select-field';
 import {Option} from 'baseui/select';
 
 interface Row {

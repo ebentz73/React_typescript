@@ -8,8 +8,8 @@ import {
 import {TableBody} from './util/table-body';
 import uuid from 'uuid/v4';
 import {TableRow} from './util/table-row';
-import {EditableTextField} from '../../common/fields/editable-text-field';
-import {EditableCurrencyField} from '../../common/fields/editable-currency-field';
+import {EditableTextField} from '../../common/editable-fields/editable-text-field';
+import {EditableCurrencyField} from '../../common/editable-fields/editable-currency-field';
 
 interface Row {
   id: string;

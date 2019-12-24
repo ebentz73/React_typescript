@@ -1,6 +1,6 @@
 import React, {useRef, useEffect} from 'react';
 import {EditableField} from './editable-field';
-import {DateInput} from './date-input';
+import {DateInput} from '../inputs/date-input';
 import moment from 'moment';
 import {Datepicker} from 'baseui/datepicker';
 

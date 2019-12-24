@@ -3,8 +3,8 @@ import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
 import {TableBody} from './util/table-body';
 import uuid from 'uuid/v4';
 import {TableRow} from './util/table-row';
-import {EditableTextField} from '../../common/fields/editable-text-field';
-import {EditableDateField} from '../../common/fields/editable-date-field';
+import {EditableTextField} from '../../common/editable-fields/editable-text-field';
+import {EditableDateField} from '../../common/editable-fields/editable-date-field';
 
 interface Row {
   id: string;

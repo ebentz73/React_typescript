@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import {LoadingSpinner, useLatestValue} from '../../util';
 import {safeUnwrap} from '../../../util';
 import {EditableField} from './editable-field';
-import {CurrencyInput} from './currency-input';
+import {CurrencyInput} from '../inputs/currency-input';
 
 export const EditableCurrencyField = ({
   value,
