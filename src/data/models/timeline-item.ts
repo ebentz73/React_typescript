@@ -1,14 +1,12 @@
 import {Document} from 'mongoose';
 import {createPlugin, createToken, ServiceType} from 'fusion-core';
 import {MongooseToken} from '../mongoose';
+import {VendorDocument} from './vendor';
 
 export type TimelineItemDocument = Document & {
-  date: string;
-  startTime: string;
+  date: Date;
   description: string;
-  location: string;
-  weddingParty: boolean;
-  vendorId: string;
+  vendor: VendorDocument;
 };
 
 export const TimelineItemModel = createPlugin({
@@ -18,15 +16,9 @@ export const TimelineItemModel = createPlugin({
       'TimelineItem',
       new mongoose.Schema(
         {
-          date: String,
-          startTime: String,
+          date: Date,
           description: String,
-          location: String,
-          weddingParty: {
-            type: Boolean,
-            default: true,
-          },
-          vendorId: {
+          vendor: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Vendor',
           },

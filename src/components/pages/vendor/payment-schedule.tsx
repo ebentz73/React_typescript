@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React, {useMemo, useContext} from 'react';
 import {
   useFrostedStyletron,
   getTableStyles,
@@ -6,21 +6,13 @@ import {
   formatUSD,
 } from '../../util';
 import {TableBody} from '../../common/editable-table/table-body';
-import uuid from 'uuid/v4';
 import {TableRow} from '../../common/editable-table/table-row';
 import {EditableTextField} from '../../common/editable-fields/editable-text-field';
 import {EditableCurrencyField} from '../../common/editable-fields/editable-currency-field';
 import {EditableDateField} from '../../common/editable-fields/editable-date-field';
 import {unwrap} from '../../../util';
-
-interface Row {
-  id: string;
-  name: string;
-  description: string;
-  dueDate: Date;
-  amount: number | null;
-  isPaid: boolean;
-}
+import {VendorContext} from '../../contexts/vendor';
+import {PaymentScheduleSchema} from '../../../data/schema-types';
 
 export const PaymentSchedulePage = () => {
   const [css, theme] = useFrostedStyletron();
@@ -33,12 +25,16 @@ export const PaymentSchedulePage = () => {
     display: 'flex',
     justifyContent: 'space-between',
   });
-  const [rows, setRows] = useState<Row[]>([]);
+  const {
+    state: {vendor},
+    actions: {upsertPaymentSchedule, deletePaymentSchedule},
+  } = useContext(VendorContext);
   const tableStyles = getTableStyles(theme);
   const headerCellStyles = css({
     ...tableStyles.header,
     border: 'none',
   });
+  const validateRow = row => row.item && row.dueDate && row.amount;
   return (
     <div>
       <div className={headerStyles}>
@@ -46,7 +42,7 @@ export const PaymentSchedulePage = () => {
         <div>
           Remaining balance due:{' '}
           {formatUSD(
-            rows
+            vendor.paymentSchedule
               .filter(r => !r.isPaid)
               .reduce((sum, r) => sum + unwrap(r.amount), 0)
           )}
@@ -59,21 +55,50 @@ export const PaymentSchedulePage = () => {
         <div className={headerCellStyles}>AMOUNT</div>
         <div className={headerCellStyles}></div>
         <TableBody
-          rows={rows}
-          setRows={setRows}
+          rows={vendor.paymentSchedule}
+          getRowId={row => row.id}
           addRowHeader="ADD ITEM"
           RowComponent={PaymentScheduleRow}
           createEmptyRow={() => ({
-            id: uuid(),
-            name: '',
+            id: 'new',
+            item: '',
             description: '',
-            dueDate: new Date(),
-            amount: null,
+            dueDate: Date.now(),
+            amount: 0,
             isPaid: false,
           })}
-          validateNewRow={newRow =>
-            Boolean(newRow.name && newRow.dueDate && newRow.amount)
-          }
+          onAdd={async newRow => {
+            if (!validateRow(newRow)) {
+              return false;
+            }
+            await upsertPaymentSchedule({
+              id: null,
+              vendorId: vendor.id,
+              item: newRow.item,
+              description: newRow.description,
+              dueDate: newRow.dueDate,
+              amount: newRow.amount,
+              isPaid: false,
+            });
+            return true;
+          }}
+          onEdit={async row => {
+            if (!validateRow(row)) {
+              return;
+            }
+            await upsertPaymentSchedule({
+              id: row.id,
+              vendorId: vendor.id,
+              item: row.item,
+              description: row.description,
+              dueDate: row.dueDate,
+              amount: row.amount,
+              isPaid: row.isPaid,
+            });
+          }}
+          onRemove={async id => {
+            await deletePaymentSchedule(id);
+          }}
         />
       </BorderlessTable>
     </div>
@@ -87,11 +112,11 @@ function PaymentScheduleRow({
   onRemove,
   onEdit,
 }: {
-  row: Row;
+  row: PaymentScheduleSchema;
   isNewRow: boolean;
   onAdd?: () => Promise<boolean>;
   onRemove: () => Promise<void>;
-  onEdit: (newRow: Row) => Promise<void>;
+  onEdit: (newRow: PaymentScheduleSchema) => Promise<void>;
 }) {
   const customContextActions = useMemo(
     () => [
@@ -125,13 +150,13 @@ function PaymentScheduleRow({
         <>
           <EditableTextField
             className={`${mainStyles} ${leftStyles}`}
-            value={row.name}
-            onValueChanged={e => onEdit({...row, name: e})}
+            value={row.item}
+            onValueChanged={item => onEdit({...row, item})}
             placeholder="Enter item name"
             alwaysEditing={isNewRow}
             regularContent={() => (
               <div className={css({display: 'flex'})}>
-                <div>{row.name}</div>
+                <div>{row.item}</div>
                 {row.isPaid && <div className={paidTextStyles}>PAID</div>}
               </div>
             )}
@@ -145,14 +170,14 @@ function PaymentScheduleRow({
           />
           <EditableDateField
             className={mainStyles}
-            value={row.dueDate}
-            onValueChanged={e => onEdit({...row, dueDate: e})}
+            value={new Date(row.dueDate)}
+            onValueChanged={e => onEdit({...row, dueDate: e.valueOf()})}
             alwaysEditing={isNewRow}
           />
           <EditableCurrencyField
             className={mainStyles}
             value={row.amount}
-            onValueChanged={amount => onEdit({...row, amount})}
+            onValueChanged={amount => onEdit({...row, amount: amount || 0})}
             placeholder="Amount"
             alwaysEditing={isNewRow}
             onEnter={() => isNewRow && add()}

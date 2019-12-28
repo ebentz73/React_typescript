@@ -5,13 +5,17 @@ import {MongooseToken} from '../mongoose';
 import {VendorKinds} from '../../constants/vendor-kind';
 import {ContactDocument} from './contact';
 import {EventDocument} from './event';
+import {VendorContactKind} from '../../constants/vendor-contact-kind';
 
 export type VendorDocument = Document & {
   name: string;
   vendorKind: VendorKinds;
   location: string;
   creator: UserDocument;
-  contact: ContactDocument;
+  contacts: {
+    contact: ContactDocument;
+    contactKind: VendorContactKind;
+  }[];
   event: EventDocument;
 };
 
@@ -34,11 +38,20 @@ export const VendorModel = createPlugin({
             required: true,
             ref: 'User',
           },
-          contact: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: 'Contact',
-          },
+          contacts: [
+            {
+              contact: {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true,
+                ref: 'Contact',
+              },
+              contactKind: {
+                type: String,
+                required: true,
+                enum: Object.values(VendorContactKind),
+              },
+            },
+          ],
           event: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,

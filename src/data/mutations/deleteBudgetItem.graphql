@@ -1,0 +1,11 @@
+mutation deleteBudgetItem($id: ID!) {
+  deleteBudgetItem(id: $id) {
+    id
+    budgetItems {
+      id
+      item
+      quantity
+      amount
+    }
+  }
+}

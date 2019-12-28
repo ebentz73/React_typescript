@@ -1,0 +1,11 @@
+mutation upsertBudgetItem($budgetItem: BudgetItemInput!) {
+  upsertBudgetItem(budgetItem: $budgetItem) {
+    id
+    budgetItems {
+      id
+      item
+      quantity
+      amount
+    }
+  }
+}

@@ -18,7 +18,8 @@ import {
   ModalFooter,
   ModalButton,
 } from 'baseui/modal';
-import {unwrap} from '../../util';
+import {unwrap, safeUnwrap} from '../../util';
+import {VendorContactKind} from '../../constants/vendor-contact-kind';
 
 export const VendorsPage = () => (
   <VendorsContextProvider>
@@ -87,6 +88,12 @@ const VendorsPageInternal = () => {
                 hoveredRow === row
                   ? `${cellStyles} ${hoveredCellStyles}`
                   : cellStyles;
+              const primaryContact = safeUnwrap(
+                row.contacts.filter(
+                  c => c.contactKind === VendorContactKind.Primary
+                )[0],
+                c => c.contact
+              );
               return (
                 <div
                   className={css({display: 'contents'})}
@@ -100,9 +107,15 @@ const VendorsPageInternal = () => {
                   <div className={styles}>{row.name}</div>
                   <div className={styles}>{row.vendorKind}</div>
                   <div className={styles}>{row.location}</div>
-                  <div className={styles}>{row.contact.name}</div>
-                  <div className={styles}>{row.contact.email}</div>
-                  <div className={styles}>{row.contact.phone}</div>
+                  <div className={styles}>
+                    {safeUnwrap(primaryContact, c => c.name)}
+                  </div>
+                  <div className={styles}>
+                    {safeUnwrap(primaryContact, c => c.email)}
+                  </div>
+                  <div className={styles}>
+                    {safeUnwrap(primaryContact, c => c.phone)}
+                  </div>
                   <div className={styles} onClick={e => e.stopPropagation()}>
                     <div>
                       <MoreOptionsButton

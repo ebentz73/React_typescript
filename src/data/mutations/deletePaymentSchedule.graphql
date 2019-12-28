@@ -1,0 +1,13 @@
+mutation deletePaymentSchedule($id: ID!) {
+  deletePaymentSchedule(id: $id) {
+    id
+    paymentSchedule {
+      id
+      item
+      description
+      dueDate
+      amount
+      isPaid
+    }
+  }
+}

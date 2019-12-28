@@ -2,7 +2,6 @@ import React, {useContext, useState, useMemo, useEffect} from 'react';
 import {Button, KIND, SIZE} from 'baseui/button';
 import {RoutePaths} from '../../constants';
 import {useFrostedStyletron} from '../util';
-import {COUNTRIES} from 'baseui/phone-input';
 import {FormControl} from 'baseui/form-control';
 import {Input} from 'baseui/input';
 import {ClientForm, ClientFormState} from '../events/client-form';
@@ -87,7 +86,6 @@ const NewVendorPageInternal = () => {
     name: '',
     email: '',
     phone: '',
-    country: COUNTRIES.US,
   };
   const [contactInfo, setContactInfo] = useState(defaultClientFormState);
 
@@ -97,20 +95,11 @@ const NewVendorPageInternal = () => {
       return;
     }
 
-    const phoneParts = editingVendor.contact.phone.split(' ');
-
     setVendorName(editingVendor.name);
     setVendorKind([
       unwrap(vendorKindOptions.find(o => o.id === editingVendor.vendorKind)),
     ]);
     setVendorLocation(editingVendor.location);
-    setContactInfo({
-      id: editingVendor.contact.id,
-      name: editingVendor.contact.name,
-      phone: phoneParts[1],
-      email: editingVendor.contact.email,
-      country: COUNTRIES.US, // TODO parse
-    });
   }, []);
 
   const submitVendor = async () => {
@@ -126,7 +115,7 @@ const NewVendorPageInternal = () => {
         : {
             name: contactInfo.name,
             email: contactInfo.email,
-            phone: contactInfo.country.dialCode + ' ' + contactInfo.phone,
+            phone: contactInfo.phone,
           },
     };
     if (isEditing) {
@@ -187,13 +176,17 @@ const NewVendorPageInternal = () => {
                   </div>
                 </div>
               </div>
-              <div className={panelStyles}>
-                <ClientForm
-                  state={contactInfo}
-                  setState={newState => setContactInfo({...newState, id: null})}
-                  title="Contact Information"
-                />
-              </div>
+              {!isEditing && (
+                <div className={panelStyles}>
+                  <ClientForm
+                    state={contactInfo}
+                    setState={newState =>
+                      setContactInfo({...newState, id: null})
+                    }
+                    title="Contact Information"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -1,0 +1,14 @@
+mutation deleteVendorContact($vendorId: ID!, $contactId: ID!) {
+  deleteVendorContact(vendorId: $vendorId, contactId: $contactId) {
+    id
+    contacts {
+      contact {
+        id
+        name
+        phone
+        email
+      }
+      contactKind
+    }
+  }
+}

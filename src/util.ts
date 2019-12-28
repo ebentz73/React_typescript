@@ -18,3 +18,7 @@ export function safeUnwrap<T, U>(
 export function sleep(timeMs: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, timeMs));
 }
+
+export function forceCast<T>(input: any): T {
+  return input as T;
+}

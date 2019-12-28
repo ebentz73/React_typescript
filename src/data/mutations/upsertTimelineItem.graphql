@@ -1,0 +1,10 @@
+mutation upsertTimelineItem($timelineItem: TimelineItemInput!) {
+  upsertTimelineItem(timelineItem: $timelineItem) {
+    id
+    timelineItems {
+      id
+      date
+      description
+    }
+  }
+}

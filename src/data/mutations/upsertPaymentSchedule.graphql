@@ -1,0 +1,13 @@
+mutation upsertPaymentSchedule($paymentSchedule: PaymentScheduleInput!) {
+  upsertPaymentSchedule(paymentSchedule: $paymentSchedule) {
+    id
+    paymentSchedule {
+      id
+      item
+      description
+      dueDate
+      amount
+      isPaid
+    }
+  }
+}

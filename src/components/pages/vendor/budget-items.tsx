@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {
   useFrostedStyletron,
   getTableStyles,
@@ -6,18 +6,11 @@ import {
   formatUSD,
 } from '../../util';
 import {TableBody} from '../../common/editable-table/table-body';
-import uuid from 'uuid/v4';
 import {TableRow} from '../../common/editable-table/table-row';
 import {EditableTextField} from '../../common/editable-fields/editable-text-field';
 import {EditableCurrencyField} from '../../common/editable-fields/editable-currency-field';
-
-interface Row {
-  id: string;
-  name: string;
-  quantity: number;
-  amount: number | null;
-  total: number;
-}
+import {VendorContext} from '../../contexts/vendor';
+import {BudgetItemSchema} from '../../../data/schema-types';
 
 export const BudgetItemsPage = () => {
   const [css, theme] = useFrostedStyletron();
@@ -30,17 +23,29 @@ export const BudgetItemsPage = () => {
     display: 'flex',
     justifyContent: 'space-between',
   });
-  const [rows, setRows] = useState<Row[]>([]);
+  const {
+    state: {vendor},
+    actions: {upsertBudgetItem, deleteBudgetItem},
+  } = useContext(VendorContext);
   const tableStyles = getTableStyles(theme);
   const headerCellStyles = css({
     ...tableStyles.header,
     border: 'none',
   });
+  const validateRow = row => row.item && row.quantity && row.amount;
   return (
     <div>
       <div className={headerStyles}>
         <div>Budget Items</div>
-        <div>Total: {formatUSD(rows.reduce((sum, r) => sum + r.total, 0))}</div>
+        <div>
+          Total:{' '}
+          {formatUSD(
+            vendor.budgetItems.reduce(
+              (sum, r) => sum + r.quantity * r.amount,
+              0
+            )
+          )}
+        </div>
       </div>
       <BorderlessTable $gridTemplateColumns="32fr 15fr 27fr 17fr 85px">
         <div className={headerCellStyles}>ITEM</div>
@@ -49,22 +54,45 @@ export const BudgetItemsPage = () => {
         <div className={headerCellStyles}>TOTAL</div>
         <div className={headerCellStyles}></div>
         <TableBody
-          rows={rows}
-          setRows={setRows}
+          rows={vendor.budgetItems}
+          getRowId={row => row.id}
           addRowHeader="ADD ITEM"
           RowComponent={BudgetItemRow}
           createEmptyRow={() => ({
-            id: uuid(),
-            name: '',
+            id: 'new',
+            item: '',
             quantity: 1,
-            amount: null,
+            amount: 0,
             total: 0,
           })}
-          validateNewRow={newRow =>
-            Boolean(
-              newRow.name && newRow.quantity && newRow.amount && newRow.total
-            )
-          }
+          onAdd={async newRow => {
+            if (!validateRow(newRow)) {
+              return false;
+            }
+            await upsertBudgetItem({
+              id: null,
+              vendorId: vendor.id,
+              item: newRow.item,
+              quantity: newRow.quantity,
+              amount: newRow.amount,
+            });
+            return true;
+          }}
+          onEdit={async row => {
+            if (!validateRow(row)) {
+              return;
+            }
+            await upsertBudgetItem({
+              id: row.id,
+              vendorId: vendor.id,
+              item: row.item,
+              quantity: row.quantity,
+              amount: row.amount,
+            });
+          }}
+          onRemove={async id => {
+            await deleteBudgetItem(id);
+          }}
         />
       </BorderlessTable>
     </div>
@@ -78,32 +106,28 @@ function BudgetItemRow({
   onRemove,
   onEdit,
 }: {
-  row: Row;
+  row: BudgetItemSchema;
   isNewRow: boolean;
   onAdd?: () => Promise<boolean>;
   onRemove: () => Promise<void>;
-  onEdit: (newRow: Row) => Promise<void>;
+  onEdit: (newRow: BudgetItemSchema) => Promise<void>;
 }) {
-  const recalculateTotal = (row: Row) => ({
-    ...row,
-    total: row.amount && row.quantity ? row.amount * row.quantity : 0,
-  });
   return (
     <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
       {({mainStyles, leftStyles}, add) => (
         <>
           <EditableTextField
             className={`${mainStyles} ${leftStyles}`}
-            value={row.name}
-            onValueChanged={e => onEdit({...row, name: e})}
+            value={row.item}
+            onValueChanged={item => onEdit({...row, item})}
             placeholder="Enter item name"
             alwaysEditing={isNewRow}
           />
           <EditableTextField
             className={mainStyles}
             value={row.quantity.toString()}
-            onValueChanged={e =>
-              onEdit(recalculateTotal({...row, quantity: parseInt(e)}))
+            onValueChanged={quantity =>
+              onEdit({...row, quantity: parseInt(quantity)})
             }
             placeholder="Enter quantity"
             alwaysEditing={isNewRow}
@@ -112,14 +136,14 @@ function BudgetItemRow({
           <EditableCurrencyField
             className={mainStyles}
             value={row.amount}
-            onValueChanged={amount =>
-              onEdit(recalculateTotal({...row, amount}))
-            }
+            onValueChanged={amount => onEdit({...row, amount: amount || 0})}
             placeholder="Amount"
             alwaysEditing={isNewRow}
             onEnter={() => isNewRow && add()}
           />
-          <div className={mainStyles}>{formatUSD(row.total)}</div>
+          <div className={mainStyles}>
+            {formatUSD(row.amount * row.quantity)}
+          </div>
         </>
       )}
     </TableRow>

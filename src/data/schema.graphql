@@ -24,6 +24,12 @@ enum VendorKinds {
   Other
 }
 
+enum VendorContactKinds {
+  Primary
+  DayOf
+  Other
+}
+
 type Contact {
   id: ID!
   name: String!
@@ -31,12 +37,42 @@ type Contact {
   email: String!
 }
 
+type VendorContact {
+  contact: Contact!
+  contactKind: VendorContactKinds!
+}
+
+type BudgetItem {
+  id: ID!
+  item: String!
+  quantity: Int!
+  amount: Int!
+}
+
+type PaymentSchedule {
+  id: ID!
+  item: String!
+  description: String!
+  dueDate: Date!
+  amount: Int!
+  isPaid: Boolean!
+}
+
+type TimelineItem {
+  id: ID!
+  date: Date!
+  description: String!
+}
+
 type Vendor {
   id: ID!
   name: String!
   vendorKind: VendorKinds!
   location: String!
-  contact: Contact!
+  contacts: [VendorContact!]!
+  budgetItems: [BudgetItem!]!
+  paymentSchedule: [PaymentSchedule!]!
+  timelineItems: [TimelineItem!]!
 }
 
 enum EventFilterType {
@@ -64,7 +100,32 @@ input VendorInput {
   name: String!
   vendorKind: VendorKinds!
   location: String!
-  contact: ContactInput!
+  contact: ContactInput
+}
+
+input BudgetItemInput {
+  id: ID
+  vendorId: ID!
+  item: String!
+  quantity: Int!
+  amount: Int!
+}
+
+input PaymentScheduleInput {
+  id: ID
+  vendorId: ID!
+  item: String!
+  description: String!
+  dueDate: Date!
+  amount: Int!
+  isPaid: Boolean!
+}
+
+input TimelineItemInput {
+  id: ID
+  vendorId: ID!
+  date: Date!
+  description: String!
 }
 
 input ContactInput {
@@ -72,6 +133,11 @@ input ContactInput {
   name: String
   email: String
   phone: String
+}
+
+input VendorContactInput {
+  contact: ContactInput!
+  contactKind: VendorContactKinds!
 }
 
 type Mutation {
@@ -84,4 +150,16 @@ type Mutation {
   createVendor(vendor: VendorInput!): Vendor!
   editVendor(id: ID!, vendor: VendorInput!): Vendor!
   deleteVendor(id: ID): ID
+
+  upsertVendorContact(vendorId: ID!, vendorContact: VendorContactInput!): Vendor!
+  deleteVendorContact(vendorId: ID!, contactId: ID!): Vendor!
+
+  upsertBudgetItem(budgetItem: BudgetItemInput!): Vendor!
+  deleteBudgetItem(id: ID!): Vendor!
+
+  upsertPaymentSchedule(paymentSchedule: PaymentScheduleInput!): Vendor!
+  deletePaymentSchedule(id: ID!): Vendor!
+
+  upsertTimelineItem(timelineItem: TimelineItemInput!): Vendor!
+  deleteTimelineItem(id: ID!): Vendor!
 }

@@ -1,12 +1,15 @@
 import {Document} from 'mongoose';
 import {createPlugin, createToken, ServiceType} from 'fusion-core';
 import {MongooseToken} from '../mongoose';
+import {VendorDocument} from './vendor';
 
 export type PaymentScheduleDocument = Document & {
   item: string;
+  description: string;
+  dueDate: Date;
   amount: number;
-  dueDate: string;
-  vendorId: string;
+  isPaid: boolean;
+  vendor: VendorDocument;
 };
 
 export const PaymentScheduleModel = createPlugin({
@@ -17,9 +20,11 @@ export const PaymentScheduleModel = createPlugin({
       new mongoose.Schema(
         {
           item: String,
+          description: String,
+          dueDate: Date,
           amount: Number,
-          dueDate: String,
-          vendorId: {
+          isPaid: Boolean,
+          vendor: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Vendor',
           },

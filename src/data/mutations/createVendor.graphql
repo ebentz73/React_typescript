@@ -4,11 +4,14 @@ mutation createVendor($vendor: VendorInput!) {
     name
     vendorKind
     location
-    contact {
-      id
-      name
-      phone
-      email
+    contacts {
+      contact {
+        id
+        name
+        phone
+        email
+      }
+      contactKind
     }
   }
 }

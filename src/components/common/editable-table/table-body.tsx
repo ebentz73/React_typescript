@@ -1,13 +1,8 @@
 import React, {useState} from 'react';
-import {sleep} from '../../../util';
 import {useFrostedStyletron, getTableStyles} from '../../util';
 import {Plus} from 'baseui/icon';
 
-interface IdentifiableType {
-  id: string;
-}
-
-interface TableRowProps<T extends IdentifiableType> {
+interface TableRowProps<T> {
   row: T;
   isNewRow: boolean;
   onAdd?: () => Promise<boolean>;
@@ -15,20 +10,24 @@ interface TableRowProps<T extends IdentifiableType> {
   onEdit: (newRow: T) => Promise<void>;
 }
 
-export function TableBody<T extends IdentifiableType>({
+export function TableBody<T>({
   RowComponent,
   rows,
-  setRows,
   createEmptyRow,
   addRowHeader,
-  validateNewRow,
+  onAdd,
+  onEdit,
+  onRemove,
+  getRowId,
 }: {
   RowComponent: React.FC<TableRowProps<T>>;
   rows: T[];
-  setRows: (newRows: T[]) => void;
   createEmptyRow: () => T;
   addRowHeader: string;
-  validateNewRow: (newRow: T) => boolean;
+  onAdd: (newRow: T) => Promise<boolean>;
+  onEdit: (row: T) => Promise<void>;
+  onRemove: (id: string) => Promise<void>;
+  getRowId: (row: T) => string;
 }) {
   const [css, theme] = useFrostedStyletron();
   const tableStyles = getTableStyles(theme);
@@ -71,11 +70,9 @@ export function TableBody<T extends IdentifiableType>({
           row={newRow}
           isNewRow={true}
           onAdd={async () => {
-            if (!validateNewRow(newRow)) {
+            if (!(await onAdd(newRow))) {
               return false;
             }
-            await sleep(1000);
-            setRows(rows.concat(newRow));
             setNewRow(null);
             return true;
           }}
@@ -90,16 +87,12 @@ export function TableBody<T extends IdentifiableType>({
       {rows.map(row => (
         <RowComponent
           row={row}
-          key={row.id}
+          key={getRowId(row)}
           isNewRow={false}
           onRemove={async () => {
-            await sleep(1000);
-            setRows(rows.filter(r => r.id !== row.id));
+            await onRemove(getRowId(row));
           }}
-          onEdit={async newRow => {
-            await sleep(1000);
-            setRows(rows.map(r => (r.id === newRow.id ? newRow : r)));
-          }}
+          onEdit={onEdit}
         />
       ))}
     </>

@@ -1,21 +1,18 @@
-import React, {useState, useMemo} from 'react';
+import React, {useMemo, useContext} from 'react';
 import {useFrostedStyletron, getTableStyles, BorderlessTable} from '../../util';
 import {TableBody} from '../../common/editable-table/table-body';
-import uuid from 'uuid/v4';
 import {TableRow} from '../../common/editable-table/table-row';
 import {EditableTextField} from '../../common/editable-fields/editable-text-field';
 import {EditableDateField} from '../../common/editable-fields/editable-date-field';
 import {EditableSelectField} from '../../common/editable-fields/editable-select-field';
-import {createTimeInputOptions} from '../../common/inputs/time-input';
-import {Option} from 'baseui/select';
+import {
+  createTimeInputOptions,
+  TimeOption,
+} from '../../common/inputs/time-input';
 import moment from 'moment';
-
-interface Row {
-  id: string;
-  date: Date;
-  time: Option;
-  description: string;
-}
+import {VendorContext} from '../../contexts/vendor';
+import {TimelineItemSchema} from '../../../data/schema-types';
+import {unwrap} from '../../../util';
 
 export const TimelineItemsPage = () => {
   const [css, theme] = useFrostedStyletron();
@@ -25,12 +22,16 @@ export const TimelineItemsPage = () => {
     marginTop: '20px',
     marginBottom: '26px',
   });
-  const [rows, setRows] = useState<Row[]>([]);
+  const {
+    state: {vendor},
+    actions: {upsertTimelineItem, deleteTimelineItem},
+  } = useContext(VendorContext);
   const tableStyles = getTableStyles(theme);
   const headerCellStyles = css({
     ...tableStyles.header,
     border: 'none',
   });
+  const validateRow = row => Boolean(row.description);
   return (
     <div>
       <div className={headerStyles}>Timeline Items</div>
@@ -41,26 +42,41 @@ export const TimelineItemsPage = () => {
         <div className={headerCellStyles}>TAGS</div>
         <div className={headerCellStyles}></div>
         <TableBody
-          rows={rows}
-          setRows={setRows}
+          rows={vendor.timelineItems}
+          getRowId={row => row.id}
           addRowHeader="ADD ITEM"
           RowComponent={TimelineItemRow}
           createEmptyRow={() => ({
-            id: uuid(),
-            date: new Date(),
-            time: {
-              id: moment()
-                .startOf('day')
-                .valueOf(),
-              label: moment()
-                .startOf('day')
-                .format('LT'),
-            },
+            id: 'new',
+            date: Date.now(),
             description: '',
           })}
-          validateNewRow={newRow =>
-            Boolean(newRow.date && newRow.time && newRow.description)
-          }
+          onAdd={async newRow => {
+            if (!validateRow(newRow)) {
+              return false;
+            }
+            await upsertTimelineItem({
+              id: null,
+              date: newRow.date,
+              description: newRow.description,
+              vendorId: vendor.id,
+            });
+            return true;
+          }}
+          onEdit={async row => {
+            if (!validateRow(row)) {
+              return;
+            }
+            await upsertTimelineItem({
+              id: row.id,
+              date: row.date,
+              description: row.description,
+              vendorId: vendor.id,
+            });
+          }}
+          onRemove={async id => {
+            await deleteTimelineItem(id);
+          }}
         />
       </BorderlessTable>
     </div>
@@ -74,28 +90,56 @@ function TimelineItemRow({
   onRemove,
   onEdit,
 }: {
-  row: Row;
+  row: TimelineItemSchema;
   isNewRow: boolean;
   onAdd?: () => Promise<boolean>;
   onRemove: () => Promise<void>;
-  onEdit: (newRow: Row) => Promise<void>;
+  onEdit: (newRow: TimelineItemSchema) => Promise<void>;
 }) {
   const timeOptions = useMemo(() => createTimeInputOptions(), []);
+  const day = moment(row.date)
+    .startOf('day')
+    .toDate();
+  const dateAndTime = moment(row.date);
+  const timeOption = useMemo(
+    () =>
+      unwrap(
+        timeOptions.find(
+          o =>
+            o.hour === dateAndTime.hour() && o.minute === dateAndTime.minute()
+        )
+      ),
+    [timeOptions, row]
+  );
+  const getNewDate = (newDay, newHour, newMinute) =>
+    moment(newDay)
+      .startOf('day')
+      .add(newHour, 'hours')
+      .add(newMinute, 'minutes')
+      .valueOf();
+
   return (
     <TableRow onAdd={onAdd} onRemove={onRemove} isNewRow={isNewRow}>
       {({mainStyles, leftStyles}) => (
         <>
           <EditableDateField
             className={`${mainStyles} ${leftStyles}`}
-            value={row.date}
-            onValueChanged={e => onEdit({...row, date: e})}
+            value={day}
+            onValueChanged={e =>
+              onEdit({
+                ...row,
+                date: getNewDate(e, dateAndTime.hours(), dateAndTime.minutes()),
+              })
+            }
             alwaysEditing={isNewRow}
           />
           <EditableSelectField
             options={timeOptions}
             className={mainStyles}
-            value={row.time}
-            onValueChanged={e => onEdit({...row, time: e})}
+            value={timeOption}
+            onValueChanged={(e: TimeOption) =>
+              onEdit({...row, date: getNewDate(row.date, e.hour, e.minute)})
+            }
             alwaysEditing={isNewRow}
             isVirtualList={true}
           />

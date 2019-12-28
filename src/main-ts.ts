@@ -52,10 +52,6 @@ import {
   EventItemsServiceToken,
 } from './data/services/event-items';
 import {EventServiceToken, EventService} from './data/services/event';
-import {
-  TimelineItemService,
-  TimelineItemServiceToken,
-} from './data/services/timeline-item';
 import {VendorService, VendorServiceToken} from './data/services/vendor';
 import HelmetPlugin from 'fusion-plugin-react-helmet-async';
 import FontLoaderReact, {
@@ -100,7 +96,6 @@ const setUpServer = app => {
   app.register(ChecklistServiceToken, ChecklistService);
   app.register(EventItemsServiceToken, EventItemsService);
   app.register(EventServiceToken, EventService);
-  app.register(TimelineItemServiceToken, TimelineItemService);
   app.register(VendorServiceToken, VendorService);
 
   // Resolvers

@@ -1,13 +1,13 @@
 import {Document} from 'mongoose';
 import {createPlugin, createToken, ServiceType} from 'fusion-core';
 import {MongooseToken} from '../mongoose';
+import {VendorDocument} from './vendor';
 
 export type BudgetItemDocument = Document & {
   item: string;
-  qty: number;
+  quantity: number;
   amount: number;
-  total: number;
-  vendorId: string;
+  vendor: VendorDocument;
 };
 
 export const BudgetItemModel = createPlugin({
@@ -18,10 +18,9 @@ export const BudgetItemModel = createPlugin({
       new mongoose.Schema(
         {
           item: String,
-          qty: Number,
+          quantity: Number,
           amount: Number,
-          total: Number,
-          vendorId: {
+          vendor: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Vendor',
           },

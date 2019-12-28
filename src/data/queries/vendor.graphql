@@ -4,11 +4,33 @@ query vendor($id: ID!) {
     name
     vendorKind
     location
-    contact {
+    contacts {
+      contact {
+        id
+        name
+        phone
+        email
+      }
+      contactKind
+    }
+    budgetItems {
       id
-      name
-      phone
-      email
+      item
+      quantity
+      amount
+    }
+    paymentSchedule {
+      id
+      item
+      description
+      dueDate
+      amount
+      isPaid
+    }
+    timelineItems {
+      id
+      date
+      description
     }
   }
 }

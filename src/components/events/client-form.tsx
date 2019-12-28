@@ -2,14 +2,12 @@ import React from 'react';
 import {FormControl} from 'baseui/form-control';
 import {Input} from 'baseui/input';
 import {useStyletron} from 'baseui';
-import {PhoneInput, Country, COUNTRIES} from 'baseui/phone-input';
-import {unwrap} from '../../util';
+import {parsePhoneInput} from '../common/util';
 
 export type ClientFormState = {
   name: string;
   email: string;
   phone: string;
-  country: Country;
 };
 
 interface Props {
@@ -43,18 +41,13 @@ export const ClientForm = ({state, setState, title}: Props) => {
         <div className={css({flexGrow: 1})}>
           <FormControl label="Phone" caption="">
             <div className={css({height: '48px', display: 'flex'})}>
-              <PhoneInput
-                overrides={{Input: {style: {height: '48px'}}}}
-                country={state.country}
-                onCountryChange={({option}) =>
+              <Input
+                value={state.phone}
+                onChange={e =>
                   setState({
                     ...state,
-                    country: COUNTRIES[unwrap(unwrap(option).id)],
+                    phone: parsePhoneInput(state.phone, e.currentTarget.value),
                   })
-                }
-                text={state.phone}
-                onTextChange={e =>
-                  setState({...state, phone: e.currentTarget.value})
                 }
               />
             </div>

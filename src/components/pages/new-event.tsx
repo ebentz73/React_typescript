@@ -3,7 +3,6 @@ import {Button, KIND, SIZE} from 'baseui/button';
 import {RoutePaths} from '../../constants';
 import {useFrostedStyletron} from '../util';
 import {EventsContext} from '../events/context';
-import {COUNTRIES} from 'baseui/phone-input';
 import {ClientFormState} from '../events/client-form';
 import {FormControl} from 'baseui/form-control';
 import {Input} from 'baseui/input';
@@ -65,7 +64,6 @@ export const NewEventPage = ({history}) => {
     name: '',
     email: '',
     phone: '',
-    country: COUNTRIES.US,
   };
   const [clientFormStates, setClientFormStates] = useState<ClientFormState[]>([
     defaultClientFormState,
@@ -189,7 +187,7 @@ export const NewEventPage = ({history}) => {
                 clients: clientFormStates.map(f => ({
                   name: f.name,
                   email: f.email,
-                  phone: f.country.dialCode + f.phone,
+                  phone: f.phone,
                 })),
               });
               history.push(RoutePaths.Events());

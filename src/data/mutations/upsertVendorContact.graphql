@@ -1,0 +1,14 @@
+mutation upsertVendorContact($vendorId: ID!, $vendorContact: VendorContactInput!) {
+  upsertVendorContact(vendorId: $vendorId, vendorContact: $vendorContact) {
+    id
+    contacts {
+      contact {
+        id
+        name
+        phone
+        email
+      }
+      contactKind
+    }
+  }
+}
