@@ -48,7 +48,10 @@ export const TimelineItemsPage = () => {
           RowComponent={TimelineItemRow}
           createEmptyRow={() => ({
             id: 'new',
-            date: Date.now(),
+            date: moment(Date.now())
+              .hour(12)
+              .minute(0)
+              .valueOf(),
             description: '',
           })}
           onAdd={async newRow => {
