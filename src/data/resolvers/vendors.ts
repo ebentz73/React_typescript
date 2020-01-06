@@ -8,7 +8,7 @@ import {
   PaymentScheduleSchema,
   TimelineItemSchema,
 } from '../schema-types';
-import {unwrap} from '../../util';
+import {unwrap, safeUnwrap} from '../../util';
 import {VendorServiceToken} from '../services/vendor';
 import {VendorDocument} from '../models/vendor';
 import {BudgetItemDocument} from '../models/budget-item';
@@ -34,6 +34,9 @@ export const VendorsResolvers = createPlugin({
       location: vendorDocument.location,
       vendorKind: vendorDocument.vendorKind,
       contacts: vendorDocument.contacts,
+      notesRichTextId: safeUnwrap(vendorDocument.notesRichText, t =>
+        t.toString()
+      ),
     });
 
     const getBudgetItemSchema = (
@@ -123,6 +126,18 @@ export const VendorsResolvers = createPlugin({
         deleteVendor: async (_, {id}, ctx): Promise<string> => {
           await vendorService.delete(id, await getUser(ctx));
           return id;
+        },
+        updateVendorNote: async (
+          _,
+          {id, notesRichTextId},
+          ctx
+        ): Promise<CoreVendorSchema> => {
+          const updatedVendor = await vendorService.updateVendorNote(
+            id,
+            notesRichTextId,
+            await getUser(ctx)
+          );
+          return getVendorSchema(updatedVendor);
         },
         upsertVendorContact: async (
           _,

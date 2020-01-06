@@ -32,5 +32,6 @@ query vendor($id: ID!) {
       date
       description
     }
+    notesRichTextId
   }
 }

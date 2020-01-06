@@ -34,12 +34,18 @@ export interface BudgetItemSchema {
   amount: number;
 }
 
+export interface RichTextSchema {
+  id: string;
+  data: string;
+}
+
 export interface CoreVendorSchema {
   id: string;
   name: string;
   vendorKind: VendorKinds;
   location: string;
   contacts: VendorContactSchema[];
+  notesRichTextId: string | null;
 }
 
 export interface VendorSchema extends CoreVendorSchema {
@@ -68,6 +74,12 @@ export interface EventInput {
   date: number;
   budget: number;
   clients: ContactInput[];
+}
+
+export interface RichTextInput {
+  id: string | null;
+  eventId: string | null;
+  data: string;
 }
 
 export interface VendorInput {

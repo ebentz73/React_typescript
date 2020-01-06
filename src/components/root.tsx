@@ -7,6 +7,7 @@ import {Login} from './pages/login';
 import {Logout} from './pages/logout';
 import {Helmet} from 'fusion-plugin-react-helmet-async';
 import {RoutePaths} from '../constants';
+import {assetUrl} from 'fusion-core';
 
 const RootStyles = styled('div', ({$theme: {typography: {font300}}}) => ({
   ...font300,
@@ -93,6 +94,10 @@ body{margin:0;}
 button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0;}
 input::-webkit-inner-spin-button,input::-webkit-outer-spin-button,input::-webkit-search-cancel-button,input::-webkit-search-decoration,input::-webkit-search-results-button,input::-webkit-search-results-decoration{display:none;}
       `}</style>
+        <link
+          rel="stylesheet"
+          href={assetUrl('../../node_modules/quill/dist/quill.snow.css')}
+        />
         <title>A Frosted Affair</title>
       </Helmet>
       <Switch>

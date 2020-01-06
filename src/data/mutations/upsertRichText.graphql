@@ -1,0 +1,6 @@
+  mutation upsertRichText($richText: RichTextInput!) {
+    upsertRichText(richText: $richText) {
+      id
+      data
+    }
+  }

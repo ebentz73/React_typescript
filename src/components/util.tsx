@@ -36,11 +36,11 @@ export const LoadingSpinner = ({size}: {size?: string}) => {
   );
 };
 
-export const useLatestValue = (value: any) => {
-  const ref = useRef(value);
+export function useLatestValue<T>(value: T) {
+  const ref = useRef<T>(value);
   ref.current = value;
   return ref;
-};
+}
 
 export const useMounted = () => {
   const ref = useRef(false);
@@ -51,6 +51,17 @@ export const useMounted = () => {
     };
   }, []);
   return ref;
+};
+
+export const useOnChangeEffect = (action, deps) => {
+  const ready = useRef(false);
+  useEffect(() => {
+    if (!ready.current) {
+      ready.current = true;
+      return;
+    }
+    action();
+  }, deps);
 };
 
 export const formatUSD = (value: number): string => {

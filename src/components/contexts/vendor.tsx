@@ -18,6 +18,7 @@ import {
   DeletePaymentScheduleMutation,
   UpsertTimelineItemMutation,
   DeleteTimelineItemMutation,
+  UpdateVendorNoteMutation,
 } from '../mutations';
 
 interface ContextType {
@@ -38,6 +39,7 @@ interface ContextType {
     deletePaymentSchedule: (id: string) => Promise<void>;
     upsertTimelineItem: (timelineItem: TimelineItemInput) => Promise<void>;
     deleteTimelineItem: (id: string) => Promise<void>;
+    updateNote: (id: string, notesRichTextId: string) => Promise<void>;
   };
 }
 
@@ -61,6 +63,7 @@ export const VendorContextProvider = ({
   const [deletePaymentSchedule] = useMutation(DeletePaymentScheduleMutation);
   const [upsertTimelineItem] = useMutation(UpsertTimelineItemMutation);
   const [deleteTimelineItem] = useMutation(DeleteTimelineItemMutation);
+  const [updateVendorNote] = useMutation(UpdateVendorNoteMutation);
 
   if (loading || !data) {
     return <LoadingSpinner />;
@@ -99,6 +102,9 @@ export const VendorContextProvider = ({
       },
       deleteTimelineItem: async id => {
         await deleteTimelineItem({variables: {id}});
+      },
+      updateNote: async (id, notesRichTextId) => {
+        await updateVendorNote({variables: {id, notesRichTextId}});
       },
     },
   };

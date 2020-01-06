@@ -6,6 +6,7 @@ import {VendorKinds} from '../../constants/vendor-kind';
 import {ContactDocument} from './contact';
 import {EventDocument} from './event';
 import {VendorContactKind} from '../../constants/vendor-contact-kind';
+import {RichTextDocument} from './rich-text';
 
 export type VendorDocument = Document & {
   name: string;
@@ -17,6 +18,7 @@ export type VendorDocument = Document & {
     contactKind: VendorContactKind;
   }[];
   event: EventDocument;
+  notesRichText: RichTextDocument;
 };
 
 export const VendorModel = createPlugin({
@@ -56,6 +58,10 @@ export const VendorModel = createPlugin({
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: 'Event',
+          },
+          notesRichText: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'RichText',
           },
         },
         {timestamps: true}

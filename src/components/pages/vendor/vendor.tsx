@@ -82,7 +82,6 @@ const VendorPageInternal = () => {
   const mainContentStyles = css({
     marginTop: '24px',
     backgroundColor: '#FFFFFF',
-    minHeight: '200px',
     border: '1px solid #F3F2F2',
     boxShadow: '0 13px 10px 0 rgba(239,233,233,1)',
     borderRadius: '4px',

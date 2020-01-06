@@ -93,6 +93,18 @@ export const VendorService = createPlugin({
         await vendor.save();
         return vendor;
       },
+      updateVendorNote: async (
+        id: string,
+        notesRichTextId: string,
+        user: UserDocument
+      ): Promise<VendorDocument> => {
+        const vendor = await findById(id, user.id);
+
+        vendor.notesRichText = notesRichTextId as any;
+
+        await vendor.save();
+        return vendor;
+      },
       delete: async (id: string, user: UserDocument): Promise<string> => {
         const vendor = await findById(id, user.id);
         vendor.remove();

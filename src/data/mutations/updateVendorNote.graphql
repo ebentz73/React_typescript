@@ -1,0 +1,6 @@
+mutation updateVendorNote($id: ID!, $notesRichTextId: ID!) {
+  updateVendorNote(id: $id, notesRichTextId: $notesRichTextId) {
+    id
+    notesRichTextId
+  }
+}

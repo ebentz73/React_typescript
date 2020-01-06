@@ -1,4 +1,5 @@
 import {gql} from 'fusion-plugin-apollo';
+import {RichTextSchema} from '../data/schema-types';
 
 export const SignupUserMutation = gql('../data/mutations/signup.graphql');
 export const LoginUserMutation = gql('../data/mutations/login.graphql');
@@ -41,3 +42,15 @@ export const UpsertTimelineItemMutation = gql(
 export const DeleteTimelineItemMutation = gql(
   '../data/mutations/deleteTimelineItem.graphql'
 );
+
+export const UpsertRichTextMutation = gql(
+  '../data/mutations/upsertRichText.graphql'
+);
+
+export const UpdateVendorNoteMutation = gql(
+  '../data/mutations/updateVendorNote.graphql'
+);
+
+export interface UpsertRichTextMutationType {
+  upsertRichText: RichTextSchema;
+}

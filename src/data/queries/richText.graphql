@@ -1,0 +1,6 @@
+  query richText($id: ID!) {
+    richText(id: $id) {
+      id
+      data
+    }
+  }

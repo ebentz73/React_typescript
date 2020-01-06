@@ -63,6 +63,11 @@ import {
   VendorsResolversToken,
   VendorsResolvers,
 } from './data/resolvers/vendors';
+import {RichTextModelToken, RichTextModel} from './data/models/rich-text';
+import {
+  RichTextResolversToken,
+  RichTextResolvers,
+} from './data/resolvers/rich-text';
 
 const setUpServer = app => {
   app.register(SecretsToken, SecretsPlugin);
@@ -91,6 +96,7 @@ const setUpServer = app => {
   app.register(TimelineItemModelToken, TimelineItemModel);
   app.register(TimelineSnippetModelToken, TimelineSnippetModel);
   app.register(VendorModelToken, VendorModel);
+  app.register(RichTextModelToken, RichTextModel);
 
   // Services
   app.register(ChecklistServiceToken, ChecklistService);
@@ -102,6 +108,7 @@ const setUpServer = app => {
   app.register(AuthResolversToken, AuthResolvers);
   app.register(EventsResolversToken, EventsResolvers);
   app.register(VendorsResolversToken, VendorsResolvers);
+  app.register(RichTextResolversToken, RichTextResolvers);
 };
 
 const setUpFonts = app => {

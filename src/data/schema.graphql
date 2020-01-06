@@ -73,6 +73,12 @@ type Vendor {
   budgetItems: [BudgetItem!]!
   paymentSchedule: [PaymentSchedule!]!
   timelineItems: [TimelineItem!]!
+  notesRichTextId: ID
+}
+
+type RichText {
+  id: ID!
+  data: String!
 }
 
 enum EventFilterType {
@@ -86,6 +92,13 @@ type Query {
   events(filterType: EventFilterType!, search: String): [Event!]!
   event(id: ID!): Event!
   vendor(id: ID!): Vendor!
+  richText(id: ID!): RichText!
+}
+
+input RichTextInput {
+  id: ID
+  eventId: ID
+  data: String!
 }
 
 input EventInput {
@@ -162,4 +175,8 @@ type Mutation {
 
   upsertTimelineItem(timelineItem: TimelineItemInput!): Vendor!
   deleteTimelineItem(id: ID!): Vendor!
+
+  updateVendorNote(id: ID!, notesRichTextId: ID!): Vendor!
+
+  upsertRichText(richText: RichTextInput!): RichText!
 }
